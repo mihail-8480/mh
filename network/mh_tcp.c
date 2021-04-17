@@ -56,15 +56,6 @@ void mh_tcp_start(mh_tcp_listener_t* listener) {
 #if defined(UNIX)
     // Handle broken pipes
     signal(SIGPIPE, mh_tcp_sigpipe);
-#elif defined(WIN32)
-    // Initiates Winsock
-    WSADATA wsa;
-    if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
-        mh_context_error(listener->context, "WSAStartup failed.", mh_tcp_start);
-        abort();
-    }
-#else
-#error Unsupported platform.
 #endif
 
     mh_socket_t sock;
@@ -137,4 +128,27 @@ mh_socket_address_t mh_tcp_string_to_address(const char *host, unsigned short po
     };
     inet_pton(address.sin_family, host, &address.sin_addr);
     return address;
+}
+
+void mh_tcp_init(mh_tcp_listener_t *listener) {
+#if defined(WIN32)
+    // Initiates Winsock
+    WSADATA wsa;
+    if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
+        mh_context_error(listener->context, "WSAStartup failed.", mh_tcp_start);
+        WSACleanup();
+        abort();
+    }
+    if (LOBYTE(wsa.wVersion) != 2 || HIBYTE(wsa.wVersion) != 2) {
+        mh_context_error(listener->context, "Invalid WinSock version.", mh_tcp_start);
+        WSACleanup();
+        abort();
+    }
+#endif
+}
+
+void mh_tcp_cleanup(mh_tcp_listener_t *listener) {
+#if defined(WIN32)
+    WSACleanup();
+#endif
 }
