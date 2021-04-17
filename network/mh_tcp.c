@@ -109,6 +109,7 @@ void mh_tcp_start(mh_tcp_listener_t* listener) {
 #else
 #error Unsupported platform.
 #endif
+            break;
         }
 
         mh_context_t *client_context = mh_start();
