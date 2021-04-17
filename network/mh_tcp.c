@@ -93,10 +93,22 @@ void mh_tcp_start(mh_tcp_listener_t* listener) {
     while (listener->running) {
         // Accept a client
         mh_socket_t client = accept(sock, (struct sockaddr *) &listener->address, &addr_len);
+
         // If the client is invalid, crash the program
         if (client == -1) {
             mh_context_error(listener->context, "Could not accept client.", mh_tcp_start);
             abort();
+        }
+
+        // If the listener is about to exit, close the socket
+        if (!listener->running) {
+#if defined(WIN32)
+            closesocket(client);
+#elif defined(UNIX)
+            close(client);
+#else
+#error Unsupported platform.
+#endif
         }
 
         mh_context_t *client_context = mh_start();
@@ -114,6 +126,15 @@ void mh_tcp_start(mh_tcp_listener_t* listener) {
         // Create the thread with those arguments
         mh_thread_create(mh_tcp_threaded_connect_invoke, args);
     }
+
+    // Close the currently listening socket
+#if defined(WIN32)
+    closesocket(sock);
+#elif defined(UNIX)
+    close(sock);
+#else
+#error Unsupported platform.
+#endif
 }
 
 unsigned short mh_tcp_address_to_string(char *host, mh_socket_address_t address, size_t size) {
@@ -135,13 +156,13 @@ void mh_tcp_init(mh_tcp_listener_t *listener) {
     // Initiates Winsock
     WSADATA wsa;
     if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
-        mh_context_error(listener->context, "WSAStartup failed.", mh_tcp_start);
         WSACleanup();
+        mh_context_error(listener->context, "WSAStartup failed.", mh_tcp_start);
         abort();
     }
     if (LOBYTE(wsa.wVersion) != 2 || HIBYTE(wsa.wVersion) != 2) {
-        mh_context_error(listener->context, "Invalid WinSock version.", mh_tcp_start);
         WSACleanup();
+        mh_context_error(listener->context, "Invalid WinSock version.", mh_tcp_start);
         abort();
     }
 #endif
