@@ -1,4 +1,5 @@
 #include "tests.h"
+
 int main(void) {
     mh_test_t tests[] = {
             MH_TEST(thread_test),
@@ -10,5 +11,5 @@ int main(void) {
             MH_TEST(memory_to_string_test),
             MH_TEST(memory_is_equal_test)
     };
-    mh_tests_run(tests, sizeof tests / sizeof tests[0]);
+    mh_tests_run(tests, MH_FIXED_COUNT(tests));
 }

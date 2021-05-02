@@ -4,6 +4,9 @@
 #include <stddef.h>
 #include <stdbool.h>
 
+// Get the number of elements in a fixed size array.
+#define MH_FIXED_COUNT(array) (sizeof array / sizeof array[0])
+
 // This may not be used.
 #define MH_UNUSED __attribute__((unused))
 
