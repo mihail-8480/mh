@@ -36,9 +36,9 @@ MH_API_TYPE(mh_version, struct mh_version {
 // A location in the code.
 MH_API_TYPE(mh_code_location, struct mh_code_location {
     const char *file_name;
-    const unsigned int file_line;
+    unsigned int file_line;
     const char *function_name;
-    const size_t function_address;
+    size_t function_address;
 });
 
 // Get the current version.

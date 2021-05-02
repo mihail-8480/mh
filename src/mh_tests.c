@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-MH_NORETURN void mh_tests_run(const mh_test_t* tests, size_t count) {
+void mh_tests_run(const mh_test_t* tests, size_t count) {
     size_t failed = 0;
     for(size_t i = 0; i < count; i++) {
         if (tests[i].func == NULL) {
@@ -32,4 +32,24 @@ MH_NORETURN void mh_tests_run(const mh_test_t* tests, size_t count) {
         printf("all tests passed.\n");
     }
     exit(failed != 0);
+}
+
+
+bool mh_tests_check(mh_test_return_t* results, const mh_test_t* tests, size_t count) {
+    size_t failed = 0;
+    for(size_t i = 0; i < count; i++) {
+        if (tests[i].func == NULL) {
+            results[i].success = false;
+            results[i].reason = "The test function is NULL.";
+            results[i].location = MH_LOCATION_ANY();
+            failed++;
+            continue;
+        }
+        mh_test_return_t result = tests[i].func();
+        results[i] = result;
+        if (!result.success && tests[i].required) {
+                return false;
+        }
+    }
+    return failed != 0;
 }

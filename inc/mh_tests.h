@@ -27,6 +27,7 @@ MH_API_TYPE(mh_test, struct mh_test {
 
 #define MH_TEST_EXPECT(cond) if (!(cond)) MH_TEST_RESULT(false, "The statement `" #cond "` is false.")
 
-MH_API_FUNC(void mh_tests_run(const mh_test_t* tests, size_t count));
+MH_NORETURN MH_API_FUNC(void mh_tests_run(const mh_test_t* tests, size_t count));
 
+MH_API_FUNC(bool mh_tests_check(mh_test_return_t* results, const mh_test_t* tests, size_t count));
 #endif //MH_TESTS_H
