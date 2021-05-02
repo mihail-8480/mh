@@ -15,7 +15,7 @@ MH_TEST_NEW(memory_new_test) {
             }
         }
     })
-    MH_TEST_RESULT(!fail);
+    MH_TEST_RESULT(!fail, "Allocated memory is not zeroed.");
 }
 
 MH_TEST_NEW(memory_resize_test) {
@@ -27,7 +27,7 @@ MH_TEST_NEW(memory_resize_test) {
             fail = true;
         }
     })
-    MH_TEST_RESULT(!fail);
+    MH_TEST_RESULT(!fail, "The returned memory address is NULL.");
 }
 
 MH_TEST_NEW(memory_reference_test) {
@@ -78,7 +78,6 @@ MH_TEST_NEW(memory_is_equal_test) {
     mh_memory_t ref2 = mh_memory_reference(str, 4);
     mh_memory_t ref3 = mh_memory_reference(str+1, 3);
     mh_memory_t ref4 = mh_memory_reference(str, 3);
-
     MH_TEST_EXPECT(mh_memory_is_equal(ref, ref2));
     MH_TEST_EXPECT(!mh_memory_is_equal(ref, ref4));
     MH_TEST_EXPECT(!mh_memory_is_equal(ref3, ref4));
