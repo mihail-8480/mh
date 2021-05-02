@@ -1,10 +1,10 @@
 #ifndef MHSERV_MH_HTTP_H
 #define MHSERV_MH_HTTP_H
 
-#include <mh_tcp.h>
-#include <mh_memory.h>
-#include <mh_stream.h>
-#include <mh_map.h>
+#include "mh_tcp.h"
+#include "mh_memory.h"
+#include "mh_stream.h"
+#include "mh_map.h"
 
 // A HTTP request
 MH_API_TYPE(mh_http_request, struct mh_http_request {

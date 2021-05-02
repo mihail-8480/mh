@@ -1,4 +1,4 @@
-#include <mh_handle.h>
+#include "../inc/mh_handle.h"
 #include <dlfcn.h>
 
 typedef struct mh_handle_private {

@@ -1,5 +1,5 @@
-#include <mh_tcp.h>
-#include <mh_thread.h>
+#include "../../inc/mh_tcp.h"
+#include "../../inc/mh_thread.h"
 #include <stdlib.h>
 
 #if defined(UNIX)

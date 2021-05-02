@@ -1,7 +1,7 @@
 #ifndef MHSERV_MH_HTTP_HANDLER_H
 #define MHSERV_MH_HTTP_HANDLER_H
 
-#include <mh_http.h>
+#include "mh_http.h"
 
 // End of line (CRLF)
 #define MH_ENDL "\r\n"

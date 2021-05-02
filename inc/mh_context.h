@@ -1,7 +1,7 @@
 #ifndef MHSERV_MH_CONTEXT_H
 #define MHSERV_MH_CONTEXT_H
 
-#include <mh.h>
+#include "mh.h"
 #include <stdbool.h>
 #include <stddef.h>
 

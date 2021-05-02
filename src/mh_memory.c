@@ -1,4 +1,4 @@
-#include <mh_memory.h>
+#include "../inc/mh_memory.h"
 
 typedef struct mh_memory_private {
     mh_memory_t base;

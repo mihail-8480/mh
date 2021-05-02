@@ -1,4 +1,4 @@
-#include <mh_stream.h>
+#include "../../inc/mh_stream.h"
 #include "mh_stream_private.h"
 
 bool mh_stream_seek(mh_stream_t *stream, size_t position) {

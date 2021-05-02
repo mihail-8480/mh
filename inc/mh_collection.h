@@ -1,8 +1,8 @@
 #ifndef MHSERV_MH_COLLECTION_H
 #define MHSERV_MH_COLLECTION_H
 
-#include <mh_context.h>
-#include <mh_memory.h>
+#include "mh_context.h"
+#include "mh_memory.h"
 
 // Something to iterate over
 MH_API_TYPE(mh_iterator, struct mh_iterator {

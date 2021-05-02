@@ -1,5 +1,5 @@
 #include <string.h>
-#include <mh_map.h>
+#include "../../inc/mh_map.h"
 
 // this code is not worth commenting
 typedef struct mh_shitmap {

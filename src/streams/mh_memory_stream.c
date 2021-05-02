@@ -1,4 +1,4 @@
-#include <mh_stream.h>
+#include "../../inc/mh_stream.h"
 #include "mh_stream_private.h"
 
 // The memory stream, it's practically a dynamic array

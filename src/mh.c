@@ -1,4 +1,4 @@
-#include <mh.h>
+#include "../inc/mh.h"
 #include <stdio.h>
 
 mh_version_t mh_get_version(void) {

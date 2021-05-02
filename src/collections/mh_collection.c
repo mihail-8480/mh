@@ -1,4 +1,4 @@
-#include <mh_collection.h>
+#include "../../inc/mh_collection.h"
 
 mh_iterator_t *mh_collection_get_iterator(mh_collection_t *collection) {
     return collection->get_iterator(collection);

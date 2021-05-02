@@ -1,8 +1,8 @@
 #ifndef MHSERV_MH_MAP_H
 #define MHSERV_MH_MAP_H
 
-#include <mh_collection.h>
-#include <mh_memory.h>
+#include "mh_collection.h"
+#include "mh_memory.h"
 
 // The map structure
 MH_API_TYPE(mh_map, struct mh_map {

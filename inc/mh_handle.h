@@ -1,7 +1,7 @@
 #ifndef MHSERV_MH_HANDLE_H
 #define MHSERV_MH_HANDLE_H
 
-#include <mh_context.h>
+#include "mh_context.h"
 
 // A handle to a dynamic library
 MH_API_TYPE(mh_handle, struct mh_handle {

@@ -1,7 +1,7 @@
 #ifndef MHSERV_MH_THREAD_H
 #define MHSERV_MH_THREAD_H
 
-#include <mh.h>
+#include "mh.h"
 
 // Code that needs to get executed on a new thread
 typedef void *(*mh_thread_action_t)(void *);
