@@ -45,9 +45,8 @@ MH_TEST_NEW(memory_read_until_test) {
     mh_memory_t ref = mh_memory_reference(str, 4);
     mh_memory_t ref2 = mh_memory_read_until(&ref, 's');
     mh_memory_t ref3 = mh_memory_read_until(&ref, 'x');
-
-
-    MH_TEST_EXPECT(ref.offset == 3);
+    mh_memory_read_until(&ref, 't');
+    MH_TEST_EXPECT(ref.offset == 4);
     MH_TEST_EXPECT(ref3.address == NULL);
     MH_TEST_EXPECT(ref3.size == 0);
     MH_TEST_EXPECT(ref2.size == 2);
