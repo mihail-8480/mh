@@ -26,3 +26,10 @@ endif(HAIKU)
 if(UNIX_LIKE)
     target_link_libraries(mh PRIVATE pthread dl)
 endif(UNIX_LIKE)
+
+install(TARGETS mh
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib)
+
+install(DIRECTORY include/ DESTINATION include/)
