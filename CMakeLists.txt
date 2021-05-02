@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 project(mh
         LANGUAGES C
-        VERSION 0.0.1
+        VERSION 0.1.0
         DESCRIPTION "A C library that is supposed to make my life easier."
         HOMEPAGE_URL "https://github.com/mihail-8480/mh")
 
