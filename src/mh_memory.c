@@ -63,7 +63,7 @@ mh_memory_t mh_memory_read_until(mh_memory_t *memory, char c) {
     }
     size_t size = index - memory->offset;
 
-    mh_memory_t ref = mh_memory_reference((void*)((size_t)memory->address + memory->offset), size);
+    mh_memory_t ref = mh_memory_reference(((char*)memory->address + memory->offset), size);
 
     // Move the offset forward
     memory->offset += size + 1;

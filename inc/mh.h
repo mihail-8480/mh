@@ -2,6 +2,7 @@
 #define MH_MH_H
 
 #include <stddef.h>
+#include <stdbool.h>
 
 // This may not be used.
 #define MH_UNUSED __attribute__((unused))

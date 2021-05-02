@@ -61,4 +61,6 @@ MH_API_FUNC(void mh_context_bind_to_thread(mh_context_t *context));
 // Get a context that was bound to the current thread
 MH_API_FUNC(mh_context_t *mh_context_get_from_thread(void));
 
+#define MH_CONTEXT(name, code) { mh_context_t* name = mh_start(); code mh_end(name);}
+
 #endif //MHSERV_MH_CONTEXT_H
