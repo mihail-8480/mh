@@ -19,7 +19,7 @@ MH_API_TYPE(mh_test, struct mh_test {
 #define MH_TEST_PASSED() return true
 #define MH_TEST_RESULT(value) return value
 #define MH_TEST(f) {.name = #f, .func = f, .required = false}
-#define MH_REQUIRED_TEST(f) {.name = #f, .func = f, .required = true}
+#define MH_TEST_REQUIRED(f) {.name = #f, .func = f, .required = true}
 
 #define MH_TEST_EXPECT(cond) if (!(cond)) MH_TEST_FAIL()
 
