@@ -25,15 +25,15 @@
 
 // Version information.
 MH_API_TYPE(mh_version, struct mh_version {
-    unsigned short major;
-    unsigned short minor;
-    unsigned short patch;
+    const unsigned short major;
+    const unsigned short minor;
+    const unsigned short patch;
 });
 
 // A location in the code.
 MH_API_TYPE(mh_code_location, struct mh_code_location {
     const char *file_name;
-    unsigned int file_line;
+    const unsigned int file_line;
     const char *function_name;
     const size_t function_address;
 });
