@@ -25,7 +25,7 @@ if(UNIX_LIKE)
     target_link_libraries(mh PRIVATE pthread dl)
 endif(UNIX_LIKE)
 
-add_executable(tests tests/main.c tests/thread_test.c tests/memory_test.c)
+add_executable(tests tests/main.c tests/thread_test.c tests/memory_test.c tests/handle_test.c)
 target_link_libraries(tests PRIVATE mh)
 
 install(TARGETS mh
