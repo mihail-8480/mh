@@ -1,4 +1,4 @@
-#include "mh_memory.h"
+#include <mh_memory.h>
 
 typedef struct mh_memory_private {
     mh_memory_t base;
@@ -10,7 +10,7 @@ mh_memory_t *mh_memory_new(mh_context_t *context, size_t size, bool clear) {
     // Allocate the memory container and set it's fields
     MH_THIS(mh_memory_private_t*, mh_context_allocate(context, sizeof(mh_memory_private_t), false).ptr);
     if (this == NULL) {
-        mh_context_error(context, "Couldn't allocate memory for the structure.", mh_memory_new);
+        mh_context_error(context, "Couldn't allocate memory for the structure.", MH_LOCATION(mh_memory_new));
         return NULL;
     }
 
@@ -40,7 +40,7 @@ void mh_memory_resize(mh_context_t *context, mh_memory_t *memory, size_t size) {
 
     // If the new pointer is null, report the error
     if (new == NULL) {
-        mh_context_error(context, "Couldn't resize the memory.", mh_memory_resize);
+        mh_context_error(context, "Couldn't resize the memory.", MH_LOCATION(mh_memory_resize));
         return;
     }
 
@@ -58,12 +58,12 @@ mh_memory_t mh_memory_read_until(mh_memory_t *memory, char c) {
 
     // Copy the memory into a c-string from the current offset, to the index of the character
     size_t index = mh_memory_index_of(*memory, c);
-    if (index == -1) {
+    if (MH_PTR_CAST(int, index) == -1) {
         return mh_memory_reference(NULL, 0);
     }
     size_t size = index - memory->offset;
 
-    mh_memory_t ref = mh_memory_reference(memory->address + memory->offset, size);
+    mh_memory_t ref = mh_memory_reference((void*)((size_t)memory->address + memory->offset), size);
 
     // Move the offset forward
     memory->offset += size + 1;

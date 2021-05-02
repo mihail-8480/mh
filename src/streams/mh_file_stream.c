@@ -1,4 +1,4 @@
-#include "mh_stream.h"
+#include <mh_stream.h>
 #include "mh_stream_private.h"
 #include <unistd.h>
 
@@ -16,9 +16,9 @@ void mh_file_stream_read(void *stream, mh_memory_t *buffer, size_t count) {
     size_t size = fread(buffer->address, 1, count, this->file);
 
     // If the allocation_size is negative, something went wrong
-    if (size == -1) {
+    if (MH_PTR_CAST(int,size) == -1) {
         mh_context_error(this->base.context, "Failed reading from the file, it is probably closed.",
-                         mh_file_stream_read);
+                         MH_LOCATION(mh_file_stream_read));
         return;
     }
 
@@ -33,9 +33,9 @@ void mh_file_stream_write(void *stream, mh_memory_t *buffer, size_t count) {
     size_t size = fwrite(buffer->address, 1, count, this->file);
 
     // See above.
-    if (size == -1) {
+    if (MH_PTR_CAST(int,size) == -1) {
         mh_context_error(this->base.context, "Failed writing to the file, it is probably closed.",
-                         mh_file_stream_write);
+                         MH_LOCATION(mh_file_stream_write));
         return;
     }
 

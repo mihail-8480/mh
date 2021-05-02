@@ -1,4 +1,4 @@
-#include "mh_stream.h"
+#include <mh_stream.h>
 #include "mh_stream_private.h"
 
 // The memory stream, it's practically a dynamic array
@@ -14,12 +14,12 @@ void mh_memory_stream_read(void *stream, mh_memory_t *buffer, size_t count) {
     if (this->memory->offset + count > this->memory->size) {
         // If not, report an error
         mh_context_error(this->base.context, "The memory you are trying to read is out of range.",
-                         mh_memory_stream_read);
+                         MH_LOCATION(mh_memory_stream_read));
         return;
     }
 
     // Copy bytes and update the buffer offset
-    memcpy(buffer->address, this->memory->address + this->memory->offset, count);
+    memcpy(buffer->address, (void*)((size_t)this->memory->address + this->memory->offset), count);
     buffer->offset = count;
     this->memory->offset += count;
 }
@@ -37,7 +37,7 @@ void mh_memory_stream_write(void *stream, mh_memory_t *buffer, size_t count) {
         if (this->fixed) {
             // Report the error
             mh_context_error(this->base.context, "The memory you are trying write is too large for this stream.",
-                             mh_memory_stream_write);
+                             MH_LOCATION(mh_memory_stream_write));
             return;
         } else {
             // Allocate enough memory to complete the write operation
@@ -45,7 +45,7 @@ void mh_memory_stream_write(void *stream, mh_memory_t *buffer, size_t count) {
         }
     }
     // Copy bytes and update the buffer offset
-    memcpy(this->memory->address + this->memory->offset, buffer->address, count);
+    memcpy((void*)((size_t)this->memory->address + this->memory->offset), buffer->address, count);
     buffer->offset = count;
     this->memory->offset += count;
 }
@@ -56,7 +56,7 @@ void mh_memory_stream_seek(void *stream, size_t position) {
     MH_THIS(mh_memory_stream_t*, stream);
     if (this->memory->offset + position < this->memory->size) {
         mh_context_error(this->base.context, "The position is larger than the memory allocation_size, cannot seek.",
-                         mh_memory_stream_seek);
+                         MH_LOCATION(mh_memory_stream_seek));
         return;
     }
 

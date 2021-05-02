@@ -29,8 +29,9 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_definitions(MH_DEBUG)
 endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
-# Set the C compiler flags
+# Set the common C compiler flags
 set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_FLAGS "-Wall -Wextra -Wpedantic -Werror")
 set(CMAKE_C_FLAGS_DEBUG "-ggdb3")
 set(CMAKE_C_FLAGS_RELEASE "-O3")
 

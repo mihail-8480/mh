@@ -1,7 +1,7 @@
 #ifndef MHSERV_MH_MEMORY_H
 #define MHSERV_MH_MEMORY_H
 
-#include "mh_context.h"
+#include <mh_context.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>

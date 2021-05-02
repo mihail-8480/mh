@@ -1,4 +1,4 @@
-#include "mh_thread.h"
+#include <mh_thread.h>
 #include <pthread.h>
 
 void mh_thread_create(mh_thread_action_t action, void *args) {

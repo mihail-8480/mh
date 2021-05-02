@@ -1,4 +1,4 @@
-#include "mh_handle.h"
+#include <mh_handle.h>
 #include <dlfcn.h>
 
 typedef struct mh_handle_private {
@@ -19,12 +19,12 @@ mh_handle_t *mh_handle_new(mh_context_t *context, const char *path) {
             (mh_handle_private_t *) mh_context_allocate(context, sizeof(mh_handle_private_t), false).ptr);
     void *handle = dlopen(path, RTLD_LAZY);
     if (!handle) {
-        mh_context_error(context, dlerror(), mh_handle_new);
+        mh_context_error(context, dlerror(), MH_LOCATION(mh_handle_new));
         return NULL;
     }
     *this = (mh_handle_private_t) {
             .context = context,
-            .base.destructor = mh_handle_destroy,
+            .base.destructor = { mh_handle_destroy },
             .handle = handle
     };
     mh_context_add_destructor(context, &this->base.destructor);
@@ -36,7 +36,7 @@ void *mh_handle_find_symbol(mh_handle_t *handle, const char *name) {
     MH_THIS(mh_handle_private_t*, handle);
     void *sym = dlsym(this->handle, name);
     if (!sym) {
-        mh_context_error(this->context, dlerror(), mh_handle_new);
+        mh_context_error(this->context, dlerror(), MH_LOCATION(mh_handle_new));
         return NULL;
     }
     return sym;

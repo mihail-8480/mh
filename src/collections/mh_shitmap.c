@@ -1,5 +1,5 @@
 #include <string.h>
-#include "mh_map.h"
+#include <mh_map.h>
 
 // this code is not worth commenting
 typedef struct mh_shitmap {
@@ -28,9 +28,9 @@ void mh_map_add(mh_map_t *map, mh_memory_t key, mh_memory_t value) {
     this->memory->offset += sizeof(mh_key_value_pair_t);
 }
 
-void mh_map_remove(mh_map_t *map, mh_memory_t key) {
+void mh_map_remove(mh_map_t *map, MH_UNUSED mh_memory_t key) {
     MH_THIS(mh_shitmap_t*, map);
-    mh_context_error(this->context, "A shitmap cannot remove elements.", mh_map_remove);
+    mh_context_error(this->context, "A shitmap cannot remove elements.", MH_LOCATION(mh_map_remove));
 }
 
 
@@ -96,7 +96,7 @@ mh_map_t *mh_map_new(mh_context_t *context) {
             .context = context,
             .memory = memory,
             .base.collection.get_iterator = mh_map_get_iterator,
-            .base.collection.destructor = NULL,
+            .base.collection.destructor = { NULL },
     };
     this->internal_iterator = mh_map_get_iterator(&this->base.collection);
     return &this->base;

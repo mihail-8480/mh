@@ -1,21 +1,20 @@
-#include "mh_tcp.h"
-#include "../mh_thread.h"
+#include <mh_tcp.h>
+#include <mh_thread.h>
 #include <stdlib.h>
-#include <sys/param.h>
 
 #if defined(UNIX)
 #include <stdio.h>
 #include <signal.h>
 #include <sys/socket.h>
 
-void mh_tcp_sigpipe(int sig) {
+void mh_tcp_sigpipe() {
     // Try to get the context of the thread where the SIGPIPE happened
     mh_context_t* context = mh_context_get_from_thread();
     if (context == NULL) {
         return;
     }
     // Report the error on that context
-    mh_context_error(context,"Broken pipe.", mh_tcp_sigpipe);
+    mh_context_error(context, "Broken pipe.", MH_LOCATION(mh_tcp_sigpipe));
 }
 #elif defined(WIN32)
 #include <ws2tcpip.h>
@@ -48,7 +47,7 @@ void *mh_tcp_threaded_connect_invoke(void *ptr) {
 
 void mh_tcp_start(mh_tcp_listener_t* listener) {
     if (listener->running) {
-        mh_context_error(listener->context, "This listener is already running.", mh_tcp_start);
+        mh_context_error(listener->context, "This listener is already running.", MH_LOCATION(mh_tcp_start));
         abort();
     }
     listener->running = true;
@@ -64,7 +63,7 @@ void mh_tcp_start(mh_tcp_listener_t* listener) {
 
     // If the socket isn't made, crash the program
     if ((sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1) {
-        mh_context_error(listener->context, "A socket could not be created successfully.", mh_tcp_start);
+        mh_context_error(listener->context, "A socket could not be created successfully.", MH_LOCATION(mh_tcp_start));
         abort();
     }
 
@@ -72,20 +71,20 @@ void mh_tcp_start(mh_tcp_listener_t* listener) {
     // Set the socket options, if it fails, crash the program
     int opt = 1;
     if(setsockopt(sock, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)) == -1) {
-        mh_context_error(listener->context, "Failed setting socket options.", mh_tcp_start);
+        mh_context_error(listener->context, "Failed setting socket options.", MH_LOCATION(mh_tcp_start));
         abort();
     }
 #endif
 
     // Bind the socket to the address specified earlier
     if (bind(sock, (struct sockaddr *) &listener->address, addr_len) == -1) {
-        mh_context_error(listener->context, "Could not use the specified address.", mh_tcp_start);
+        mh_context_error(listener->context, "Could not use the specified address.", MH_LOCATION(mh_tcp_start));
         abort();
     }
 
     // Start listening
     if (listen(sock, listener->max_clients) == -1) {
-        mh_context_error(listener->context, "Failed listening for clients.", mh_tcp_start);
+        mh_context_error(listener->context, "Failed listening for clients.", MH_LOCATION(mh_tcp_start));
         abort();
     }
 
@@ -96,7 +95,7 @@ void mh_tcp_start(mh_tcp_listener_t* listener) {
 
         // If the client is invalid, crash the program
         if (client == -1) {
-            mh_context_error(listener->context, "Could not accept client.", mh_tcp_start);
+            mh_context_error(listener->context, "Could not accept client.", MH_LOCATION(mh_tcp_start));
             abort();
         }
 
@@ -152,7 +151,7 @@ mh_socket_address_t mh_tcp_string_to_address(const char *host, unsigned short po
     return address;
 }
 
-void mh_tcp_init(mh_tcp_listener_t *listener) {
+void mh_tcp_init(MH_UNUSED mh_tcp_listener_t *listener) {
 #if defined(WIN32)
     // Initiates Winsock
     WSADATA wsa;
@@ -169,7 +168,7 @@ void mh_tcp_init(mh_tcp_listener_t *listener) {
 #endif
 }
 
-void mh_tcp_cleanup(mh_tcp_listener_t *listener) {
+void mh_tcp_cleanup(MH_UNUSED mh_tcp_listener_t *listener) {
 #if defined(WIN32)
     WSACleanup();
 #endif

@@ -1,4 +1,4 @@
-#include "mh_context.h"
+#include <mh_context.h>
 #include <stdlib.h>
 
 #ifdef MH_DEBUG
@@ -109,7 +109,7 @@ void *mh_context_reallocate(mh_context_t *context, mh_context_allocation_referen
     void* ptr = realloc(ref.ptr, size);
 
     if (ptr == NULL) {
-        mh_context_error(context, "Failed reallocating memory.", mh_context_reallocate);
+        mh_context_error(context, "Failed reallocating memory.", MH_LOCATION(mh_context_reallocate));
     }
 
     this->allocations[ref.index] = ptr;
@@ -136,9 +136,13 @@ void *mh_context_add_destructor(mh_context_t *context, mh_destructor_t *destruct
     return destructor;
 }
 
-void mh_context_error(mh_context_t *context, const char *message, void *from) {
+void mh_context_error(mh_context_t *context, const char *message, mh_code_location_t from) {
     MH_THIS(mh_context_private_t*, context);
-    INFO("mh_context_error(%zu, %s, %zu)\n", (size_t) context, message, (size_t) from);
+#ifdef MH_DEBUG
+    char loc[128];
+    mh_code_location_to_string(loc, from);
+#endif
+    INFO("mh_context_error(%zu, %s, %s)\n", (size_t) context, message, loc);
 
     if (this->error_handler != NULL) {
         if (this->error_handler(context, message, from)) {
@@ -151,7 +155,7 @@ void mh_context_error(mh_context_t *context, const char *message, void *from) {
     abort();
 }
 
-void mh_context_set_error_handler(mh_context_t *context, bool (*handler)(mh_context_t *, const char *, void *)) {
+void mh_context_set_error_handler(mh_context_t *context, mh_error_handler_t handler) {
     MH_THIS(mh_context_private_t*, context);
     this->error_handler = handler;
 }

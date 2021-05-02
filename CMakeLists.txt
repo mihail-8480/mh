@@ -1,15 +1,26 @@
 cmake_minimum_required(VERSION 3.0)
-project(mh C)
+project(mh
+        LANGUAGES C
+        VERSION 0.0.1
+        DESCRIPTION "A C library that is supposed to make my life easier."
+        HOMEPAGE_URL "https://github.com/mihail-8480/mh")
+
 include("Mh.cmake")
 
-add_library(mh SHARED streams/mh_stream.c streams/mh_memory_stream.c mh_memory.c network/mh_tcp.c streams/mh_socket_stream.c network/mh_http.c mh_thread.c streams/mh_file_stream.c mh_context.c collections/mh_shitmap.c collections/mh_collection.c mh_handle.c)
+add_compile_definitions(MH_VERSION_MINOR=${CMAKE_PROJECT_VERSION_MINOR})
+add_compile_definitions(MH_VERSION_MAJOR=${CMAKE_PROJECT_VERSION_MAJOR})
+add_compile_definitions(MH_VERSION_PATCH=${CMAKE_PROJECT_VERSION_PATCH})
+
+add_library(mh SHARED src/streams/mh_stream.c src/streams/mh_memory_stream.c src/mh_memory.c src/network/mh_tcp.c src/streams/mh_socket_stream.c src/network/mh_http.c src/mh_thread.c src/streams/mh_file_stream.c src/mh_context.c src/collections/mh_shitmap.c src/collections/mh_collection.c src/mh_handle.c src/mh.c)
+target_include_directories(mh PRIVATE include/)
+
 
 if (WIN32)
     target_link_libraries(mh PRIVATE wsock32 ws2_32 dl)
 endif (WIN32)
 
 if(HAIKU)
-    target_link_libraries(mh PRIVATE bsd network)
+    target_link_libraries(mh PRIVATE bsd src/network)
 endif(HAIKU)
 
 if(UNIX_LIKE)

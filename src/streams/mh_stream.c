@@ -1,4 +1,4 @@
-#include "mh_stream.h"
+#include <mh_stream.h>
 #include "mh_stream_private.h"
 
 bool mh_stream_seek(mh_stream_t *stream, size_t position) {
@@ -19,7 +19,7 @@ void mh_stream_read(mh_stream_t *stream, mh_memory_t *buffer, size_t count) {
     }
 
     // Cannot read, report error
-    mh_context_error(this->context, "Cannot read from this stream.", mh_stream_read);
+    mh_context_error(this->context, "Cannot read from this stream.", MH_LOCATION(mh_stream_read));
 }
 
 void mh_stream_write(mh_stream_t *stream, mh_memory_t *buffer, size_t count) {
@@ -30,7 +30,7 @@ void mh_stream_write(mh_stream_t *stream, mh_memory_t *buffer, size_t count) {
     }
 
     // Cannot write.
-    mh_context_error(this->context, "Cannot write to this stream.", mh_stream_read);
+    mh_context_error(this->context, "Cannot write to this stream.", MH_LOCATION(mh_stream_read));
 }
 
 size_t mh_stream_get_position(mh_stream_t *stream) {
@@ -59,13 +59,13 @@ void mh_stream_copy_to(mh_stream_t *dest, mh_stream_t *src, size_t size) {
     if (src_stream->can_seek && size > src_stream->get_size(src_stream)) {
         mh_context_error(src_stream->context,
                          "Not enough memory in src_stream to preform a mh_stream_copy_to operation.",
-                         mh_stream_copy_to);
+                         MH_LOCATION(mh_stream_copy_to));
         return;
     }
     if (dest_stream->can_seek && size > dest_stream->get_size(dest_stream)) {
         mh_context_error(dest_stream->context,
                          "Not enough memory in dest_stream to preform a mh_stream_copy_to operation.",
-                         mh_stream_copy_to);
+                         MH_LOCATION(mh_stream_copy_to));
         return;
     }
 
