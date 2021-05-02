@@ -13,9 +13,7 @@ MH_TEST_NEW(thread_test) {
     mh_thread_create(modify, &args);
     size_t c = 0;
     while(args) {
-        if (c >= 10) {
-            MH_TEST_FAIL();
-        }
+        MH_TEST_EXPECT(c < 10);
         usleep(100);
         c++;
     }

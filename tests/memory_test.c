@@ -33,9 +33,10 @@ MH_TEST_NEW(memory_resize_test) {
 MH_TEST_NEW(memory_reference_test) {
     char str[] = "test";
     mh_memory_t ref = mh_memory_reference(str, 4);
-    if (ref.offset != 0 || ref.address != str || ref.size != 4) {
-        MH_TEST_FAIL();
-    }
+
+    MH_TEST_EXPECT(ref.offset == 0);
+    MH_TEST_EXPECT(ref.address == str);
+    MH_TEST_EXPECT(ref.size == 4);
     MH_TEST_PASSED();
 }
 
@@ -45,21 +46,19 @@ MH_TEST_NEW(memory_read_until_test) {
     mh_memory_t ref2 = mh_memory_read_until(&ref, 's');
     mh_memory_t ref3 = mh_memory_read_until(&ref, 'x');
 
-    if (ref.offset != 3 || ref3.address != NULL || ref3.size != 0 || ref2.size != 2) {
-        MH_TEST_FAIL();
-    }
 
+    MH_TEST_EXPECT(ref.offset == 3);
+    MH_TEST_EXPECT(ref3.address == NULL);
+    MH_TEST_EXPECT(ref3.size == 0);
+    MH_TEST_EXPECT(ref2.size == 2);
     MH_TEST_PASSED();
 }
 
 MH_TEST_NEW(memory_index_of_test) {
     char str[] = "test";
     mh_memory_t ref = mh_memory_reference(str, 4);
-    size_t index = mh_memory_index_of(ref, 'e');
-    if (index != 1) {
-        MH_TEST_FAIL();
-    }
 
+    MH_TEST_EXPECT(mh_memory_index_of(ref, 'e') == 1);
     MH_TEST_PASSED();
 }
 
@@ -68,9 +67,8 @@ MH_TEST_NEW(memory_to_string_test) {
     char str2[5];
     mh_memory_t ref = mh_memory_reference(str, 4);
     mh_memory_to_string(str2, ref);
-    if (strcmp(str, str2) != 0) {
-        MH_TEST_FAIL();
-    }
+
+    MH_TEST_EXPECT(strcmp(str, str2) == 0);
     MH_TEST_PASSED();
 }
 
@@ -81,9 +79,8 @@ MH_TEST_NEW(memory_is_equal_test) {
     mh_memory_t ref3 = mh_memory_reference(str+1, 3);
     mh_memory_t ref4 = mh_memory_reference(str, 3);
 
-    if (!mh_memory_is_equal(ref, ref2) || mh_memory_is_equal(ref, ref4) || mh_memory_is_equal(ref3, ref4)) {
-        MH_TEST_FAIL();
-    }
-
+    MH_TEST_EXPECT(mh_memory_is_equal(ref, ref2));
+    MH_TEST_EXPECT(!mh_memory_is_equal(ref, ref4));
+    MH_TEST_EXPECT(!mh_memory_is_equal(ref3, ref4));
     MH_TEST_PASSED();
 }
