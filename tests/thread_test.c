@@ -1,4 +1,4 @@
-#include "tests.h"
+#include "default_tests.h"
 #include "../inc/mh_thread.h"
 #include <unistd.h>
 

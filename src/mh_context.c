@@ -160,7 +160,7 @@ void mh_context_set_error_handler(mh_context_t *context, mh_error_handler_t hand
     this->error_handler = handler;
 }
 
-__thread mh_context_t *mh_context_current_thread = NULL;
+MH_PER_THREAD mh_context_t *mh_context_current_thread = NULL;
 
 void mh_context_bind_to_thread(mh_context_t *context) {
     if (mh_context_current_thread != NULL) {

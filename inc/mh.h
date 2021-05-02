@@ -10,6 +10,12 @@
 // This may not be used.
 #define MH_UNUSED __attribute__((unused))
 
+// One per thread.
+#define MH_PER_THREAD __thread
+
+// This function does not modify the state of the program.
+#define MH_PURE __attribute__ ((pure))
+
 // This function does not return.
 #define MH_NORETURN __attribute__((noreturn))
 
@@ -42,7 +48,7 @@ MH_API_TYPE(mh_code_location, struct mh_code_location {
 });
 
 // Get the current version.
-MH_API_FUNC(mh_version_t mh_get_version(void));
+MH_PURE MH_API_FUNC(mh_version_t mh_get_version(void));
 
 // Turn a code location to a string.
 MH_API_FUNC(void mh_code_location_to_string(char* str,mh_code_location_t location));

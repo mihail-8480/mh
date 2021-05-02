@@ -16,6 +16,10 @@ MH_API_TYPE(mh_test, struct mh_test {
     const bool required;
 });
 
+MH_API_TYPE(mh_tests, struct mh_tests {
+    const mh_test_t* tests;
+    size_t count;
+});
 
 #define MH_TEST_NEW(f) mh_test_return_t f(void)
 
