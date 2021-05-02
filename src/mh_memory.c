@@ -58,7 +58,7 @@ mh_memory_t mh_memory_read_until(mh_memory_t *memory, char c) {
 
     // Copy the memory into a c-string from the current offset, to the index of the character
     size_t index = mh_memory_index_of(*memory, c);
-    if (MH_PTR_CAST(int, index) == -1) {
+    if (index == (size_t)-1) {
         return mh_memory_reference(NULL, 0);
     }
     size_t size = index - memory->offset;

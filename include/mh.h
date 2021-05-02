@@ -15,9 +15,6 @@
 // Turn a function name into an error location.
 #define MH_LOCATION(x) ((mh_code_location_t){.file_name = __FILE__, .file_line = __LINE__, .function_name = #x, .function_address = (size_t)x})
 
-// Get the pointer of a variable, cast it to an other type and get it's value.
-#define MH_PTR_CAST(type,name) *((type*)&name)
-
 // Define an MH API type.
 #define MH_API_TYPE(name, code) typedef code name##_t
 
