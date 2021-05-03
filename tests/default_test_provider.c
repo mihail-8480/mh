@@ -19,7 +19,9 @@ static const mh_test_t tests[] = {
         MH_TEST(context_destructor_test),
         MH_TEST(context_error_test),
         MH_TEST(context_reallocate_test),
-        MH_TEST(context_thread_bind_test)
+        MH_TEST(context_thread_bind_test),
+
+        MH_TEST(memory_stream_test)
 };
 
 mh_tests_t mh_test_provider(void){

@@ -26,7 +26,7 @@ if(UNIX_LIKE)
 endif(UNIX_LIKE)
 
 
-add_library(mh-default-tests SHARED tests/thread_test.c tests/memory_test.c tests/handle_test.c tests/default_test_provider.c tests/context_test.c)
+add_library(mh-default-tests SHARED tests/thread_test.c tests/memory_test.c tests/handle_test.c tests/default_test_provider.c tests/context_test.c tests/stream_test.c)
 target_link_libraries(mh-default-tests PRIVATE mh)
 
 add_executable(mhtest src/test/mh_test_runner.c)
