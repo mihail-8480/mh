@@ -21,7 +21,9 @@ static const mh_test_t tests[] = {
         MH_TEST(context_reallocate_test),
         MH_TEST(context_thread_bind_test),
 
-        MH_TEST(memory_stream_test)
+        MH_TEST(memory_stream_test),
+
+        MH_TEST(map_test)
 };
 
 mh_tests_t mh_test_provider(void){

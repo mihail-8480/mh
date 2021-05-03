@@ -23,7 +23,6 @@ MH_TEST_NEW(context_thread_bind_test);
 
 MH_TEST_NEW(memory_stream_test);
 
-// TODO: Add tests for the following headers: mh.h, mh_stream.h, mh_collection.h, mh_map.h
-
+MH_TEST_NEW(map_test);
 
 #endif //MH_TESTS_LIST_H
