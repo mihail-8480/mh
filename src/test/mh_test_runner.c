@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-bool error(MH_UNUSED mh_context_t *context, const char *message, mh_code_location_t from) {
+bool program_error(MH_UNUSED mh_context_t *context, const char *message, mh_code_location_t from) {
     char loc[128];
     mh_code_location_to_string(loc, from);
     fprintf(stderr, "[program_error] An error has occurred %s: %s\n", loc, message);
@@ -23,7 +23,7 @@ inline static const char* mh_env_default(const char* env, const char* def) {
 int main(int argc, char* argv[]) {
     typedef mh_tests_t (*mh_test_provider_t)(void);
     MH_CONTEXT(context, {
-        mh_context_set_error_handler(context, error);
+        mh_context_set_error_handler(context, program_error);
 
         if (argc != 2) {
             mh_context_error(context, "Invalid syntax.", MH_LOCATION_ANY());

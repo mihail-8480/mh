@@ -12,7 +12,14 @@ static const mh_test_t tests[] = {
         MH_TEST(memory_to_string_test),
         MH_TEST(memory_is_equal_test),
 
-        MH_TEST(handle_test)
+        MH_TEST(handle_test),
+
+        MH_TEST(context_allocate_test),
+        MH_TEST(context_create_test),
+        MH_TEST(context_destructor_test),
+        MH_TEST(context_error_test),
+        MH_TEST(context_reallocate_test),
+        MH_TEST(context_thread_bind_test)
 };
 
 mh_tests_t mh_test_provider(void){
