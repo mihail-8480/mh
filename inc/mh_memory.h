@@ -38,7 +38,7 @@ void mh_memory_to_string(char *dest, mh_memory_t memory);
 bool mh_memory_is_equal(mh_memory_t first, mh_memory_t second);
 
 // Get a mh_memory reference from a fixed size array
-#define MH_REF_CONST(arr) mh_memory_reference(arr, sizeof(arr)-1)
+#define MH_REF_CONST(arr) mh_memory_reference(arr, sizeof(arr))
 
 // Get a mh_memory reference from a null terminated string
 #define MH_REF_STRING(str) mh_memory_reference(str, strlen(str))

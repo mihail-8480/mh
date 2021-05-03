@@ -1,34 +1,24 @@
 #include "default_tests.h"
 #include "../inc/mh_memory.h"
-MH_TEST_NEW(memory_new_test) {
-    bool fail = false;
-    MH_CONTEXT(context, {
-        mh_memory_t* memory = mh_memory_new(context, 10, true);
-        if (memory == NULL || memory->address == NULL || memory->offset != 0) {
-            fail = true;
-        } else {
-            for (int i = 0; i < 10; i++) {
-                if (((char *) memory->address)[i] != 0) {
-                    fail = true;
-                    break;
-                }
-            }
-        }
-    })
-    MH_TEST_RESULT(!fail, "Allocated memory is not zeroed.");
-}
 
-MH_TEST_NEW(memory_resize_test) {
-    bool fail = false;
-    MH_CONTEXT(context, {
-        mh_memory_t* memory = mh_memory_new(context, 10, false);
-        mh_memory_resize(context, memory, 20);
-        if (memory->address == NULL) {
-            fail = true;
-        }
-    })
-    MH_TEST_RESULT(!fail, "The returned memory address is NULL.");
-}
+MH_TEST_CONTEXT_NEW(memory_new_test, {
+    mh_memory_t* memory = mh_memory_new(context, 10, true);
+
+    MH_TEST_CONTEXT_EXPECT(memory != NULL)
+    MH_TEST_CONTEXT_EXPECT(memory->address != NULL)
+    MH_TEST_CONTEXT_EXPECT(memory->offset == 0)
+
+    for (int i = 0; i < 10; i++) {
+        MH_TEST_CONTEXT_EXPECT(((char *) memory->address)[i] == 0);
+    }
+
+})
+
+MH_TEST_CONTEXT_NEW(memory_resize_test, {
+    mh_memory_t* memory = mh_memory_new(context, 10, false);
+    mh_memory_resize(context, memory, 20);
+    MH_TEST_CONTEXT_EXPECT(memory->address != NULL)
+})
 
 MH_TEST_NEW(memory_reference_test) {
     char str[] = "test";
