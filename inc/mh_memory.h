@@ -40,6 +40,12 @@ bool mh_memory_is_equal(mh_memory_t first, mh_memory_t second);
 // Get a mh_memory reference from a fixed size array
 #define MH_REF_CONST(arr) mh_memory_reference(arr, sizeof(arr))
 
+// Get a mh_memory reference from a fixed size string
+#define MH_STRING(arr) mh_memory_reference(arr, sizeof(arr)-1)
+
+// Cast a mh_memory address to character pointer
+#define MH_MEM_TO_STRING(mem) ((char *)mem.address)
+
 // Get a mh_memory reference from a null terminated string
 #define MH_REF_STRING(str) mh_memory_reference(str, strlen(str))
 
