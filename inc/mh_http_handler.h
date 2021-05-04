@@ -19,7 +19,7 @@
 #define MH_ECHO_STR(str) mh_stream_write_reference(MH_SOCKET_STREAM, str, strlen(str))
 
 // Get a header from MH_REQUEST (str = string literal)
-#define MH_HEADER(str) mh_map_get(MH_REQUEST->headers, MH_REF_CONST(str))
+#define MH_HEADER(str) mh_map_get(MH_REQUEST->headers, MH_STRING(str))
 
 // Get a header from MH_REQUEST (str = string)
 #define MH_HEADER_STR(str) mh_map_get(MH_REQUEST->headers, MH_REF_STRING(str))
