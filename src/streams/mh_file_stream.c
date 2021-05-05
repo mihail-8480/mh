@@ -19,7 +19,6 @@ void mh_file_stream_read(void *stream, mh_memory_t *buffer, size_t count) {
     if (size == (size_t)-1) {
         mh_context_error(this->base.context, "Failed reading from the file, it is probably closed.",
                          MH_LOCATION(mh_file_stream_read));
-        return;
     }
 
     // Change the buffer offset
@@ -36,7 +35,6 @@ void mh_file_stream_write(void *stream, mh_memory_t *buffer, size_t count) {
     if (size == (size_t)-1) {
         mh_context_error(this->base.context, "Failed writing to the file, it is probably closed.",
                          MH_LOCATION(mh_file_stream_write));
-        return;
     }
 
     // Change the buffer offset

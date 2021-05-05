@@ -20,7 +20,6 @@ mh_handle_t *mh_handle_new(mh_context_t *context, const char *path) {
     void *handle = dlopen(path, RTLD_LAZY);
     if (!handle) {
         mh_context_error(context, dlerror(), MH_LOCATION(mh_handle_new));
-        return NULL;
     }
     *this = (mh_handle_private_t) {
             .context = context,
@@ -37,7 +36,6 @@ void *mh_handle_find_symbol(mh_handle_t *handle, const char *name) {
     void *sym = dlsym(this->handle, name);
     if (!sym) {
         mh_context_error(this->context, dlerror(), MH_LOCATION(mh_handle_new));
-        return NULL;
     }
     return sym;
 }

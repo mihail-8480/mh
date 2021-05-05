@@ -48,7 +48,6 @@ void *mh_tcp_threaded_connect_invoke(void *ptr) {
 void mh_tcp_start(mh_tcp_listener_t* listener) {
     if (listener->running) {
         mh_context_error(listener->context, "This listener is already running.", MH_LOCATION(mh_tcp_start));
-        abort();
     }
     listener->running = true;
 
@@ -64,7 +63,6 @@ void mh_tcp_start(mh_tcp_listener_t* listener) {
     // If the socket isn't made, crash the program
     if ((sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1) {
         mh_context_error(listener->context, "A socket could not be created successfully.", MH_LOCATION(mh_tcp_start));
-        abort();
     }
 
 #if defined(LINUX)
@@ -72,20 +70,17 @@ void mh_tcp_start(mh_tcp_listener_t* listener) {
     int opt = 1;
     if(setsockopt(sock, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)) == -1) {
         mh_context_error(listener->context, "Failed setting socket options.", MH_LOCATION(mh_tcp_start));
-        abort();
     }
 #endif
 
     // Bind the socket to the address specified earlier
     if (bind(sock, (struct sockaddr *) &listener->address, addr_len) == -1) {
         mh_context_error(listener->context, "Could not use the specified address.", MH_LOCATION(mh_tcp_start));
-        abort();
     }
 
     // Start listening
     if (listen(sock, listener->max_clients) == -1) {
         mh_context_error(listener->context, "Failed listening for clients.", MH_LOCATION(mh_tcp_start));
-        abort();
     }
 
     // Forever... (until the program crashes)
@@ -96,7 +91,6 @@ void mh_tcp_start(mh_tcp_listener_t* listener) {
         // If the client is invalid, crash the program
         if (client == -1) {
             mh_context_error(listener->context, "Could not accept client.", MH_LOCATION(mh_tcp_start));
-            abort();
         }
 
         // If the listener is about to exit, close the socket

@@ -15,7 +15,6 @@ void mh_memory_stream_read(void *stream, mh_memory_t *buffer, size_t count) {
         // If not, report an error
         mh_context_error(this->base.context, "The memory you are trying to read is out of range.",
                          MH_LOCATION(mh_memory_stream_read));
-        return;
     }
 
     // Copy bytes and update the buffer offset
@@ -38,7 +37,6 @@ void mh_memory_stream_write(void *stream, mh_memory_t *buffer, size_t count) {
             // Report the error
             mh_context_error(this->base.context, "The memory you are trying write is too large for this stream.",
                              MH_LOCATION(mh_memory_stream_write));
-            return;
         } else {
             // Allocate enough memory to complete the write operation
             mh_memory_stream_increase(this, this->memory->offset + count);
@@ -57,7 +55,6 @@ void mh_memory_stream_seek(void *stream, size_t position) {
     if (this->memory->offset + position < this->memory->size) {
         mh_context_error(this->base.context, "The position is larger than the memory allocation_size, cannot seek.",
                          MH_LOCATION(mh_memory_stream_seek));
-        return;
     }
 
     this->memory->offset = position;

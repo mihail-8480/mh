@@ -60,13 +60,11 @@ void mh_stream_copy_to(mh_stream_t *dest, mh_stream_t *src, size_t size) {
         mh_context_error(src_stream->context,
                          "Not enough memory in src_stream to preform a mh_stream_copy_to operation.",
                          MH_LOCATION(mh_stream_copy_to));
-        return;
     }
     if (dest_stream->can_seek && size > dest_stream->get_size(dest_stream)) {
         mh_context_error(dest_stream->context,
                          "Not enough memory in dest_stream to preform a mh_stream_copy_to operation.",
                          MH_LOCATION(mh_stream_copy_to));
-        return;
     }
 
     // try to NOT read everything at once...
