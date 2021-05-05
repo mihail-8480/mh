@@ -29,7 +29,7 @@ static mh_memory_t mh_list_iterator_current(mh_iterator_t *iterator) {
     return this->current->value;
 }
 
-static bool mh_list_iterator_next(mh_iterator_t* iterator) {
+static bool mh_list_iterator_next(mh_iterator_t *iterator) {
     MH_THIS(mh_list_iterator_t*, iterator);
     if (this->current == NULL || this->current->next == NULL) {
         return false;
@@ -45,34 +45,34 @@ static bool mh_list_iterator_start(mh_iterator_t *iterator) {
     return true;
 }
 
-static mh_iterator_t* mh_list_get_iterator(mh_collection_t *collection) {
+static mh_iterator_t *mh_list_get_iterator(mh_collection_t *collection) {
     MH_THIS(mh_list_private_t*, collection);
-    mh_list_iterator_t* iterator = mh_context_allocate(this->context, sizeof(mh_list_iterator_t), false).ptr;
-    *iterator = (mh_list_iterator_t){
-        .list = this,
-        .current = this->first,
-        .iterator = {
-                .current = mh_list_iterator_current,
-                .next = mh_list_iterator_next,
-                .start = mh_list_iterator_start
-        }
+    mh_list_iterator_t *iterator = mh_context_allocate(this->context, sizeof(mh_list_iterator_t), false).ptr;
+    *iterator = (mh_list_iterator_t) {
+            .list = this,
+            .current = this->first,
+            .iterator = {
+                    .current = mh_list_iterator_current,
+                    .next = mh_list_iterator_next,
+                    .start = mh_list_iterator_start
+            }
     };
     return &iterator->iterator;
 }
 
-mh_list_t *mh_list_new(mh_context_t* context){
-    MH_THIS(mh_list_private_t*,mh_context_allocate(context, sizeof(mh_list_private_t), false).ptr);
+mh_list_t *mh_list_new(mh_context_t *context) {
+    MH_THIS(mh_list_private_t*, mh_context_allocate(context, sizeof(mh_list_private_t), false).ptr);
     MH_NULL_REFERENCE(context, this);
 
-    *this = (mh_list_private_t){
-        .first = NULL,
-        .last = NULL,
-        .count = 0,
-        .context = context,
-        .base.collection = {
-                .destructor.free = NULL,
-                .get_iterator = mh_list_get_iterator
-        }
+    *this = (mh_list_private_t) {
+            .first = NULL,
+            .last = NULL,
+            .count = 0,
+            .context = context,
+            .base.collection = {
+                    .destructor.free = NULL,
+                    .get_iterator = mh_list_get_iterator
+            }
     };
     return &this->base;
 }
@@ -82,7 +82,7 @@ mh_memory_t *mh_list_node_value(mh_list_node_t *node) {
 }
 
 
-mh_list_node_t *mh_list_node_new(mh_context_t* context, const mh_memory_t ref) {
+mh_list_node_t *mh_list_node_new(mh_context_t *context, const mh_memory_t ref) {
     mh_context_allocation_reference_t alloc = mh_context_allocate(context, sizeof(mh_list_node_t), false);
 
     MH_THIS(mh_list_node_t*, alloc.ptr);
@@ -100,9 +100,10 @@ size_t mh_list_count(mh_list_t *list) {
     MH_THIS(mh_list_private_t*, list);
     return this->count;
 }
+
 void mh_list_append(mh_list_t *list, const mh_memory_t ref) {
     MH_THIS(mh_list_private_t*, list);
-    mh_list_node_t* node = mh_list_node_new(this->context, ref);
+    mh_list_node_t *node = mh_list_node_new(this->context, ref);
     if (this->last != NULL) {
         this->last->next = node;
     }
@@ -120,22 +121,22 @@ mh_list_node_t *mh_list_node_previous(mh_list_node_t *node) {
     return node->previous;
 }
 
-mh_list_node_t *mh_list_last(mh_list_t* list) {
+mh_list_node_t *mh_list_last(mh_list_t *list) {
     MH_THIS(mh_list_private_t*, list);
     return this->last;
 }
 
-mh_list_node_t *mh_list_first(mh_list_t* list) {
+mh_list_node_t *mh_list_first(mh_list_t *list) {
     MH_THIS(mh_list_private_t*, list);
     return this->first;
 }
 
-mh_list_node_t *mh_list_at_index(mh_list_t* list, size_t index) {
+mh_list_node_t *mh_list_at_index(mh_list_t *list, size_t index) {
     MH_THIS(mh_list_private_t*, list);
     if (index >= this->count) {
         mh_context_error(this->context, "The index is out of range.", MH_LOCATION(mh_list_at_index));
     }
-    mh_list_node_t* node = this->first;
+    mh_list_node_t *node = this->first;
     for (size_t i = 0; i < index; i++) {
         node = node->next;
     }
@@ -144,7 +145,7 @@ mh_list_node_t *mh_list_at_index(mh_list_t* list, size_t index) {
 
 void mh_list_prepend(mh_list_t *list, const mh_memory_t ref) {
     MH_THIS(mh_list_private_t*, list);
-    mh_list_node_t* node = mh_list_node_new(this->context, ref);
+    mh_list_node_t *node = mh_list_node_new(this->context, ref);
     if (this->first != NULL) {
         this->first->previous = node;
     }
@@ -171,5 +172,5 @@ void mh_list_remove(mh_list_t *list, mh_list_node_t *node) {
     }
 
     this->count--;
-    mh_context_free(this->context, (mh_context_allocation_reference_t){.ptr = node, .index = node->allocation_index});
+    mh_context_free(this->context, (mh_context_allocation_reference_t) {.ptr = node, .index = node->allocation_index});
 }

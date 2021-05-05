@@ -2,12 +2,13 @@
 #include "../inc/mh_map.h"
 
 static int c = 0;
+
 static void count(MH_UNUSED mh_memory_t mem) {
     c++;
 }
 
 MH_TEST_CONTEXT_NEW(map_test, {
-    mh_map_t* map = mh_map_new(context);
+    mh_map_t *map = mh_map_new(context);
     char key[] = "TestKey";
     char key2[] = "TestKey1";
     char invalid_key[] = "TestKeyInvalid";

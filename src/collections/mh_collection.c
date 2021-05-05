@@ -22,5 +22,5 @@ void mh_collection_foreach(mh_collection_t *collection, void (*action)(mh_memory
     do {
         mh_memory_t mem = mh_iterator_current(iterator);
         action(mem);
-    } while(mh_iterator_next(iterator));
+    } while (mh_iterator_next(iterator));
 }

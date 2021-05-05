@@ -51,6 +51,6 @@ MH_API_TYPE(mh_code_location, struct mh_code_location {
 MH_PURE MH_API_FUNC(mh_version_t mh_get_version(void));
 
 // Turn a code location to a string.
-MH_API_FUNC(void mh_code_location_to_string(char* str,mh_code_location_t location));
+MH_API_FUNC(void mh_code_location_to_string(char *str, mh_code_location_t location));
 
 #endif //MH_MH_H

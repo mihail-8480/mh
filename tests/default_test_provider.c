@@ -26,6 +26,6 @@ static const mh_test_t tests[] = {
         MH_TEST(map_test)
 };
 
-mh_tests_t mh_test_provider(void){
+mh_tests_t mh_test_provider(void) {
     return (mh_tests_t) {.count = MH_FIXED_COUNT(tests), .tests = tests};
 }

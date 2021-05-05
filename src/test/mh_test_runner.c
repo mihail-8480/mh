@@ -14,24 +14,25 @@ bool program_error(mh_context_t *context, const char *message, mh_code_location_
     exit(1);
 }
 
-void tests_print(const mh_test_t* tests, size_t count) {
+void tests_print(const mh_test_t *tests, size_t count) {
     mh_test_return_t result;
     size_t failed = 0;
-    for(size_t i = 0; i < count; i++) {
-        printf("[......] [%zu/%zu] Running the test `%s`...", i+1, count, tests[i].name);
+    for (size_t i = 0; i < count; i++) {
+        printf("[......] [%zu/%zu] Running the test `%s`...", i + 1, count, tests[i].name);
         fflush(stdout);
         mh_tests_check(&result, &tests[i], 1);
         if (!result.success) {
             char loc[128];
             mh_code_location_to_string(loc, result.location);
-            printf("\r[FAILED] [%zu/%zu] The test `%s` has failed because \"%s\" %s.\n", i+1, count, tests[i].name, result.reason, loc);
+            printf("\r[FAILED] [%zu/%zu] The test `%s` has failed because \"%s\" %s.\n", i + 1, count, tests[i].name,
+                   result.reason, loc);
             failed++;
             if (tests[i].required) {
-                fprintf(stderr,"`%s` is a required test, stopping...\n", tests[i].name);
+                fprintf(stderr, "`%s` is a required test, stopping...\n", tests[i].name);
                 exit(1);
             }
         } else {
-            printf("\r[PASSED] [%zu/%zu] The test `%s` has passed.\n", i+1, count, tests[i].name);
+            printf("\r[PASSED] [%zu/%zu] The test `%s` has passed.\n", i + 1, count, tests[i].name);
         }
     }
     printf("Finished testing and ");
@@ -43,8 +44,8 @@ void tests_print(const mh_test_t* tests, size_t count) {
     exit(failed != 0);
 }
 
-int main(int argc, char* argv[]) {
-    mh_context_t* context = mh_start();
+int main(int argc, char *argv[]) {
+    mh_context_t *context = mh_start();
     typedef mh_tests_t (*mh_test_provider_t)(void);
     mh_context_set_error_handler(context, program_error);
 

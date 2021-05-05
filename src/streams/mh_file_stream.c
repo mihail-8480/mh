@@ -16,7 +16,7 @@ void mh_file_stream_read(void *stream, mh_memory_t *buffer, size_t count) {
     size_t size = fread(buffer->address, 1, count, this->file);
 
     // If the allocation_size is negative, something went wrong
-    if (size == (size_t)-1) {
+    if (size == (size_t) -1) {
         mh_context_error(this->base.context, "Failed reading from the file, it is probably closed.",
                          MH_LOCATION(mh_file_stream_read));
     }
@@ -32,7 +32,7 @@ void mh_file_stream_write(void *stream, mh_memory_t *buffer, size_t count) {
     size_t size = fwrite(buffer->address, 1, count, this->file);
 
     // See above.
-    if (size == (size_t)-1) {
+    if (size == (size_t) -1) {
         mh_context_error(this->base.context, "Failed writing to the file, it is probably closed.",
                          MH_LOCATION(mh_file_stream_write));
     }
@@ -51,7 +51,7 @@ void mh_file_stream_free(void *stream) {
 
 void mh_file_stream_seek(void *stream, size_t position) {
     MH_THIS(mh_file_stream_t*, stream);
-    fseek(this->file, (long)position, SEEK_SET);
+    fseek(this->file, (long) position, SEEK_SET);
 }
 
 size_t mh_file_stream_get_position(void *stream) {

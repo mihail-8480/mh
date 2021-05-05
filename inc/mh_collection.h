@@ -8,6 +8,7 @@
 MH_API_TYPE(mh_iterator, struct mh_iterator {
     // For mh_iterator_start()
     bool (*start)(struct mh_iterator *iterator);
+
     // For mh_iterator_next()
     bool (*next)(struct mh_iterator *iterator);
 
@@ -18,6 +19,7 @@ MH_API_TYPE(mh_iterator, struct mh_iterator {
 // A collection
 MH_API_TYPE(mh_collection, struct mh_collection {
     mh_destructor_t destructor;
+
     // For mh_collection_get_iterator()
     mh_iterator_t *(*get_iterator)(struct mh_collection *collection);
 });

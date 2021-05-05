@@ -1,14 +1,14 @@
 #include "../../inc/mh_args.h"
 
 
-static bool mh_argument_parse_one(mh_map_t* map, int argc, char *argv[], mh_memory_t* format, int *c_arg) {
-    while(*c_arg < argc) {
+static bool mh_argument_parse_one(mh_map_t *map, int argc, char *argv[], mh_memory_t *format, int *c_arg) {
+    while (*c_arg < argc) {
         if (format->offset >= format->size) {
             return true;
         }
         mh_memory_t current = mh_memory_read_until(format, ' ');
         if (current.size == 0) {
-            current = mh_memory_reference((char*)format->address + format->offset, format->size - format->offset);
+            current = mh_memory_reference((char *) format->address + format->offset, format->size - format->offset);
             format->offset = format->size;
         }
         mh_memory_t value = MH_REF_STRING(argv[*c_arg]);
@@ -18,8 +18,8 @@ static bool mh_argument_parse_one(mh_map_t* map, int argc, char *argv[], mh_memo
     return false;
 }
 
-mh_map_t* mh_argument_parse(mh_context_t* context, const mh_argument_parser_args_t* args, int argc, char *argv[]) {
-    mh_map_t* map = mh_map_new(context);
+mh_map_t *mh_argument_parse(mh_context_t *context, const mh_argument_parser_args_t *args, int argc, char *argv[]) {
+    mh_map_t *map = mh_map_new(context);
     mh_memory_t req = MH_REF_STRING(args->required_arguments);
 
     int c_arg = 1;
@@ -35,7 +35,7 @@ mh_map_t* mh_argument_parse(mh_context_t* context, const mh_argument_parser_args
         if (too_many_opt) {
             mh_context_error(context, "Too many arguments.", MH_LOCATION_ANY());
         }
-    } else if(too_many_req) {
+    } else if (too_many_req) {
         mh_context_error(context, "Too many arguments.", MH_LOCATION_ANY());
     }
 

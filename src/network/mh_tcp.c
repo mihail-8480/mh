@@ -3,19 +3,21 @@
 #include <stdlib.h>
 
 #if defined(UNIX)
+
 #include <stdio.h>
 #include <signal.h>
 #include <sys/socket.h>
 
 void mh_tcp_sigpipe() {
     // Try to get the context of the thread where the SIGPIPE happened
-    mh_context_t* context = mh_context_get_from_thread();
+    mh_context_t *context = mh_context_get_from_thread();
     if (context == NULL) {
         return;
     }
     // Report the error on that context
     mh_context_error(context, "Broken pipe.", MH_LOCATION(mh_tcp_sigpipe));
 }
+
 #elif defined(WIN32)
 #include <ws2tcpip.h>
 #else
@@ -25,7 +27,7 @@ void mh_tcp_sigpipe() {
 // The new thread's arguments
 typedef struct mh_tcp_threaded_args {
     mh_socket_t socket;
-    mh_tcp_listener_t* listener;
+    mh_tcp_listener_t *listener;
     mh_socket_address_t address;
     mh_on_connect_t on_connect;
     mh_context_t *context;
@@ -45,7 +47,7 @@ void *mh_tcp_threaded_connect_invoke(void *ptr) {
     return NULL;
 }
 
-void mh_tcp_start(mh_tcp_listener_t* listener) {
+void mh_tcp_start(mh_tcp_listener_t *listener) {
     if (listener->running) {
         mh_context_error(listener->context, "This listener is already running.", MH_LOCATION(mh_tcp_start));
     }
@@ -68,7 +70,7 @@ void mh_tcp_start(mh_tcp_listener_t* listener) {
 #if defined(LINUX)
     // Set the socket options, if it fails, crash the program
     int opt = 1;
-    if(setsockopt(sock, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)) == -1) {
+    if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)) == -1) {
         mh_context_error(listener->context, "Failed setting socket options.", MH_LOCATION(mh_tcp_start));
     }
 #endif

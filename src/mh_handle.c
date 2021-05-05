@@ -23,7 +23,7 @@ mh_handle_t *mh_handle_new(mh_context_t *context, const char *path) {
     }
     *this = (mh_handle_private_t) {
             .context = context,
-            .base.destructor = { mh_handle_destroy },
+            .base.destructor = {mh_handle_destroy},
             .handle = handle
     };
     mh_context_add_destructor(context, &this->base.destructor);

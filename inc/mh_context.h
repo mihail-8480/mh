@@ -13,7 +13,7 @@ typedef void (*mh_destructor_free_t)(void *ptr);
 MH_API_TYPE(mh_context_allocation, void*);
 
 // A context reference to allocated memory
-MH_API_TYPE(mh_context_allocation_reference,struct mh_context_allocation_reference {
+MH_API_TYPE(mh_context_allocation_reference, struct mh_context_allocation_reference {
     mh_context_allocation_t ptr;
     size_t index;
 });

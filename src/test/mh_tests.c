@@ -1,8 +1,8 @@
 #include "../../inc/mh_tests.h"
 
-bool mh_tests_check(mh_test_return_t* results, const mh_test_t* tests, size_t count) {
+bool mh_tests_check(mh_test_return_t *results, const mh_test_t *tests, size_t count) {
     size_t failed = 0;
-    for(size_t i = 0; i < count; i++) {
+    for (size_t i = 0; i < count; i++) {
         if (tests[i].func == NULL) {
             if (results != NULL) {
                 results[i].success = false;
@@ -17,7 +17,7 @@ bool mh_tests_check(mh_test_return_t* results, const mh_test_t* tests, size_t co
             results[i] = result;
         }
         if (!result.success && tests[i].required) {
-                return false;
+            return false;
         }
     }
     return !failed;

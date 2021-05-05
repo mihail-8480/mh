@@ -6,9 +6,11 @@
 #include <stdbool.h>
 
 #if defined(UNIX)
+
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+
 #elif defined(WIN32)
 #include <winsock2.h>
 #else
@@ -16,7 +18,7 @@
 #endif
 
 // The address of a socket
-MH_API_TYPE(mh_socket_address,struct sockaddr_in);
+MH_API_TYPE(mh_socket_address, struct sockaddr_in);
 
 // The socket type
 #if defined(UNIX)
@@ -29,10 +31,10 @@ MH_API_TYPE(mh_socket, SOCKET);
 
 
 // The tcp listener struct
-MH_API_TYPE(mh_tcp_listener,struct mh_tcp_listener);
+MH_API_TYPE(mh_tcp_listener, struct mh_tcp_listener);
 
 // A function pointer type for mh_tcp_start
-typedef void (*mh_on_connect_t)(mh_tcp_listener_t*, mh_context_t *, mh_socket_t, mh_socket_address_t);
+typedef void (*mh_on_connect_t)(mh_tcp_listener_t *, mh_context_t *, mh_socket_t, mh_socket_address_t);
 
 struct mh_tcp_listener {
     mh_context_t *context;
@@ -49,11 +51,12 @@ MH_API_FUNC(unsigned short mh_tcp_address_to_string(char *dest, mh_socket_addres
 MH_API_FUNC(mh_socket_address_t mh_tcp_string_to_address(const char *str, unsigned short port));
 
 // Init platform-specific stuff
-MH_API_FUNC(void mh_tcp_init(mh_tcp_listener_t* listener));
+MH_API_FUNC(void mh_tcp_init(mh_tcp_listener_t *listener));
 
 // Cleanup platform-specific stuff
-MH_API_FUNC(void mh_tcp_cleanup(mh_tcp_listener_t* listener));
+MH_API_FUNC(void mh_tcp_cleanup(mh_tcp_listener_t *listener));
 
 // Start a TCP listener
-MH_API_FUNC(void mh_tcp_start(mh_tcp_listener_t* listener));
+MH_API_FUNC(void mh_tcp_start(mh_tcp_listener_t *listener));
+
 #endif //MHSERV_MH_TCP_H

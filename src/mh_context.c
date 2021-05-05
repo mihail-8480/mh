@@ -3,7 +3,9 @@
 #include <setjmp.h>
 
 #ifdef MH_DEBUG
+
 #include <stdio.h>
+
 #define INFO(...) printf(__VA_ARGS__)
 #else
 #define INFO(...)
@@ -66,7 +68,7 @@ void mh_end(mh_context_t *context) {
 
     // Free every allocation and the allocation array
     for (size_t i = 0; i < this->allocation_count; i++) {
-        INFO("(mh_end [%zu])-- freeing [%zu] (%zu)\n",(size_t) context , i, (size_t) this->allocations[i]);
+        INFO("(mh_end [%zu])-- freeing [%zu] (%zu)\n", (size_t) context, i, (size_t) this->allocations[i]);
         if (this->allocations[i] != NULL) {
             free(this->allocations[i]);
         }
@@ -112,7 +114,7 @@ void *mh_context_reallocate(mh_context_t *context, mh_context_allocation_referen
         return NULL;
     }
 
-    void* ptr = realloc(ref.ptr, size);
+    void *ptr = realloc(ref.ptr, size);
 
     if (ptr == NULL) {
         mh_context_error(context, "Failed reallocating memory.", MH_LOCATION(mh_context_reallocate));
@@ -176,7 +178,7 @@ void mh_context_error(mh_context_t *context, const char *message, mh_code_locati
 }
 
 
-jmp_buf* mh_context_get_jump_buffer(mh_context_t* context) {
+jmp_buf *mh_context_get_jump_buffer(mh_context_t *context) {
     MH_THIS(mh_context_private_t*, context);
     this->do_jump = true;
     return &this->jump_buffer;

@@ -17,13 +17,13 @@ if (WIN32)
     target_link_libraries(mh PRIVATE wsock32 ws2_32 dl)
 endif (WIN32)
 
-if(HAIKU)
+if (HAIKU)
     target_link_libraries(mh PRIVATE bsd src/network)
-endif(HAIKU)
+endif (HAIKU)
 
-if(UNIX_LIKE)
+if (UNIX_LIKE)
     target_link_libraries(mh PRIVATE pthread dl)
-endif(UNIX_LIKE)
+endif (UNIX_LIKE)
 
 
 add_library(mh-default-tests SHARED tests/thread_test.c tests/memory_test.c tests/handle_test.c tests/default_test_provider.c tests/context_test.c tests/stream_test.c tests/collection_test.c)

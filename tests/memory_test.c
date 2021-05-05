@@ -2,7 +2,7 @@
 #include "../inc/mh_memory.h"
 
 MH_TEST_CONTEXT_NEW(memory_new_test, {
-    mh_memory_t* memory = mh_memory_new(context, 10, true);
+    mh_memory_t *memory = mh_memory_new(context, 10, true);
 
     MH_TEST_CONTEXT_EXPECT(memory != NULL)
     MH_TEST_CONTEXT_EXPECT(memory->address != NULL)
@@ -15,7 +15,7 @@ MH_TEST_CONTEXT_NEW(memory_new_test, {
 })
 
 MH_TEST_CONTEXT_NEW(memory_resize_test, {
-    mh_memory_t* memory = mh_memory_new(context, 10, false);
+    mh_memory_t *memory = mh_memory_new(context, 10, false);
     mh_memory_resize(context, memory, 20);
     MH_TEST_CONTEXT_EXPECT(memory->address != NULL)
 })
@@ -65,7 +65,7 @@ MH_TEST_NEW(memory_is_equal_test) {
     char str[] = "test";
     mh_memory_t ref = mh_memory_reference(str, 4);
     mh_memory_t ref2 = mh_memory_reference(str, 4);
-    mh_memory_t ref3 = mh_memory_reference(str+1, 3);
+    mh_memory_t ref3 = mh_memory_reference(str + 1, 3);
     mh_memory_t ref4 = mh_memory_reference(str, 3);
     MH_TEST_EXPECT(mh_memory_is_equal(ref, ref2));
     MH_TEST_EXPECT(!mh_memory_is_equal(ref, ref4));

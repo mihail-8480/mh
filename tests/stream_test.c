@@ -2,8 +2,8 @@
 #include "../inc/mh_stream.h"
 
 MH_TEST_CONTEXT_NEW(memory_stream_test, {
-    mh_stream_t* stream = mh_memory_stream_new(context, 1, false);
-    mh_memory_t* memory = mh_memory_stream_get_memory(stream);
+    mh_stream_t *stream = mh_memory_stream_new(context, 1, false);
+    mh_memory_t *memory = mh_memory_stream_get_memory(stream);
 
     MH_TEST_CONTEXT_EXPECT(memory->address != NULL)
     MH_TEST_CONTEXT_EXPECT(memory->size == 1)

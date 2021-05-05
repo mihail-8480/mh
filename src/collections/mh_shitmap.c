@@ -100,7 +100,7 @@ mh_map_t *mh_map_new(mh_context_t *context) {
             .context = context,
             .memory = memory,
             .base.collection.get_iterator = mh_map_get_iterator,
-            .base.collection.destructor = { NULL },
+            .base.collection.destructor = {NULL},
     };
     this->internal_iterator = mh_map_get_iterator(&this->base.collection);
     return &this->base;

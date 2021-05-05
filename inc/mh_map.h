@@ -10,7 +10,7 @@ MH_API_TYPE(mh_map, struct mh_map {
 });
 
 // The key/value pair structure (the iterator returns mh_memory_t that points to this)
-MH_API_TYPE(mh_key_value_pair,struct mh_key_value_pair {
+MH_API_TYPE(mh_key_value_pair, struct mh_key_value_pair {
     mh_memory_t key;
     mh_memory_t value;
 });

@@ -18,7 +18,7 @@ void mh_memory_stream_read(void *stream, mh_memory_t *buffer, size_t count) {
     }
 
     // Copy bytes and update the buffer offset
-    memcpy(buffer->address, (void*)((size_t)this->memory->address + this->memory->offset), count);
+    memcpy(buffer->address, (void *) ((size_t) this->memory->address + this->memory->offset), count);
     buffer->offset = count;
     this->memory->offset += count;
 }
@@ -43,7 +43,7 @@ void mh_memory_stream_write(void *stream, mh_memory_t *buffer, size_t count) {
         }
     }
     // Copy bytes and update the buffer offset
-    memcpy((void*)((size_t)this->memory->address + this->memory->offset), buffer->address, count);
+    memcpy((void *) ((size_t) this->memory->address + this->memory->offset), buffer->address, count);
     buffer->offset = count;
     this->memory->offset += count;
 }
