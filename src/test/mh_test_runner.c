@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
     mh_memory_t lib = mh_map_get(map, MH_STRING("lib"));
     mh_memory_t check_only_s = mh_map_get(map, MH_STRING("check_only"));
 
-    bool check_only = check_only_s.address != NULL && strcmp(MH_MEM_TO_STRING(check_only_s), "check") == 0 ? true : false;
+    bool check_only = check_only_s.address != NULL && strcmp(MH_MEM_TO_STRING(check_only_s), "check") == 0;
 
     mh_handle_t *handle = mh_handle_new(context, MH_MEM_TO_STRING(lib));
     mh_test_provider_t provider = (mh_test_provider_t) (size_t) mh_handle_find_symbol(handle, "mh_test_provider");

@@ -56,9 +56,13 @@ bool mh_map_contains(mh_map_t *map, mh_memory_t key) {
     return mh_map_get(map, key).address != NULL;
 }
 
-void mh_map_iterator_start(mh_iterator_t *iterator) {
+bool mh_map_iterator_start(mh_iterator_t *iterator) {
     MH_THIS(mh_map_iterator_t*, iterator);
+    if (this->map->memory->offset == 0) {
+        return false;
+    }
     this->position = 0;
+    return true;
 }
 
 bool mh_map_iterator_next(mh_iterator_t *iterator) {

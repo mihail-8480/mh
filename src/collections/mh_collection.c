@@ -4,8 +4,8 @@ mh_iterator_t *mh_collection_get_iterator(mh_collection_t *collection) {
     return collection->get_iterator(collection);
 }
 
-void mh_iterator_start(mh_iterator_t *iterator) {
-    iterator->start(iterator);
+bool mh_iterator_start(mh_iterator_t *iterator) {
+    return iterator->start(iterator);
 }
 
 bool mh_iterator_next(mh_iterator_t *iterator) {
@@ -14,4 +14,13 @@ bool mh_iterator_next(mh_iterator_t *iterator) {
 
 mh_memory_t mh_iterator_current(mh_iterator_t *iterator) {
     return iterator->current(iterator);
+}
+
+void mh_collection_foreach(mh_collection_t *collection, void (*action)(mh_memory_t)) {
+    mh_iterator_t *iterator = mh_collection_get_iterator(collection);
+    if (!mh_iterator_start(iterator)) return;
+    do {
+        mh_memory_t mem = mh_iterator_current(iterator);
+        action(mem);
+    } while(mh_iterator_next(iterator));
 }

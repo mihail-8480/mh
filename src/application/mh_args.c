@@ -27,7 +27,6 @@ mh_map_t* mh_argument_parse(mh_context_t* context, const mh_argument_parser_args
 
     if (req.offset != req.size) {
         mh_context_error(context, "Not enough arguments.", MH_LOCATION_ANY());
-        return map;
     }
 
     if (too_many_req && args->optional_arguments != NULL) {

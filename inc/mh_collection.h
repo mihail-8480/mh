@@ -7,7 +7,7 @@
 // Something to iterate over
 MH_API_TYPE(mh_iterator, struct mh_iterator {
     // For mh_iterator_start()
-    void (*start)(struct mh_iterator *iterator);
+    bool (*start)(struct mh_iterator *iterator);
     // For mh_iterator_next()
     bool (*next)(struct mh_iterator *iterator);
 
@@ -23,7 +23,7 @@ MH_API_TYPE(mh_collection, struct mh_collection {
 });
 
 // Set the iterator to the beginning
-MH_API_FUNC(void mh_iterator_start(mh_iterator_t *iterator));
+MH_API_FUNC(bool mh_iterator_start(mh_iterator_t *iterator));
 
 // Move to the next element
 MH_API_FUNC(bool mh_iterator_next(mh_iterator_t *iterator));
@@ -34,5 +34,7 @@ MH_API_FUNC(mh_memory_t mh_iterator_current(mh_iterator_t *iterator));
 // Create an iterator from a collection
 MH_API_FUNC(mh_iterator_t *mh_collection_get_iterator(mh_collection_t *collection));
 
+// Iterate trough the array and do an action
+MH_API_FUNC(void mh_collection_foreach(mh_collection_t *collection, void (*action)(mh_memory_t memory)));
 
 #endif //MHSERV_MH_COLLECTION_H

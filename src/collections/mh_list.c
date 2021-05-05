@@ -2,8 +2,8 @@
 
 struct mh_list_node {
     mh_memory_t value;
-    struct mh_list_node *next;
-    struct mh_list_node *previous;
+    mh_list_node_t *next;
+    mh_list_node_t *previous;
     size_t allocation_index;
 };
 
@@ -38,9 +38,11 @@ static bool mh_list_iterator_next(mh_iterator_t* iterator) {
     return true;
 }
 
-static void mh_list_iterator_start(mh_iterator_t *iterator) {
+static bool mh_list_iterator_start(mh_iterator_t *iterator) {
     MH_THIS(mh_list_iterator_t*, iterator);
+    if (this->list->first != NULL) return false;
     this->current = this->list->first;
+    return true;
 }
 
 static mh_iterator_t* mh_list_get_iterator(mh_collection_t *collection) {
@@ -75,8 +77,8 @@ mh_list_t *mh_list_new(mh_context_t* context){
     return &this->base;
 }
 
-mh_memory_t mh_list_node_value(mh_list_node_t *node) {
-    return node->value;
+mh_memory_t *mh_list_node_value(mh_list_node_t *node) {
+    return &node->value;
 }
 
 
