@@ -49,4 +49,6 @@ bool mh_memory_is_equal(mh_memory_t first, mh_memory_t second);
 // Get a mh_memory reference from a null terminated string
 #define MH_REF_STRING(str) mh_memory_reference(str, strlen(str))
 
+#define MH_MEM_NULL ((mh_memory_t){.address = NULL, .offset = 0, .size = 0})
+
 #endif //MHSERV_MH_MEMORY_H

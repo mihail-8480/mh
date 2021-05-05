@@ -4,6 +4,7 @@
 #include "mh.h"
 #include <stdbool.h>
 #include <stddef.h>
+#include <setjmp.h>
 
 // A function pointer that points to the method that is supposed to free memory
 typedef void (*mh_destructor_free_t)(void *ptr);
@@ -41,13 +42,19 @@ MH_API_FUNC(mh_context_t *mh_start(void));
 MH_API_FUNC(void mh_end(mh_context_t *context));
 
 // Report an error to a context
-MH_API_FUNC(void mh_context_error(mh_context_t *context, const char *message, mh_code_location_t from));
+MH_NORETURN MH_API_FUNC(void mh_context_error(mh_context_t *context, const char *message, mh_code_location_t from));
 
 // Set an error handler to a context
 MH_API_FUNC(void mh_context_set_error_handler(mh_context_t *context, mh_error_handler_t handler));
 
+// Catch an error on this thread, returns false on a caught error
+MH_API_FUNC(jmp_buf *mh_context_get_jump_buffer(mh_context_t *context));
+
 // Resize memory in the context
 MH_API_FUNC(void *mh_context_reallocate(mh_context_t *context, mh_context_allocation_reference_t ref, size_t size));
+
+// Free previously allocated memory
+MH_API_FUNC(void mh_context_free(mh_context_t *context, mh_context_allocation_reference_t ref));
 
 // Allocate memory that will get destroyed when the context ends
 MH_API_FUNC(mh_context_allocation_reference_t mh_context_allocate(mh_context_t *context, size_t size, bool clear));
@@ -62,5 +69,9 @@ MH_API_FUNC(void mh_context_bind_to_thread(mh_context_t *context));
 MH_API_FUNC(mh_context_t *mh_context_get_from_thread(void));
 
 #define MH_CONTEXT(name, code) { mh_context_t* name = mh_start(); code mh_end(name);}
+#define MH_NULL_REFERENCE(ctx, arg) if (arg == NULL) mh_context_error(ctx, "The reference `" #arg "` is NULL.", MH_LOCATION_ANY())
+
+#define MH_TRY(ctx) if (!setjmp(*mh_context_get_jump_buffer(ctx)))
+#define MH_CATCH else
 
 #endif //MHSERV_MH_CONTEXT_H

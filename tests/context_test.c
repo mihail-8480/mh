@@ -18,10 +18,15 @@ bool error_report() {
 MH_TEST_NEW(context_error_test) {
     mh_context_t* context = mh_start();
     mh_context_set_error_handler(context, error_report);
-    mh_context_error(context, "Test", MH_LOCATION_ANY());
-    mh_end(context);
-    MH_TEST_EXPECT(error_reported == true);
-    MH_TEST_PASSED();
+
+    MH_TRY(context) {
+        mh_context_error(context, "Test", MH_LOCATION_ANY());
+    } MH_CATCH {
+        mh_end(context);
+        MH_TEST_EXPECT(error_reported == true);
+        MH_TEST_PASSED();
+    }
+    MH_TEST_FAIL();
 }
 
 MH_TEST_NEW(context_allocate_test) {
