@@ -10,7 +10,7 @@ MH_TEST_CONTEXT_NEW(memory_stream_test, {
     MH_TEST_CONTEXT_EXPECT(mh_stream_write_reference(stream, "Test", 4) == 4)
 
     mh_stream_seek(stream, 0);
-    char test[5];
+    char test[5] = "Null";
     mh_memory_t ref = mh_memory_reference(test, 5);
     mh_stream_read(stream, &ref, 4);
 
