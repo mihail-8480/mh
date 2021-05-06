@@ -154,12 +154,10 @@ void mh_tcp_init(MH_UNUSED mh_tcp_listener_t *listener) {
     if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
         WSACleanup();
         mh_context_error(listener->context, "WSAStartup failed.", MH_LOCATION(mh_tcp_start));
-        abort();
     }
     if (LOBYTE(wsa.wVersion) != 2 || HIBYTE(wsa.wVersion) != 2) {
         WSACleanup();
         mh_context_error(listener->context, "Invalid WinSock version.", MH_LOCATION(mh_tcp_start));
-        abort();
     }
 #endif
 }
