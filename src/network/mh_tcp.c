@@ -63,7 +63,7 @@ void mh_tcp_start(mh_tcp_listener_t *listener) {
     socklen_t addr_len = sizeof(listener->address);
 
     // If the socket isn't made, crash the program
-    if ((sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1) {
+    if ((sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == (mh_socket_t)-1) {
         mh_context_error(listener->context, "A socket could not be created successfully.", MH_LOCATION(mh_tcp_start));
     }
 
@@ -91,7 +91,7 @@ void mh_tcp_start(mh_tcp_listener_t *listener) {
         mh_socket_t client = accept(sock, (struct sockaddr *) &listener->address, &addr_len);
 
         // If the client is invalid, crash the program
-        if (client == -1) {
+        if (client == (mh_socket_t)-1) {
             mh_context_error(listener->context, "Could not accept client.", MH_LOCATION(mh_tcp_start));
         }
 
@@ -153,12 +153,12 @@ void mh_tcp_init(MH_UNUSED mh_tcp_listener_t *listener) {
     WSADATA wsa;
     if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
         WSACleanup();
-        mh_context_error(listener->context, "WSAStartup failed.", mh_tcp_start);
+        mh_context_error(listener->context, "WSAStartup failed.", MH_LOCATION(mh_tcp_start));
         abort();
     }
     if (LOBYTE(wsa.wVersion) != 2 || HIBYTE(wsa.wVersion) != 2) {
         WSACleanup();
-        mh_context_error(listener->context, "Invalid WinSock version.", mh_tcp_start);
+        mh_context_error(listener->context, "Invalid WinSock version.", MH_LOCATION(mh_tcp_start));
         abort();
     }
 #endif
