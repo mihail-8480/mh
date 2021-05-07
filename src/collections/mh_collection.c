@@ -17,10 +17,9 @@ mh_memory_t mh_iterator_current(mh_iterator_t *iterator) {
 }
 
 void mh_collection_foreach(mh_collection_t *collection, void (*action)(mh_memory_t)) {
-    mh_iterator_t *iterator = mh_collection_get_iterator(collection);
-    if (!mh_iterator_start(iterator)) return;
-    do {
+    MH_FOREACH_MEM(iterator, collection) {
         mh_memory_t mem = mh_iterator_current(iterator);
         action(mem);
-    } while (mh_iterator_next(iterator));
+    }
 }
+
