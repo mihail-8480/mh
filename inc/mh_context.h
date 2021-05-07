@@ -2,6 +2,7 @@
 #define MHSERV_MH_CONTEXT_H
 
 #include "mh.h"
+#include "mh_stack.h"
 #include <stdbool.h>
 #include <stddef.h>
 #include <setjmp.h>
@@ -16,6 +17,11 @@ MH_API_TYPE(mh_context_allocation, void*);
 MH_API_TYPE(mh_context_allocation_reference, struct mh_context_allocation_reference {
     mh_context_allocation_t ptr;
     size_t index;
+});
+
+MH_API_TYPE(mh_context_jump_stack_node, struct mh_context_jump_stack_node {
+    mh_stack_node_t node;
+    jmp_buf jmp;
 });
 
 // A destructor structure, should be a part of every other structure that needs freeing
@@ -47,8 +53,11 @@ MH_NORETURN MH_API_FUNC(void mh_context_error(mh_context_t *context, const char 
 // Set an error handler to a context
 MH_API_FUNC(void mh_context_set_error_handler(mh_context_t *context, mh_error_handler_t handler));
 
-// Catch an error on this thread, returns false on a caught error
-MH_API_FUNC(jmp_buf *mh_context_get_jump_buffer(mh_context_t *context));
+// Push a jump buffer for error handling
+MH_API_FUNC(void mh_context_push_jump(mh_context_t *context, mh_context_jump_stack_node_t *jump));
+
+// Remove a jump buffer if it's the latest one
+MH_API_FUNC(void mh_context_remove_jump(mh_context_t *context, mh_context_jump_stack_node_t *jump));
 
 // Resize memory in the context
 MH_API_FUNC(void *mh_context_reallocate(mh_context_t *context, mh_context_allocation_reference_t ref, size_t size));
@@ -78,10 +87,10 @@ extern mh_context_t *mh_global_context;
 #define MH_NULL_REFERENCE(ctx, arg) if (arg == NULL) mh_context_error(ctx, "The reference `" #arg "` is NULL.", MH_LOCATION_ANY())
 
 // Try executing some code
-#define MH_TRY(ctx) if (!setjmp(*mh_context_get_jump_buffer(ctx)))
+#define MH_TRY(name, ctx) mh_context_jump_stack_node_t name; mh_context_push_jump(ctx, &name); if (!setjmp(name.jmp))
 
 // If a MH_TRY fails, it'll fallback to this
-#define MH_CATCH else
+#define MH_CATCH(name, ctx, code) else code mh_context_remove_jump(ctx, &name)
 
 // Throw an error
 #define MH_THROW(ctx, message) mh_context_error(ctx, message, MH_LOCATION_ANY())

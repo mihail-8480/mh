@@ -27,6 +27,7 @@ static const mh_test_t tests[] = {
         MH_TEST(iterator_test),
         MH_TEST(map_test),
         MH_TEST(list_test),
+        MH_TEST(stack_test)
 };
 
 mh_tests_t mh_test_provider(void) {

@@ -21,10 +21,8 @@ typedef struct mh_context_private {
     size_t destructor_size;
     mh_destructor_t **destructors;
     mh_error_handler_t error_handler;
-    jmp_buf jump_buffer;
-    bool do_jump;
+    mh_stack_t jump_stack;
 } mh_context_private_t;
-
 mh_context_t *mh_global_context;
 
 MH_CONSTRUCTOR void mh_context_create_global(void) {
@@ -63,7 +61,10 @@ mh_context_t *mh_start(void) {
             .destructor_size = 32,
             .destructors = malloc(sizeof(mh_destructor_t *) * 32),
             .error_handler = NULL,
-            .do_jump = false
+            .jump_stack = {
+                    .depth = 0,
+                    .last = NULL
+            }
     };
     INFO("(mh_start)-- returned %zu\n", (size_t) this);
     return &this->base;
@@ -181,8 +182,11 @@ void mh_context_error(mh_context_t *context, const char *message, mh_code_locati
         this->error_handler(context, message, from);
     }
 
-    if (this->do_jump) {
-        longjmp(this->jump_buffer, true);
+    if (this->jump_stack.depth) {
+        mh_context_jump_stack_node_t *node = ((mh_context_jump_stack_node_t*)mh_stack_pop(&this->jump_stack));
+        if (node != NULL) {
+            longjmp(node->jmp, true);
+        }
     }
 
     // Destroy the context and crash the program
@@ -191,10 +195,16 @@ void mh_context_error(mh_context_t *context, const char *message, mh_code_locati
 }
 
 
-jmp_buf *mh_context_get_jump_buffer(mh_context_t *context) {
+void mh_context_push_jump(mh_context_t *context, mh_context_jump_stack_node_t *jump){
     MH_THIS(mh_context_private_t*, context);
-    this->do_jump = true;
-    return &this->jump_buffer;
+    mh_stack_push(&this->jump_stack, &jump->node);
+}
+
+void mh_context_remove_jump(mh_context_t *context, mh_context_jump_stack_node_t *jump){
+    MH_THIS(mh_context_private_t*, context);
+    if ((mh_context_jump_stack_node_t*)mh_stack_peek(&this->jump_stack) == jump) {
+        mh_stack_pop(&this->jump_stack);
+    }
 }
 
 void mh_context_set_error_handler(mh_context_t *context, mh_error_handler_t handler) {

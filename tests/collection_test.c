@@ -1,6 +1,7 @@
 #include "default_tests.h"
 #include "../inc/mh_map.h"
 #include "../inc/mh_list.h"
+#include "../inc/mh_stack.h"
 
 static int c = 0;
 
@@ -69,5 +70,36 @@ MH_TEST_NEW(iterator_test) {
     MH_FOREACH(char*, chr,MH_ARRAY(MH_GLOBAL, array)) {
         MH_TEST_EXPECT(*chr == array[i++]);
     }
+    MH_TEST_PASSED();
+}
+
+MH_TEST_NEW(stack_test) {
+    typedef struct {
+        mh_stack_node_t node;
+        int a;
+    } my_node_t;
+
+    my_node_t n1, n2, n3, n4;
+    n1.a = 1;
+    n2.a = 2;
+    n3.a = 3;
+    n4.a = 4;
+
+    mh_stack_t stack = {
+            .depth = 0,
+            .last = NULL
+    };
+
+    mh_stack_push(&stack,  &n1.node);
+    mh_stack_push(&stack,  &n2.node);
+    mh_stack_push(&stack,  &n3.node);
+    mh_stack_push(&stack,  &n4.node);
+
+    int i = 4;
+    while(stack.depth) {
+        my_node_t *node = (my_node_t*)mh_stack_pop(&stack);
+        MH_TEST_EXPECT(node->a == i--);
+    }
+
     MH_TEST_PASSED();
 }
