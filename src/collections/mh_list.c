@@ -107,7 +107,10 @@ void mh_list_append(mh_list_t *list, const mh_memory_t ref) {
     if (this->last != NULL) {
         this->last->next = node;
     }
-    node->previous = this->last;
+    if (this->first == NULL) {
+        this->first = node;
+    }
+    node->next = this->last;
     this->last = node;
     this->count++;
 }
@@ -148,6 +151,9 @@ void mh_list_prepend(mh_list_t *list, const mh_memory_t ref) {
     mh_list_node_t *node = mh_list_node_new(this->context, ref);
     if (this->first != NULL) {
         this->first->previous = node;
+    }
+    if (this->last == NULL) {
+        this->last = node;
     }
     node->next = this->first;
     this->first = node;
