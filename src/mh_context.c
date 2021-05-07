@@ -25,6 +25,19 @@ typedef struct mh_context_private {
     bool do_jump;
 } mh_context_private_t;
 
+mh_context_t *mh_global_context;
+
+MH_CONSTRUCTOR void mh_context_create_global(void) {
+    INFO("mh_context_create_global():\n");
+    mh_global_context = mh_start();
+}
+
+
+MH_DESTRUCTOR void mh_context_destroy_global(void) {
+    INFO("mh_context_destroy_global():\n");
+    mh_end(mh_global_context);
+}
+
 void mh_destroy(mh_destructor_t *object) {
     INFO("mh_destroy(%zu):\n", (size_t) object);
     // If the object isn't null or it's destructor function pointer isn't null

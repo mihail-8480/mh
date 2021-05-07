@@ -10,6 +10,12 @@
 // This may not be used.
 #define MH_UNUSED __attribute__((unused))
 
+// This is a constructor.
+#define MH_CONSTRUCTOR __attribute__((constructor))
+
+// This is a destructor.
+#define MH_DESTRUCTOR __attribute__((destructor))
+
 // One per thread.
 #define MH_PER_THREAD __thread
 

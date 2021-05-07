@@ -45,22 +45,21 @@ void tests_print(const mh_test_t *tests, size_t count) {
 }
 
 int main(int argc, char *argv[]) {
-    mh_context_t *context = mh_start();
     typedef mh_tests_t (*mh_test_provider_t)(void);
-    mh_context_set_error_handler(context, program_error);
+    mh_context_set_error_handler(MH_GLOBAL, program_error);
 
     mh_argument_parser_args_t args = {
             .required_arguments = "lib",
             .optional_arguments = "check_only",
     };
 
-    mh_map_t *map = mh_argument_parse(context, &args, argc, argv);
+    mh_map_t *map = mh_argument_parse(MH_GLOBAL, &args, argc, argv);
     mh_memory_t lib = mh_map_get(map, MH_STRING("lib"));
     mh_memory_t check_only_s = mh_map_get(map, MH_STRING("check_only"));
 
     bool check_only = check_only_s.address != NULL && strcmp(MH_MEM_TO_STRING(check_only_s), "check") == 0;
 
-    mh_handle_t *handle = mh_handle_new(context, MH_MEM_TO_STRING(lib));
+    mh_handle_t *handle = mh_handle_new(MH_GLOBAL, MH_MEM_TO_STRING(lib));
     mh_test_provider_t provider = (mh_test_provider_t) (size_t) mh_handle_find_symbol(handle, "mh_test_provider");
     mh_tests_t tests = provider();
     if (check_only) {
@@ -68,5 +67,4 @@ int main(int argc, char *argv[]) {
     } else {
         tests_print(tests.tests, tests.count);
     }
-    mh_end(context);
 }

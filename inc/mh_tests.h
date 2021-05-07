@@ -31,10 +31,6 @@ MH_API_TYPE(mh_tests, struct mh_tests {
 #define MH_TEST_REQUIRED(f) {.name = #f, .func = f, .required = true}
 #define MH_TEST_EXPECT(cond) if (!(cond)) MH_TEST_RESULT(false, "The statement `" #cond "` is false.")
 
-#define MH_TEST_CONTEXT_NEW(name, code) MH_TEST_NEW(name) { bool failed = false; const char* reason = "Success."; MH_CONTEXT(context, {code test_end:;}) MH_TEST_RESULT(!failed, reason);}
-#define MH_TEST_CONTEXT_FAIL(r) {failed = true; reason = r; goto test_end;}
-#define MH_TEST_CONTEXT_EXPECT(cond) if (!(cond)) MH_TEST_CONTEXT_FAIL("The statement `" #cond "` is false.")
-
 MH_API_FUNC(bool mh_tests_check(mh_test_return_t *results, const mh_test_t *tests, size_t count));
 
 #endif //MH_TESTS_H

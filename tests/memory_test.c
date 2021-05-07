@@ -1,24 +1,27 @@
 #include "default_tests.h"
 #include "../inc/mh_memory.h"
 
-MH_TEST_CONTEXT_NEW(memory_new_test, {
-    mh_memory_t *memory = mh_memory_new(context, 10, true);
+MH_TEST_NEW(memory_new_test) {
+    mh_memory_t *memory = mh_memory_new(MH_GLOBAL, 10, true);
 
-    MH_TEST_CONTEXT_EXPECT(memory != NULL)
-    MH_TEST_CONTEXT_EXPECT(memory->address != NULL)
-    MH_TEST_CONTEXT_EXPECT(memory->offset == 0)
+    MH_TEST_EXPECT(memory != NULL);
+    MH_TEST_EXPECT(memory->address != NULL);
+    MH_TEST_EXPECT(memory->offset == 0);
 
     for (int i = 0; i < 10; i++) {
-        MH_TEST_CONTEXT_EXPECT(((char *) memory->address)[i] == 0);
+        MH_TEST_EXPECT(((char *) memory->address)[i] == 0);
     }
 
-})
+    MH_TEST_PASSED();
+}
 
-MH_TEST_CONTEXT_NEW(memory_resize_test, {
-    mh_memory_t *memory = mh_memory_new(context, 10, false);
-    mh_memory_resize(context, memory, 20);
-    MH_TEST_CONTEXT_EXPECT(memory->address != NULL)
-})
+MH_TEST_NEW(memory_resize_test) {
+    mh_memory_t *memory = mh_memory_new(MH_GLOBAL, 10, false);
+    mh_memory_resize(MH_GLOBAL, memory, 20);
+
+    MH_TEST_EXPECT(memory->address != NULL);
+    MH_TEST_PASSED();
+}
 
 MH_TEST_NEW(memory_reference_test) {
     char str[] = "test";
@@ -67,6 +70,7 @@ MH_TEST_NEW(memory_is_equal_test) {
     mh_memory_t ref2 = mh_memory_reference(str, 4);
     mh_memory_t ref3 = mh_memory_reference(str + 1, 3);
     mh_memory_t ref4 = mh_memory_reference(str, 3);
+
     MH_TEST_EXPECT(mh_memory_is_equal(ref, ref2));
     MH_TEST_EXPECT(!mh_memory_is_equal(ref, ref4));
     MH_TEST_EXPECT(!mh_memory_is_equal(ref3, ref4));

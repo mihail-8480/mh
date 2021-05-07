@@ -68,8 +68,11 @@ MH_API_FUNC(void mh_context_bind_to_thread(mh_context_t *context));
 // Get a context that was bound to the current thread
 MH_API_FUNC(mh_context_t *mh_context_get_from_thread(void));
 
-// Create a context, execute some code and destroy the context
-#define MH_CONTEXT(name, code) { mh_context_t* name = mh_start(); code mh_end(name);}
+// The global context
+extern mh_context_t *mh_global_context;
+
+// The global context
+#define MH_GLOBAL mh_global_context
 
 // Check for a null reference and report the error
 #define MH_NULL_REFERENCE(ctx, arg) if (arg == NULL) mh_context_error(ctx, "The reference `" #arg "` is NULL.", MH_LOCATION_ANY())
