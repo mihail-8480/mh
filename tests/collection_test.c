@@ -34,9 +34,9 @@ MH_TEST_NEW(list_test) {
     mh_list_append(list, MH_REF_CONST("Node4"));
     mh_list_prepend(list, MH_REF_CONST("Node-1"));
     mh_list_prepend(list, MH_REF_CONST("Node-2"));
+    MH_TEST_EXPECT(mh_list_count(list) == 7);
 
     mh_iterator_t* iterator = mh_collection_get_iterator(&list->collection);
-
     MH_TEST_EXPECT(mh_iterator_start(iterator));
     MH_TEST_EXPECT(strcmp(mh_iterator_current(iterator).address, "Node-2") == 0);
     MH_TEST_EXPECT(mh_iterator_next(iterator));
@@ -54,9 +54,11 @@ MH_TEST_NEW(list_test) {
 
     mh_memory_t* mem = mh_list_node_value(mh_list_node_next(mh_list_at_index(list, 4)));
     MH_TEST_EXPECT(strcmp(mem->address, "Node3") == 0);
+
     mh_list_remove(list, mh_list_at_index(list, 0));
     mh_list_remove(list, mh_list_at_index(list, 1));
-    MH_TEST_EXPECT(strcmp(mh_list_node_value(mh_list_at_index(list, 0))->address, "Node-1") == 0);
+    MH_TEST_EXPECT(mh_list_count(list) == 5);
+    MH_TEST_EXPECT(strcmp(mh_list_node_value(mh_list_last(list))->address, "Node4") == 0);
 
     MH_TEST_PASSED();
 }
