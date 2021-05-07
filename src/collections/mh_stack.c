@@ -7,7 +7,7 @@ void mh_stack_push(mh_stack_t *stack, mh_stack_node_t *node) {
 }
 
 mh_stack_node_t *mh_stack_pop(mh_stack_t *stack) {
-    if (stack->depth == 0 || stack->last == NULL) {
+    if (stack->depth == 0) {
         return NULL;
     }
     stack->depth--;
