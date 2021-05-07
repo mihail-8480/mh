@@ -40,7 +40,7 @@ static bool mh_list_iterator_next(mh_iterator_t *iterator) {
 
 static bool mh_list_iterator_start(mh_iterator_t *iterator) {
     MH_THIS(mh_list_iterator_t*, iterator);
-    if (this->list->first != NULL) return false;
+    if (this->list->first == NULL) return false;
     this->current = this->list->first;
     return true;
 }

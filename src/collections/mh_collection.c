@@ -22,4 +22,3 @@ void mh_collection_foreach(mh_collection_t *collection, void (*action)(mh_memory
         action(mem);
     }
 }
-

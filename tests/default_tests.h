@@ -37,4 +37,8 @@ MH_TEST_NEW(memory_stream_test);
 
 MH_TEST_NEW(map_test);
 
+MH_TEST_NEW(list_test);
+
+MH_TEST_NEW(iterator_test);
+
 #endif //MH_TESTS_LIST_H
