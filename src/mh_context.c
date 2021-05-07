@@ -117,7 +117,7 @@ void *mh_context_reallocate(mh_context_t *context, mh_context_allocation_referen
     void *ptr = realloc(ref.ptr, size);
 
     if (ptr == NULL) {
-        mh_context_error(context, "Failed reallocating memory.", MH_LOCATION(mh_context_reallocate));
+        MH_THROW(context, "Failed reallocating memory.");
     }
 
     this->allocations[ref.index] = ptr;
@@ -131,7 +131,7 @@ void mh_context_free(mh_context_t *context, mh_context_allocation_reference_t re
     INFO("mh_context_free(%zu, {%zu,%zu}):\n", (size_t) context, (size_t) ref.ptr, ref.index);
 
     if (this->allocations[ref.index] != ref.ptr) {
-        mh_context_error(context, "Invalid allocation reference.", MH_LOCATION(mh_context_free));
+        MH_THROW(context, "Invalid allocation reference.");
     }
 
     free(ref.ptr);

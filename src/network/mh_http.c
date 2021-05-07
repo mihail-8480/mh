@@ -119,7 +119,7 @@ void mh_http_on_connect(mh_tcp_listener_t *listener, mh_context_t *context, mh_s
     // If there is no request handler, ERROR!
     MH_THIS(mh_http_listener_t*, listener);
     if (this->http_request_handler == NULL) {
-        mh_context_error(context, "A request handler is not set.", MH_LOCATION(mh_http_on_connect));
+        MH_THROW(context, "A request handler is not set.");
     }
 
     // Set the error handler to the current context if there is one

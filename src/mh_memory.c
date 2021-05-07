@@ -10,7 +10,7 @@ mh_memory_t *mh_memory_new(mh_context_t *context, size_t size, bool clear) {
     // Allocate the memory container and set it's fields
     MH_THIS(mh_memory_private_t*, mh_context_allocate(context, sizeof(mh_memory_private_t), false).ptr);
     if (this == NULL) {
-        mh_context_error(context, "Couldn't allocate memory for the structure.", MH_LOCATION(mh_memory_new));
+        MH_THROW(context, "Couldn't allocate memory for the structure.");
     }
 
     mh_context_allocation_reference_t ref = mh_context_allocate(context, size, clear);
@@ -39,7 +39,7 @@ void mh_memory_resize(mh_context_t *context, mh_memory_t *memory, size_t size) {
 
     // If the new pointer is null, report the error
     if (new == NULL) {
-        mh_context_error(context, "Couldn't resize the memory.", MH_LOCATION(mh_memory_resize));
+        MH_THROW(context, "Couldn't resize the memory.");
     }
 
     // Set the new address and allocation_size

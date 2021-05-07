@@ -21,8 +21,7 @@ void mh_socket_stream_read(void *stream, mh_memory_t *buffer, size_t count) {
 #endif
     // If the allocation_size is negative, something went wrong
     if (size == -1) {
-        mh_context_error(this->base.context, "Failed reading from the socket, it is probably closed.",
-                         MH_LOCATION(mh_socket_stream_read));
+        MH_THROW(this->base.context, "Failed reading from the socket, it is probably closed.");
     }
 
     // Change the buffer offset
@@ -42,8 +41,7 @@ void mh_socket_stream_write(void *stream, mh_memory_t *buffer, size_t count) {
 #endif
     // See above.
     if (size == -1) {
-        mh_context_error(this->base.context, "Failed writing to the socket, it is probably closed.",
-                         MH_LOCATION(mh_socket_stream_write));
+        MH_THROW(this->base.context, "Failed writing to the socket, it is probably closed.");
     }
 
     // Change the buffer offset

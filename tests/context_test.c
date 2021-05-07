@@ -20,7 +20,7 @@ MH_TEST_NEW(context_error_test) {
     mh_context_set_error_handler(context, error_report);
 
     MH_TRY(context) {
-        mh_context_error(context, "Test", MH_LOCATION_ANY());
+        MH_THROW(context, "Test");
     } MH_CATCH {
         mh_end(context);
         MH_TEST_EXPECT(error_reported == true);

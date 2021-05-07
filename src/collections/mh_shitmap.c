@@ -30,7 +30,7 @@ void mh_map_add(mh_map_t *map, mh_memory_t key, mh_memory_t value) {
 
 void mh_map_remove(mh_map_t *map, MH_UNUSED mh_memory_t key) {
     MH_THIS(mh_shitmap_t*, map);
-    mh_context_error(this->context, "A shitmap cannot remove elements.", MH_LOCATION(mh_map_remove));
+    MH_THROW(this->context, "Not implemented.");
 }
 
 

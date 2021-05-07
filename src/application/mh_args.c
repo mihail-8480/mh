@@ -26,17 +26,17 @@ mh_map_t *mh_argument_parse(mh_context_t *context, const mh_argument_parser_args
     bool too_many_req = mh_argument_parse_one(map, argc, argv, &req, &c_arg);
 
     if (req.offset != req.size) {
-        mh_context_error(context, "Not enough arguments.", MH_LOCATION_ANY());
+        MH_THROW(context, "Not enough arguments.");
     }
 
     if (too_many_req && args->optional_arguments != NULL) {
         mh_memory_t opt = MH_REF_STRING(args->optional_arguments);
         bool too_many_opt = mh_argument_parse_one(map, argc, argv, &opt, &c_arg);
         if (too_many_opt) {
-            mh_context_error(context, "Too many arguments.", MH_LOCATION_ANY());
+            MH_THROW(context, "Too many arguments.");
         }
     } else if (too_many_req) {
-        mh_context_error(context, "Too many arguments.", MH_LOCATION_ANY());
+        MH_THROW(context, "Too many arguments.");
     }
 
     return map;

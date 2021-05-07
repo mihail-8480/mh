@@ -134,7 +134,7 @@ mh_list_node_t *mh_list_first(mh_list_t *list) {
 mh_list_node_t *mh_list_at_index(mh_list_t *list, size_t index) {
     MH_THIS(mh_list_private_t*, list);
     if (index >= this->count) {
-        mh_context_error(this->context, "The index is out of range.", MH_LOCATION(mh_list_at_index));
+        MH_THROW(this->context, "The index is out of range.");
     }
     mh_list_node_t *node = this->first;
     for (size_t i = 0; i < index; i++) {
