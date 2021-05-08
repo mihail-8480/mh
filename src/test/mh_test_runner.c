@@ -10,7 +10,6 @@ bool program_error(mh_context_t *context, const char *message, mh_code_location_
     char loc[128];
     mh_code_location_to_string(loc, from);
     fprintf(stderr, "An error has occurred %s: %s\n", loc, message);
-    mh_end(context);
     exit(1);
 }
 
