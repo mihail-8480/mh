@@ -21,7 +21,7 @@ To test if the installation is successful you can run the default tests:
 
 ```shell
 cd bin
-./mhtest libmh-default-tests.so
+mhtest ./libmh-default-tests.so
 ```
 
 *You need to replace the `.so` extension with `.dll` if you are on Windows or `.dylib` if you are on Mac.*
