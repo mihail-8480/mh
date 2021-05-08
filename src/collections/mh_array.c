@@ -2,7 +2,7 @@
 
 typedef struct mh_array {
     mh_collection_t collection;
-    void* ptr;
+    void *ptr;
     size_t size;
     size_t element_size;
     mh_context_t *context;
@@ -21,7 +21,8 @@ static mh_memory_t mh_array_iterator_current(mh_iterator_t *iterator) {
     if (this->array->size <= this->array->element_size * this->position) {
         return MH_MEM_NULL;
     }
-    return mh_memory_reference((char *) this->array->ptr + (this->array->element_size * this->position), this->array->element_size);
+    return mh_memory_reference((char *) this->array->ptr + (this->array->element_size * this->position),
+                               this->array->element_size);
 }
 
 static bool mh_array_iterator_start(mh_iterator_t *iterator) {
@@ -44,7 +45,7 @@ static bool mh_array_iterator_next(mh_iterator_t *iterator) {
 
 static mh_iterator_t *mh_array_get_iterator(mh_collection_t *collection) {
     MH_THIS(mh_array_t*, collection);
-    mh_array_iterator_t* it = mh_context_allocate(this->context, sizeof(mh_array_iterator_t), false).ptr;
+    mh_array_iterator_t *it = mh_context_allocate(this->context, sizeof(mh_array_iterator_t), false).ptr;
     *it = (mh_array_iterator_t) {
             .array = this,
             .position = 0,
@@ -58,7 +59,7 @@ static mh_iterator_t *mh_array_get_iterator(mh_collection_t *collection) {
 }
 
 
-mh_collection_t *mh_array_new(mh_context_t* context, void* array, size_t size, size_t element_size) {
+mh_collection_t *mh_array_new(mh_context_t *context, void *array, size_t size, size_t element_size) {
     MH_THIS(mh_array_t*, mh_context_allocate(context, sizeof(mh_array_t), false).ptr);
     *this = (mh_array_t) {
             .element_size = element_size,
@@ -67,7 +68,7 @@ mh_collection_t *mh_array_new(mh_context_t* context, void* array, size_t size, s
             .context = context,
             .collection = {
                     .get_iterator = mh_array_get_iterator,
-                    .destructor = { NULL }
+                    .destructor = {NULL}
             }};
     return &this->collection;
 }

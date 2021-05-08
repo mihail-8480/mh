@@ -37,7 +37,7 @@ MH_TEST_NEW(list_test) {
     mh_list_prepend(list, MH_REF_CONST("Node-2"));
     MH_TEST_EXPECT(mh_list_count(list) == 7);
 
-    mh_iterator_t* iterator = mh_collection_get_iterator(&list->collection);
+    mh_iterator_t *iterator = mh_collection_get_iterator(&list->collection);
     MH_TEST_EXPECT(mh_iterator_start(iterator));
     MH_TEST_EXPECT(strcmp(mh_iterator_current(iterator).address, "Node-2") == 0);
     MH_TEST_EXPECT(mh_iterator_next(iterator));
@@ -53,7 +53,7 @@ MH_TEST_NEW(list_test) {
     MH_TEST_EXPECT(mh_iterator_next(iterator));
     MH_TEST_EXPECT(strcmp(mh_iterator_current(iterator).address, "Node4") == 0);
 
-    mh_memory_t* mem = mh_list_node_value(mh_list_node_next(mh_list_at_index(list, 4)));
+    mh_memory_t *mem = mh_list_node_value(mh_list_node_next(mh_list_at_index(list, 4)));
     MH_TEST_EXPECT(strcmp(mem->address, "Node3") == 0);
 
     mh_list_remove(list, mh_list_at_index(list, 0));
@@ -67,7 +67,7 @@ MH_TEST_NEW(list_test) {
 MH_TEST_NEW(iterator_test) {
     char array[] = "TEST";
     int i = 0;
-    MH_FOREACH(char*, chr,MH_ARRAY(MH_GLOBAL, array)) {
+    MH_FOREACH(char*, chr, MH_ARRAY(MH_GLOBAL, array)) {
         MH_TEST_EXPECT(*chr == array[i++]);
     }
     MH_TEST_PASSED();
@@ -90,14 +90,14 @@ MH_TEST_NEW(stack_test) {
             .last = NULL
     };
 
-    mh_stack_push(&stack,  &n1.node);
-    mh_stack_push(&stack,  &n2.node);
-    mh_stack_push(&stack,  &n3.node);
-    mh_stack_push(&stack,  &n4.node);
+    mh_stack_push(&stack, &n1.node);
+    mh_stack_push(&stack, &n2.node);
+    mh_stack_push(&stack, &n3.node);
+    mh_stack_push(&stack, &n4.node);
 
     int i = 4;
-    while(stack.depth) {
-        my_node_t *node = (my_node_t*)mh_stack_pop(&stack);
+    while (stack.depth) {
+        my_node_t *node = (my_node_t *) mh_stack_pop(&stack);
         MH_TEST_EXPECT(node->a == i--);
     }
 

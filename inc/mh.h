@@ -79,6 +79,7 @@ MH_API_FUNC(void mh_code_location_to_string(char *str, mh_code_location_t locati
 // Print something to the screen.
 #define MH_INFO(...) printf(__VA_ARGS__)
 #else
+
 // Doesn't do anything.
 inline void mh_nothing() {
 

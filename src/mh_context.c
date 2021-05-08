@@ -173,7 +173,7 @@ void mh_context_error(mh_context_t *context, const char *message, mh_code_locati
     }
 
     if (this->jump_stack.depth) {
-        mh_context_jump_stack_node_t *node = ((mh_context_jump_stack_node_t*)mh_stack_pop(&this->jump_stack));
+        mh_context_jump_stack_node_t *node = ((mh_context_jump_stack_node_t *) mh_stack_pop(&this->jump_stack));
         if (node != NULL) {
             longjmp(node->jmp, true);
         }
@@ -185,14 +185,14 @@ void mh_context_error(mh_context_t *context, const char *message, mh_code_locati
 }
 
 
-void mh_context_push_jump(mh_context_t *context, mh_context_jump_stack_node_t *jump){
+void mh_context_push_jump(mh_context_t *context, mh_context_jump_stack_node_t *jump) {
     MH_THIS(mh_context_t*, context);
     mh_stack_push(&this->jump_stack, &jump->node);
 }
 
-void mh_context_remove_jump(mh_context_t *context, mh_context_jump_stack_node_t *jump){
+void mh_context_remove_jump(mh_context_t *context, mh_context_jump_stack_node_t *jump) {
     MH_THIS(mh_context_t*, context);
-    if ((mh_context_jump_stack_node_t*)mh_stack_peek(&this->jump_stack) == jump) {
+    if ((mh_context_jump_stack_node_t *) mh_stack_peek(&this->jump_stack) == jump) {
         mh_stack_pop(&this->jump_stack);
     }
 }

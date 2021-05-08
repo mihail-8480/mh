@@ -63,9 +63,9 @@ mh_http_request_t *mh_http_request_new(mh_context_t *context, mh_socket_address_
         mh_memory_t value = mh_memory_reference((void *) ((size_t) head.address + head.offset + 1),
                                                 head.size - (head.offset + 1));
         mh_key_value_pair_t *kv = mh_context_allocate(context, sizeof(mh_key_value_pair_t), true).ptr;
-        *kv = (mh_key_value_pair_t){
-            .value = value,
-            .key = key
+        *kv = (mh_key_value_pair_t) {
+                .value = value,
+                .key = key
         };
         mh_list_append(headers, mh_memory_reference(kv, sizeof(mh_key_value_pair_t)));
     }

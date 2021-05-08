@@ -27,7 +27,7 @@ MH_TEST_NEW(context_error_test) {
     MH_TRY(error2, MH_GLOBAL) {
         MH_TRY(error3, MH_GLOBAL) {
             MH_THROW(MH_GLOBAL, "Test2");
-        } MH_CATCH (error3, MH_GLOBAL,{
+        } MH_CATCH (error3, MH_GLOBAL, {
             MH_TEST_EXPECT(error_reported == 2);
             MH_THROW(MH_GLOBAL, "Test3");
         });

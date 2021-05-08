@@ -63,7 +63,7 @@ void mh_tcp_start(mh_tcp_listener_t *listener) {
     socklen_t addr_len = sizeof(listener->address);
 
     // If the socket isn't made, crash the program
-    if ((sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == (mh_socket_t)-1) {
+    if ((sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == (mh_socket_t) -1) {
         MH_THROW(listener->context, "A socket could not be created successfully.");
     }
 
@@ -91,7 +91,7 @@ void mh_tcp_start(mh_tcp_listener_t *listener) {
         mh_socket_t client = accept(sock, (struct sockaddr *) &listener->address, &addr_len);
 
         // If the client is invalid, crash the program
-        if (client == (mh_socket_t)-1) {
+        if (client == (mh_socket_t) -1) {
             MH_THROW(listener->context, "Could not accept client.");
         }
 

@@ -58,7 +58,7 @@ MH_API_FUNC(mh_iterator_t *mh_collection_get_iterator(mh_collection_t *collectio
 MH_API_FUNC(void mh_collection_foreach(mh_collection_t *collection, void (*action)(mh_memory_t memory)));
 
 // Create an array collection.
-MH_API_FUNC(mh_collection_t *mh_array_new(mh_context_t* context, void* array, size_t size, size_t element_size));
+MH_API_FUNC(mh_collection_t *mh_array_new(mh_context_t *context, void *array, size_t size, size_t element_size));
 
 // Create an iterator and iterate trough the memory.
 #define MH_FOREACH_MEM(it, col) mh_iterator_t *it = mh_collection_get_iterator((mh_collection_t *)(col)); for(bool it##_stat = mh_iterator_start(it); it##_stat; it##_stat = mh_iterator_next(it))

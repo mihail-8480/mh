@@ -58,11 +58,11 @@ void mh_stream_copy_to(mh_stream_t *dest, mh_stream_t *src, size_t size) {
     // If the streams are seekable, check if this operation is possible
     if (src_stream->can_seek && size > src_stream->get_size(src_stream)) {
         MH_THROW(src_stream->context,
-                         "Not enough memory in src_stream to preform a mh_stream_copy_to operation.");
+                 "Not enough memory in src_stream to preform a mh_stream_copy_to operation.");
     }
     if (dest_stream->can_seek && size > dest_stream->get_size(dest_stream)) {
         MH_THROW(dest_stream->context,
-                         "Not enough memory in dest_stream to preform a mh_stream_copy_to operation.");
+                 "Not enough memory in dest_stream to preform a mh_stream_copy_to operation.");
     }
 
     // try to NOT read everything at once...
