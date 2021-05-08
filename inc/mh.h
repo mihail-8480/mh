@@ -81,7 +81,7 @@ MH_API_FUNC(void mh_code_location_to_string(char *str, mh_code_location_t locati
 #else
 
 // Doesn't do anything.
-void mh_nothing() {
+static inline void mh_nothing() {
 
 }
 // Doesn't do anything.
