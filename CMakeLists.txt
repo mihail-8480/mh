@@ -7,7 +7,9 @@ project(mh
 
 include("Mh.cmake")
 
-set(BUILD_WITH_INSTALL_RPATH TRUE)
+IF(UNIX)
+    SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_RPATH}:\$ORIGIN/../bin:\$ORIGIN")
+ENDIF()
 
 add_compile_definitions(MH_VERSION_MINOR=${CMAKE_PROJECT_VERSION_MINOR})
 add_compile_definitions(MH_VERSION_MAJOR=${CMAKE_PROJECT_VERSION_MAJOR})
