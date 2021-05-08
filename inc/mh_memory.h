@@ -13,8 +13,6 @@
  * Contains memory manipulation functions and a memory type.
  */
 
-// TODO: remove offset.
-
 // A structure that represents a memory address with a allocation_size and offset.
 typedef struct mh_memory {
     // The address of the memory.
