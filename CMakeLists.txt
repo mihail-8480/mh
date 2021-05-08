@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 3.0)
 project(mh
         LANGUAGES C
-        VERSION 0.1.1
+        VERSION 0.1.2
         DESCRIPTION "A C library that is supposed to make my life easier."
         HOMEPAGE_URL "https://github.com/mihail-8480/mh")
 
 include("Mh.cmake")
+
+set(BUILD_WITH_INSTALL_RPATH TRUE)
 
 add_compile_definitions(MH_VERSION_MINOR=${CMAKE_PROJECT_VERSION_MINOR})
 add_compile_definitions(MH_VERSION_MAJOR=${CMAKE_PROJECT_VERSION_MAJOR})
