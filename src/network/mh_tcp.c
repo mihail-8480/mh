@@ -3,19 +3,21 @@
 #include <stdlib.h>
 
 #if defined(UNIX)
+
 #include <stdio.h>
 #include <signal.h>
 #include <sys/socket.h>
 
 void mh_tcp_sigpipe() {
     // Try to get the context of the thread where the SIGPIPE happened
-    mh_context_t* context = mh_context_get_from_thread();
+    mh_context_t *context = mh_context_get_from_thread();
     if (context == NULL) {
         return;
     }
     // Report the error on that context
-    mh_context_error(context, "Broken pipe.", MH_LOCATION(mh_tcp_sigpipe));
+    MH_THROW(context, "Broken pipe.");
 }
+
 #elif defined(WIN32)
 #include <ws2tcpip.h>
 #else
@@ -25,7 +27,7 @@ void mh_tcp_sigpipe() {
 // The new thread's arguments
 typedef struct mh_tcp_threaded_args {
     mh_socket_t socket;
-    mh_tcp_listener_t* listener;
+    mh_tcp_listener_t *listener;
     mh_socket_address_t address;
     mh_on_connect_t on_connect;
     mh_context_t *context;
@@ -45,10 +47,9 @@ void *mh_tcp_threaded_connect_invoke(void *ptr) {
     return NULL;
 }
 
-void mh_tcp_start(mh_tcp_listener_t* listener) {
+void mh_tcp_start(mh_tcp_listener_t *listener) {
     if (listener->running) {
-        mh_context_error(listener->context, "This listener is already running.", MH_LOCATION(mh_tcp_start));
-        abort();
+        MH_THROW(listener->context, "This listener is already running.");
     }
     listener->running = true;
 
@@ -62,30 +63,26 @@ void mh_tcp_start(mh_tcp_listener_t* listener) {
     socklen_t addr_len = sizeof(listener->address);
 
     // If the socket isn't made, crash the program
-    if ((sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == (mh_socket_t)-1) {
-        mh_context_error(listener->context, "A socket could not be created successfully.", MH_LOCATION(mh_tcp_start));
-        abort();
+    if ((sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == (mh_socket_t) -1) {
+        MH_THROW(listener->context, "A socket could not be created successfully.");
     }
 
 #if defined(LINUX)
     // Set the socket options, if it fails, crash the program
     int opt = 1;
-    if(setsockopt(sock, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)) == -1) {
-        mh_context_error(listener->context, "Failed setting socket options.", MH_LOCATION(mh_tcp_start));
-        abort();
+    if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)) == -1) {
+        MH_THROW(listener->context, "Failed setting socket options.");
     }
 #endif
 
     // Bind the socket to the address specified earlier
     if (bind(sock, (struct sockaddr *) &listener->address, addr_len) == -1) {
-        mh_context_error(listener->context, "Could not use the specified address.", MH_LOCATION(mh_tcp_start));
-        abort();
+        MH_THROW(listener->context, "Could not use the specified address.");
     }
 
     // Start listening
     if (listen(sock, listener->max_clients) == -1) {
-        mh_context_error(listener->context, "Failed listening for clients.", MH_LOCATION(mh_tcp_start));
-        abort();
+        MH_THROW(listener->context, "Failed listening for clients.");
     }
 
     // Forever... (until the program crashes)
@@ -94,9 +91,8 @@ void mh_tcp_start(mh_tcp_listener_t* listener) {
         mh_socket_t client = accept(sock, (struct sockaddr *) &listener->address, &addr_len);
 
         // If the client is invalid, crash the program
-        if (client == (mh_socket_t)-1) {
-            mh_context_error(listener->context, "Could not accept client.", MH_LOCATION(mh_tcp_start));
-            abort();
+        if (client == (mh_socket_t) -1) {
+            MH_THROW(listener->context, "Could not accept client.");
         }
 
         // If the listener is about to exit, close the socket
@@ -157,13 +153,11 @@ void mh_tcp_init(MH_UNUSED mh_tcp_listener_t *listener) {
     WSADATA wsa;
     if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
         WSACleanup();
-        mh_context_error(listener->context, "WSAStartup failed.", MH_LOCATION(mh_tcp_start));
-        abort();
+        MH_THROW(listener->context, "WSAStartup failed.");
     }
     if (LOBYTE(wsa.wVersion) != 2 || HIBYTE(wsa.wVersion) != 2) {
         WSACleanup();
-        mh_context_error(listener->context, "Invalid WinSock version.", MH_LOCATION(mh_tcp_start));
-        abort();
+        MH_THROW(listener->context, "Invalid WinSock version.");
     }
 #endif
 }

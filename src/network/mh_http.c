@@ -19,17 +19,18 @@ typedef struct mh_http_listener {
 } mh_http_listener_t;
 
 
-void mh_http_set_request_handler(mh_tcp_listener_t* listener, http_request_handler_t request_handler) {
+void mh_http_set_request_handler(mh_tcp_listener_t *listener, http_request_handler_t request_handler) {
     MH_THIS(mh_http_listener_t*, listener);
     this->http_request_handler = request_handler;
 }
 
-void mh_http_set_error_handler(mh_tcp_listener_t* listener, mh_error_handler_t handler) {
+void mh_http_set_error_handler(mh_tcp_listener_t *listener, mh_error_handler_t handler) {
     MH_THIS(mh_http_listener_t*, listener);
     this->mh_http_error_handler = handler;
 }
 
-mh_http_request_t *mh_http_request_new(mh_context_t *context, mh_socket_address_t address, mh_memory_t *header, mh_tcp_listener_t* listener, mh_stream_t* socket_stream) {
+mh_http_request_t *mh_http_request_new(mh_context_t *context, mh_socket_address_t address, mh_memory_t *header,
+                                       mh_tcp_listener_t *listener, mh_stream_t *socket_stream) {
     MH_THIS(mh_http_request_private_t*, mh_context_allocate(context, sizeof(mh_http_request_private_t), true).ptr);
 
     // Read the request method
@@ -54,13 +55,19 @@ mh_http_request_t *mh_http_request_new(mh_context_t *context, mh_socket_address_
         ((mh_memory_t *) memory->address)[count] = single;
     }
 
-    // Put the headers into a map
-    mh_map_t *headers = mh_map_new(context);
+    // Put the headers into a list
+    mh_list_t *headers = mh_list_new(context);
     for (size_t i = 0; i < count; i++) {
         mh_memory_t head = ((mh_memory_t *) memory->address)[i];
         mh_memory_t key = mh_memory_read_until(&head, ':');
-        mh_memory_t value = mh_memory_reference((void*)((size_t)head.address + head.offset + 1), head.size - (head.offset + 1));
-        mh_map_add(headers, key, value);
+        mh_memory_t value = mh_memory_reference((void *) ((size_t) head.address + head.offset + 1),
+                                                head.size - (head.offset + 1));
+        mh_key_value_pair_t *kv = mh_context_allocate(context, sizeof(mh_key_value_pair_t), true).ptr;
+        *kv = (mh_key_value_pair_t) {
+                .value = value,
+                .key = key
+        };
+        mh_list_append(headers, mh_memory_reference(kv, sizeof(mh_key_value_pair_t)));
     }
 
     // Create the request
@@ -80,7 +87,7 @@ mh_http_request_t *mh_http_request_new(mh_context_t *context, mh_socket_address_
 
 
 // Figure out where the end of the header is
-size_t http_find_end_of_headers(const mh_tcp_listener_t* listener, mh_memory_t *mem) {
+size_t http_find_end_of_headers(const mh_tcp_listener_t *listener, mh_memory_t *mem) {
     MH_THIS(mh_http_listener_t*, listener);
     // Turn the memory into a character array
     char *str = (char *) mem->address;
@@ -88,7 +95,8 @@ size_t http_find_end_of_headers(const mh_tcp_listener_t* listener, mh_memory_t *
     if (mem->size < 8) return 0;
 
     // Go from the current location (minus some characters back, there are bugs here probably) to the end - 3
-    for (size_t i = mem->offset - this->mh_http_copy_buffer_size - (mem->offset - 5 > 0 ? 4 : 0); i < mem->offset - 3; i++) {
+    for (size_t i = mem->offset - this->mh_http_copy_buffer_size - (mem->offset - 5 > 0 ? 4 : 0);
+         i < mem->offset - 3; i++) {
         // Read 4 characters per iteration to check for \r\n\r\n
         if (str[i] == '\r' && str[i + 1] == '\n' && str[i + 2] == '\r' && str[i + 3] == '\n') {
             // Return the index of the first character + 4
@@ -105,17 +113,18 @@ void mh_http_request_read_content(mh_http_request_t *request) {
         private->iterations++;
         mh_stream_copy_to(private->request_stream, request->stream, this->mh_http_copy_buffer_size);
     }
-    request->content = mh_memory_reference((void*)((size_t)private->request_memory->address + private->request_header_end),
-                                           private->request_memory->offset - private->request_header_end);
+    request->content = mh_memory_reference(
+            (void *) ((size_t) private->request_memory->address + private->request_header_end),
+            private->request_memory->offset - private->request_header_end);
 }
 
 
-void mh_http_on_connect(mh_tcp_listener_t* listener, mh_context_t *context, mh_socket_t socket, mh_socket_address_t address) {
+void mh_http_on_connect(mh_tcp_listener_t *listener, mh_context_t *context, mh_socket_t socket,
+                        mh_socket_address_t address) {
     // If there is no request handler, ERROR!
     MH_THIS(mh_http_listener_t*, listener);
     if (this->http_request_handler == NULL) {
-        mh_context_error(context, "A request handler is not set.", MH_LOCATION(mh_http_on_connect));
-        return;
+        MH_THROW(context, "A request handler is not set.");
     }
 
     // Set the error handler to the current context if there is one
@@ -150,7 +159,7 @@ void mh_http_on_connect(mh_tcp_listener_t* listener, mh_context_t *context, mh_s
     // Split the request_stream memory into header and post
     mh_memory_t header = mh_memory_reference(request_memory->address,
                                              request_memory->offset - (request_memory->offset - request_header_end));
-    mh_memory_t post = mh_memory_reference((void*)((size_t)request_memory->address + request_header_end),
+    mh_memory_t post = mh_memory_reference((void *) ((size_t) request_memory->address + request_header_end),
                                            request_memory->offset - request_header_end);
 
     // Parse the request header
