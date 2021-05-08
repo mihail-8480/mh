@@ -4,7 +4,7 @@
 #include "mh_tcp.h"
 #include "mh_memory.h"
 #include "mh_stream.h"
-#include "mh_map.h"
+#include "mh_list.h"
 
 /*
  * <mh_http.h>
@@ -22,7 +22,7 @@ MH_API_TYPE(mh_http_request, struct mh_http_request {
     // The HTTP version.
     mh_memory_t version;
     // The HTTP headers.
-    mh_map_t *headers;
+    mh_list_t *headers;
     // The HTTP address.
     mh_socket_address_t address;
     // The HTTP POST content.

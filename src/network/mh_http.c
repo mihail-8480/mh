@@ -55,14 +55,19 @@ mh_http_request_t *mh_http_request_new(mh_context_t *context, mh_socket_address_
         ((mh_memory_t *) memory->address)[count] = single;
     }
 
-    // Put the headers into a map
-    mh_map_t *headers = mh_map_new(context);
+    // Put the headers into a list
+    mh_list_t *headers = mh_list_new(context);
     for (size_t i = 0; i < count; i++) {
         mh_memory_t head = ((mh_memory_t *) memory->address)[i];
         mh_memory_t key = mh_memory_read_until(&head, ':');
         mh_memory_t value = mh_memory_reference((void *) ((size_t) head.address + head.offset + 1),
                                                 head.size - (head.offset + 1));
-        mh_map_add(headers, key, value);
+        mh_key_value_pair_t *kv = mh_context_allocate(context, sizeof(mh_key_value_pair_t), true).ptr;
+        *kv = (mh_key_value_pair_t){
+            .value = value,
+            .key = key
+        };
+        mh_list_append(headers, mh_memory_reference(kv, sizeof(mh_key_value_pair_t)));
     }
 
     // Create the request

@@ -15,15 +15,6 @@
 MH_API_TYPE(mh_map, struct mh_map {
     mh_collection_t collection;
 });
-
-// The key/value pair structure (the iterator returns mh_memory_t that points to this).
-MH_API_TYPE(mh_key_value_pair, struct mh_key_value_pair {
-    // The key.
-    mh_memory_t key;
-    // The value.
-    mh_memory_t value;
-});
-
 // Add an element to the map.
 MH_API_FUNC(void mh_map_add(mh_map_t *map, mh_memory_t key, mh_memory_t value));
 

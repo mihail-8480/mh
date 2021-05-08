@@ -11,6 +11,16 @@
  * Contains functions for iteration.
  */
 
+
+// The key/value pair structure
+MH_API_TYPE(mh_key_value_pair, struct mh_key_value_pair {
+    // The key.
+    mh_memory_t key;
+    // The value.
+    mh_memory_t value;
+});
+
+
 // Something to iterate over.
 MH_API_TYPE(mh_iterator, struct mh_iterator {
     // For mh_iterator_start().
