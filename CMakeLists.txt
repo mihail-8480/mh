@@ -8,7 +8,7 @@ project(mh
 include("Mh.cmake")
 
 IF(UNIX)
-    SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}")
+    SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 ENDIF()
 
 add_compile_definitions(MH_VERSION_MINOR=${CMAKE_PROJECT_VERSION_MINOR})
