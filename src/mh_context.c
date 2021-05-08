@@ -12,8 +12,7 @@
 #endif
 
 // The container for the context's variables
-typedef struct mh_context_private {
-    mh_context_t base;
+struct mh_context {
     size_t allocation_count;
     size_t allocation_size;
     mh_context_allocation_t *allocations;
@@ -22,7 +21,7 @@ typedef struct mh_context_private {
     mh_destructor_t **destructors;
     mh_error_handler_t error_handler;
     mh_stack_t jump_stack;
-} mh_context_private_t;
+};
 mh_context_t *mh_global_context;
 
 MH_CONSTRUCTOR void mh_context_create_global(void) {
@@ -52,8 +51,8 @@ mh_context_t *mh_start(void) {
     INFO("mh_start():\n");
 
     // Create the context structure and set some default values
-    MH_THIS(mh_context_private_t*, malloc(sizeof(mh_context_private_t)));
-    *this = (mh_context_private_t) {
+    MH_THIS(mh_context_t*, malloc(sizeof(mh_context_t)));
+    *this = (mh_context_t) {
             .allocation_count = 0,
             .allocation_size = 32,
             .allocations = malloc(sizeof(mh_context_allocation_t) * 32),
@@ -67,12 +66,12 @@ mh_context_t *mh_start(void) {
             }
     };
     INFO("(mh_start)-- returned %zu\n", (size_t) this);
-    return &this->base;
+    return this;
 }
 
 void mh_end(mh_context_t *context) {
     INFO("mh_end(%zu):\n", (size_t) context);
-    MH_THIS(mh_context_private_t*, context);
+    MH_THIS(mh_context_t*, context);
 
     // Call every destructor and free the destructor array
     for (size_t i = 0; i < this->destructor_count; i++) {
@@ -94,7 +93,7 @@ void mh_end(mh_context_t *context) {
 }
 
 mh_context_allocation_reference_t mh_context_allocate(mh_context_t *context, size_t size, bool clear) {
-    MH_THIS(mh_context_private_t*, context);
+    MH_THIS(mh_context_t*, context);
     INFO("mh_context_allocate(%zu, %zu, %d):\n", (size_t) context, size, clear);
 
     // Double the allocation array if there isn't enough space
@@ -121,7 +120,7 @@ mh_context_allocation_reference_t mh_context_allocate(mh_context_t *context, siz
 }
 
 void *mh_context_reallocate(mh_context_t *context, mh_context_allocation_reference_t ref, size_t size) {
-    MH_THIS(mh_context_private_t*, context);
+    MH_THIS(mh_context_t*, context);
     INFO("mh_context_reallocate(%zu, {%zu,%zu}, %zu):\n", (size_t) context, (size_t) ref.ptr, ref.index, size);
 
     if (ref.index >= this->allocation_count) {
@@ -141,7 +140,7 @@ void *mh_context_reallocate(mh_context_t *context, mh_context_allocation_referen
 }
 
 void mh_context_free(mh_context_t *context, mh_context_allocation_reference_t ref) {
-    MH_THIS(mh_context_private_t*, context);
+    MH_THIS(mh_context_t*, context);
     INFO("mh_context_free(%zu, {%zu,%zu}):\n", (size_t) context, (size_t) ref.ptr, ref.index);
 
     if (this->allocations[ref.index] != ref.ptr) {
@@ -153,7 +152,7 @@ void mh_context_free(mh_context_t *context, mh_context_allocation_reference_t re
 }
 
 void *mh_context_add_destructor(mh_context_t *context, mh_destructor_t *destructor) {
-    MH_THIS(mh_context_private_t*, context);
+    MH_THIS(mh_context_t*, context);
     INFO("mh_context_add_destructor(%zu, %zu):\n", (size_t) context, (size_t) destructor);
 
     // Double the destructor array if there isn't enough space
@@ -171,7 +170,7 @@ void *mh_context_add_destructor(mh_context_t *context, mh_destructor_t *destruct
 }
 
 void mh_context_error(mh_context_t *context, const char *message, mh_code_location_t from) {
-    MH_THIS(mh_context_private_t*, context);
+    MH_THIS(mh_context_t*, context);
 #ifdef MH_DEBUG
     char loc[128];
     mh_code_location_to_string(loc, from);
@@ -196,19 +195,19 @@ void mh_context_error(mh_context_t *context, const char *message, mh_code_locati
 
 
 void mh_context_push_jump(mh_context_t *context, mh_context_jump_stack_node_t *jump){
-    MH_THIS(mh_context_private_t*, context);
+    MH_THIS(mh_context_t*, context);
     mh_stack_push(&this->jump_stack, &jump->node);
 }
 
 void mh_context_remove_jump(mh_context_t *context, mh_context_jump_stack_node_t *jump){
-    MH_THIS(mh_context_private_t*, context);
+    MH_THIS(mh_context_t*, context);
     if ((mh_context_jump_stack_node_t*)mh_stack_peek(&this->jump_stack) == jump) {
         mh_stack_pop(&this->jump_stack);
     }
 }
 
 void mh_context_set_error_handler(mh_context_t *context, mh_error_handler_t handler) {
-    MH_THIS(mh_context_private_t*, context);
+    MH_THIS(mh_context_t*, context);
     this->error_handler = handler;
 }
 

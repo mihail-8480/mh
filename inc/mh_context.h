@@ -31,9 +31,7 @@ MH_API_TYPE(mh_destructor, struct mh_destructor {
 });
 
 // The context structure, used for error reporting and memory management
-MH_API_TYPE(mh_context, struct mh_context {
-    short nothing;
-});
+MH_API_TYPE(mh_context, struct mh_context);
 
 // A context error handler
 typedef bool (*mh_error_handler_t)(mh_context_t *context, const char *message, mh_code_location_t from);
