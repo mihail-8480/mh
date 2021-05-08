@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-bool program_error(mh_context_t *context, const char *message, mh_code_location_t from) {
+bool program_error(MH_UNUSED mh_context_t *context, const char *message, mh_code_location_t from) {
     char loc[128];
     mh_code_location_to_string(loc, from);
     fprintf(stderr, "An error has occurred %s: %s\n", loc, message);
