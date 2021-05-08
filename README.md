@@ -9,6 +9,7 @@ cmake .
 cmake --build .
 cmake --install .
 ```
+*You might need root permissions for `cmake --install .` because it tries to copy files into `/usr/local/lib` by default.*
 
 ## Testing
 To test if the installation is successful you can run the default tests:
