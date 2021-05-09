@@ -170,8 +170,8 @@ void mh_list_remove(mh_list_t *list, mh_list_node_t *node) {
     MH_THIS(mh_list_private_t*, list);
     MH_NULL_REFERENCE(this->context, node);
 
-    mh_list_node_t* prev = node->previous;
-    mh_list_node_t* next = node->next;
+    mh_list_node_t *prev = node->previous;
+    mh_list_node_t *next = node->next;
 
     if (prev != NULL) {
         prev->next = next;
