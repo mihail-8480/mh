@@ -1,7 +1,6 @@
 #include "default_tests.h"
 #include "../inc/mh_map.h"
 #include "../inc/mh_list.h"
-#include "../inc/mh_stack.h"
 
 static int c = 0;
 
@@ -58,6 +57,7 @@ MH_TEST_NEW(list_test) {
 
     mh_list_remove(list, mh_list_at_index(list, 0));
     mh_list_remove(list, mh_list_at_index(list, 1));
+
     MH_TEST_EXPECT(mh_list_count(list) == 5);
     MH_TEST_EXPECT(strcmp(mh_list_node_value(mh_list_last(list))->address, "Node4") == 0);
 
