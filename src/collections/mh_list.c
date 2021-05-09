@@ -18,6 +18,7 @@ typedef struct mh_list_private {
 typedef struct mh_list_iterator {
     mh_iterator_t iterator;
     mh_list_node_t *current;
+    size_t index;
     mh_list_private_t *list;
 } mh_list_iterator_t;
 
@@ -31,11 +32,14 @@ static mh_memory_t mh_list_iterator_current(mh_iterator_t *iterator) {
 
 static bool mh_list_iterator_next(mh_iterator_t *iterator) {
     MH_THIS(mh_list_iterator_t*, iterator);
-    if (this->current == NULL || this->current->next == NULL) {
-        return false;
+    if (++this->index < this->list->count) {
+        if (this->current == NULL) {
+            return false;
+        }
+        this->current = this->current->next;
+        return true;
     }
-    this->current = this->current->next;
-    return true;
+    return false;
 }
 
 static bool mh_list_iterator_start(mh_iterator_t *iterator) {
@@ -50,6 +54,7 @@ static mh_iterator_t *mh_list_get_iterator(mh_collection_t *collection) {
     mh_list_iterator_t *iterator = mh_context_allocate(this->context, sizeof(mh_list_iterator_t), false).ptr;
     *iterator = (mh_list_iterator_t) {
             .list = this,
+            .index = 0,
             .current = this->first,
             .iterator = {
                     .current = mh_list_iterator_current,
@@ -165,16 +170,23 @@ void mh_list_remove(mh_list_t *list, mh_list_node_t *node) {
     MH_THIS(mh_list_private_t*, list);
     MH_NULL_REFERENCE(this->context, node);
 
-    if (node == this->first) {
-        this->first = node->next;
-    } else {
-        node->previous->next = node->next;
+    mh_list_node_t* prev = node->previous;
+    mh_list_node_t* next = node->next;
+
+    if (prev != NULL) {
+        prev->next = next;
     }
 
-    if (node == this->last) {
-        this->last = node->previous;
-    } else {
-        node->next->previous = node->previous;
+    if (next != NULL) {
+        next->previous = prev;
+    }
+
+    if (this->first == node) {
+        this->first = next;
+    }
+
+    if (this->last == node) {
+        this->last = prev;
     }
 
     this->count--;
