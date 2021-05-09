@@ -17,6 +17,9 @@
 // This may not be used.
 #define MH_UNUSED __attribute__((unused))
 
+// Intended fallthrough.
+#define MH_FALLTHROUGH __attribute__ ((fallthrough));
+
 // This is a constructor.
 #define MH_CONSTRUCTOR __attribute__((constructor))
 
