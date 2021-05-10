@@ -2,7 +2,6 @@
 #include "../inc/mh_map.h"
 #include "../inc/mh_list.h"
 
-#include <stdio.h>
 static int c = 0;
 
 static void count(MH_UNUSED mh_memory_t mem) {
