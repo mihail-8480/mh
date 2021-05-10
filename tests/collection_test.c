@@ -1,12 +1,11 @@
-#include <stdio.h>
 #include "default_tests.h"
 #include "../inc/mh_map.h"
 #include "../inc/mh_list.h"
 
+#include <stdio.h>
 static int c = 0;
 
 static void count(MH_UNUSED mh_memory_t mem) {
-    // todo: fix iterator
     c++;
 }
 
@@ -19,11 +18,11 @@ MH_TEST_NEW(map_test) {
     char value2[] = "TestValue2";
     mh_map_add(map, MH_REF_CONST(key), MH_REF_CONST(value));
     mh_map_add(map, MH_REF_CONST(key2), MH_REF_CONST(value2));
-    mh_collection_foreach(&map->collection, count);
-    MH_TEST_EXPECT(c == 2);
     MH_TEST_EXPECT(!mh_map_contains(map, MH_REF_CONST(invalid_key)));
     MH_TEST_EXPECT(mh_map_contains(map, MH_REF_CONST(key)));
     MH_TEST_EXPECT(mh_memory_is_equal(mh_map_get(map, MH_REF_CONST(key)), MH_REF_CONST(value)));
+    mh_collection_foreach(&map->collection, count);
+    MH_TEST_EXPECT(c == 2);
     MH_TEST_PASSED();
 }
 
