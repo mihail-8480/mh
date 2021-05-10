@@ -29,7 +29,7 @@ static uint64_t mh_kv_hash(const void *item, uint64_t seed0, uint64_t seed1) {
     return hash;
 }
 
-void mh_map_add(mh_map_t *map, mh_memory_t key, mh_memory_t value) {
+void mh_map_set(mh_map_t *map, mh_memory_t key, mh_memory_t value) {
     MH_THIS(mh_hashmap_t*, map);
     mh_key_value_pair_t *kv = mh_context_allocate(this->context, sizeof(mh_key_value_pair_t), false).ptr;
     *kv = (mh_key_value_pair_t) {

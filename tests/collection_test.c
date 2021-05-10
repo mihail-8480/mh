@@ -15,8 +15,8 @@ MH_TEST_NEW(map_test) {
     char invalid_key[] = "TestKeyInvalid";
     char value[] = "TestValue";
     char value2[] = "TestValue2";
-    mh_map_add(map, MH_REF_CONST(key), MH_REF_CONST(value));
-    mh_map_add(map, MH_REF_CONST(key2), MH_REF_CONST(value2));
+    mh_map_set(map, MH_REF_CONST(key), MH_REF_CONST(value));
+    mh_map_set(map, MH_REF_CONST(key2), MH_REF_CONST(value2));
     MH_TEST_EXPECT(!mh_map_contains(map, MH_REF_CONST(invalid_key)));
     MH_TEST_EXPECT(mh_map_contains(map, MH_REF_CONST(key)));
     MH_TEST_EXPECT(mh_memory_is_equal(mh_map_get(map, MH_REF_CONST(key)), MH_REF_CONST(value)));

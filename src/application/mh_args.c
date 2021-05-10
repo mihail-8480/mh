@@ -12,7 +12,7 @@ static bool mh_argument_parse_one(mh_map_t *map, int argc, char *argv[], mh_memo
             format->offset = format->size;
         }
         mh_memory_t value = MH_REF_STRING(argv[*c_arg]);
-        mh_map_add(map, current, value);
+        mh_map_set(map, current, value);
         *c_arg = *c_arg + 1;
     }
     return false;
