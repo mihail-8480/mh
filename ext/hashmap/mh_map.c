@@ -66,16 +66,20 @@ bool mh_map_contains(mh_map_t *map, mh_memory_t key) {
 static bool mh_map_iterator_start(mh_iterator_t *iterator) {
     MH_THIS(mh_map_iterator_t*, iterator);
     this->i = 0;
-    if (this->i < this->map->map->nbuckets) {
-        return true;
+    while (this->i < this->map->map->nbuckets) {
+        struct bucket *bucket = bucket_at(this->map->map, this->i);
+        if (bucket->dib) {
+            return true;
+        }
+        this->i++;
     }
     return false;
 }
 
 static bool mh_map_iterator_next(mh_iterator_t *iterator) {
     MH_THIS(mh_map_iterator_t*, iterator);
-    while (this->i + 1 < this->map->map->nbuckets) {
-        struct bucket *bucket = bucket_at(this->map->map, this->i++);
+    while (++this->i < this->map->map->nbuckets) {
+        struct bucket *bucket = bucket_at(this->map->map, this->i);
         if (bucket->dib) {
             return true;
         }
@@ -86,10 +90,11 @@ static bool mh_map_iterator_next(mh_iterator_t *iterator) {
 static mh_memory_t mh_map_iterator_current(mh_iterator_t *iterator) {
     MH_THIS(mh_map_iterator_t*, iterator);
     struct bucket *bucket = bucket_at(this->map->map, this->i);
-    if (bucket->dib) {
-        return ((mh_key_value_pair_t *) bucket_item(bucket))->value;
-    }
-    return MH_MEM_NULL;
+    return (mh_memory_t) {
+            .address = bucket_item(bucket),
+            .size = sizeof(mh_key_value_pair_t),
+            .offset = 0
+    };
 }
 
 static mh_iterator_t *mh_map_get_iterator(mh_collection_t *collection) {
