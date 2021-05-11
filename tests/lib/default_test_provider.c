@@ -1,4 +1,4 @@
-#include "../inc/mh_test_provider.h"
+#include "../../inc/mh_test_provider.h"
 #include "default_tests.h"
 
 static const mh_test_t tests[] = {

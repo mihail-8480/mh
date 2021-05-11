@@ -1,4 +1,4 @@
-#include "default_tests.h"
+#include "lib/default_tests.h"
 #include "../inc/mh_context.h"
 
 MH_TEST_NEW(context_create_test) {

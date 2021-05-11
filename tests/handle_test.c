@@ -1,4 +1,4 @@
-#include "default_tests.h"
+#include "lib/default_tests.h"
 #include "../inc/mh_handle.h"
 
 typedef mh_version_t (*mh_get_version_t)(void);
