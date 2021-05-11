@@ -60,6 +60,9 @@ MH_API_FUNC(void mh_collection_foreach(mh_collection_t *collection, void (*actio
 // Create an array collection.
 MH_API_FUNC(mh_collection_t *mh_array_new(mh_context_t *context, void *array, size_t size, size_t element_size));
 
+// Find values in a key-value pair collection.
+MH_API_FUNC(void mh_collection_find_values(mh_collection_t *collection, size_t key_count, const mh_memory_t keys[], ...));
+
 // Create an iterator and iterate trough the memory.
 #define MH_FOREACH_MEM(it, col) mh_iterator_t *it = mh_collection_get_iterator((mh_collection_t *)(col)); for(bool it##_stat = mh_iterator_start(it); it##_stat; it##_stat = mh_iterator_next(it))
 
@@ -68,5 +71,8 @@ MH_API_FUNC(mh_collection_t *mh_array_new(mh_context_t *context, void *array, si
 
 // Create a fixed-size array collection.
 #define MH_ARRAY(ctx, arr) mh_array_new(ctx, arr, sizeof(arr), sizeof(&arr[0]))
+
+// Find values in a key-value pair collection.
+#define MH_FIND_VALUES(collection, args, ...) mh_collection_find_values(collection, sizeof(args)/sizeof(*args), args, __VA_ARGS__)
 
 #endif //MHSERV_MH_COLLECTION_H
