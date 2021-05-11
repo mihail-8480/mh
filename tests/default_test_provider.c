@@ -31,7 +31,9 @@ static const mh_test_t tests[] = {
         MH_TEST(collection_find_test),
         MH_TEST(collection_find_test_map),
 
-        MH_TEST(tcp_test)
+        MH_TEST(tcp_test),
+
+        MH_TEST(conversion_test)
 };
 
 mh_tests_t mh_test_provider(void) {

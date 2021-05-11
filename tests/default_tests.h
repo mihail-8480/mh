@@ -49,4 +49,6 @@ MH_TEST_NEW(collection_find_test_map);
 
 MH_TEST_NEW(tcp_test);
 
+MH_TEST_NEW(conversion_test);
+
 #endif //MH_TESTS_LIST_H
