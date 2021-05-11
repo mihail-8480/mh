@@ -58,10 +58,6 @@ void hashmap_free(struct hashmap *map);
 
 void hashmap_clear(struct hashmap *map, bool update_cap);
 
-size_t hashmap_count(struct hashmap *map);
-
-bool hashmap_oom(struct hashmap *map);
-
 void *hashmap_get(struct hashmap *map, void *item);
 
 void *hashmap_set(struct hashmap *map, void *item);
@@ -72,9 +68,6 @@ void *hashmap_probe(struct hashmap *map, uint64_t position);
 
 uint64_t hashmap_sip(const void *data, size_t len,
                      uint64_t seed0, uint64_t seed1);
-
-uint64_t hashmap_murmur(const void *data, size_t len,
-                        uint64_t seed0, uint64_t seed1);
 
 struct bucket *bucket_at(struct hashmap *map, size_t index);
 

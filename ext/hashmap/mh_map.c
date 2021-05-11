@@ -37,7 +37,7 @@ void mh_map_set(mh_map_t *map, mh_memory_t key, mh_memory_t value) {
             .value = value
     };
     void *result = hashmap_set(this->map, kv);
-    if (result == NULL && hashmap_oom(this->map)) {
+    if (result == NULL && this->map->oom) {
         MH_THROW(this->context, "Out of memory.");
     }
 }
