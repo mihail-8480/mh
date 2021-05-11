@@ -12,8 +12,14 @@ struct mh_context {
     mh_destructor_t **destructors;
     mh_error_handler_t error_handler;
     mh_stack_t jump_stack;
+    mh_stack_t recycled_allocations;
 };
 mh_context_t *mh_global_context;
+
+typedef struct mh_recycled_node {
+    mh_stack_node_t node;
+    size_t index;
+} mh_recycled_node_t;
 
 MH_CONSTRUCTOR void mh_context_create_global(void) {
     MH_INFO("mh_context_create_global():\n");
@@ -54,6 +60,10 @@ mh_context_t *mh_start(void) {
             .jump_stack = {
                     .depth = 0,
                     .last = NULL
+            },
+            .recycled_allocations = {
+                    .depth = 0,
+                    .last = NULL
             }
     };
     MH_INFO("(mh_start)-- returned %zu\n", (size_t) this);
@@ -79,6 +89,12 @@ void mh_end(mh_context_t *context) {
     }
     free(this->allocations);
 
+    while(this->recycled_allocations.depth) {
+        void *node = mh_stack_pop(&this->recycled_allocations);
+        MH_INFO("(mh_end [%zu])-- removing recycled allocation index node [%zu] (%zu)\n", (size_t)context, this->recycled_allocations.depth, (size_t)node);
+        free(node);
+    }
+
     free(this);
     MH_INFO("(mh_end)-- success\n");
 }
@@ -87,11 +103,24 @@ mh_context_allocation_reference_t mh_context_allocate(mh_context_t *context, siz
     MH_THIS(mh_context_t*, context);
     MH_INFO("mh_context_allocate(%zu, %zu, %d):\n", (size_t) context, size, clear);
 
-    // Double the allocation array if there isn't enough space
-    if (this->allocation_count + 1 >= this->allocation_size) {
-        this->allocation_size *= 2;
-        MH_INFO("(mh_context_allocate)-- resizing allocations array to %zu\n", this->allocation_size);
-        this->allocations = realloc(this->allocations, sizeof(mh_context_allocation_t) * this->allocation_size);
+    size_t index;
+
+    // If you can recycle a previous index, do it.
+    if (this->recycled_allocations.depth > 0) {
+
+        mh_recycled_node_t *node = (mh_recycled_node_t*)mh_stack_pop(&this->recycled_allocations);
+        index = node->index;
+        MH_INFO("(mh_context_allocate)-- allocating memory with a recycled index: %zu\n", node->index);
+        free(node);
+    } else {
+        // If you can't get a new index and resize the array if there isn't enough space.
+        index = this->allocation_count++;
+        MH_INFO("(mh_context_allocate)-- allocating memory with a new index: %zu\n", index);
+        if (index >= this->allocation_size) {
+            this->allocation_size *= 2;
+            MH_INFO("(mh_context_allocate)-- resizing allocations array to %zu\n", this->allocation_size);
+            this->allocations = realloc(this->allocations, sizeof(mh_context_allocation_t) * this->allocation_size);
+        }
     }
 
     // If clear is true use calloc, if not use malloc
@@ -102,10 +131,9 @@ mh_context_allocation_reference_t mh_context_allocate(mh_context_t *context, siz
         ptr = calloc(1, size);
     }
 
-    // Add the pointer to the allocations array
-    size_t index = this->allocation_count++;
-    this->allocations[index] = ptr;
+    MH_NULL_REFERENCE(context, ptr);
 
+    this->allocations[index] = ptr;
     MH_INFO("(mh_context_allocate)-- allocated [%zu] (%zu)\n", index, (size_t) ptr);
     return (mh_context_allocation_reference_t) {.index = index, .ptr = ptr};
 }
@@ -114,15 +142,13 @@ void *mh_context_reallocate(mh_context_t *context, mh_context_allocation_referen
     MH_THIS(mh_context_t*, context);
     MH_INFO("mh_context_reallocate(%zu, {%zu,%zu}, %zu):\n", (size_t) context, (size_t) ref.ptr, ref.index, size);
 
-    if (ref.index >= this->allocation_count) {
-        return NULL;
+    if (ref.index >= this->allocation_count || this->allocations[ref.index] != ref.ptr) {
+        MH_THROW(context, "Invalid allocation reference.");
     }
 
     void *ptr = realloc(ref.ptr, size);
 
-    if (ptr == NULL) {
-        MH_THROW(context, "Failed reallocating memory.");
-    }
+    MH_NULL_REFERENCE(context, ptr);
 
     this->allocations[ref.index] = ptr;
     MH_INFO("(mh_context_reallocate)-- resized %zu to %zu - resulted in %zu\n", (size_t) ref.ptr, size,
@@ -134,12 +160,16 @@ void mh_context_free(mh_context_t *context, mh_context_allocation_reference_t re
     MH_THIS(mh_context_t*, context);
     MH_INFO("mh_context_free(%zu, {%zu,%zu}):\n", (size_t) context, (size_t) ref.ptr, ref.index);
 
-    if (this->allocations[ref.index] != ref.ptr) {
+    if (ref.index >= this->allocation_count || this->allocations[ref.index] != ref.ptr) {
         MH_THROW(context, "Invalid allocation reference.");
     }
 
     free(ref.ptr);
     this->allocations[ref.index] = NULL;
+
+    mh_recycled_node_t *node = malloc(sizeof(mh_recycled_node_t));
+    node->index = ref.index;
+    mh_stack_push(&this->recycled_allocations, &node->node);
 }
 
 void *mh_context_add_destructor(mh_context_t *context, mh_destructor_t *destructor) {
