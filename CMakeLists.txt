@@ -15,7 +15,7 @@ add_compile_definitions(MH_VERSION_PATCH=${CMAKE_PROJECT_VERSION_PATCH})
 # Fix some linker problems.
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# Create a library called lihmhext.a that contains code that wasn't written by me and has a different copyright.
+# Create a library called libmhext.a that contains code that wasn't written by me and has a different copyright.
 add_library(mhext STATIC ext/hashmap/hashmap.c ext/hashmap/mh_map.c)
 
 # libmh.so
@@ -23,15 +23,15 @@ add_library(mh SHARED src/collections/mh_stack.c src/streams/mh_stream.c src/str
 
 # Link platform dependent libraries.
 if (WIN32)
-    target_link_libraries(mh PRIVATE wsock32 ws2_32 dl)
+    target_link_libraries(mh PRIVATE wsock32 ws2_32 dl m)
 endif (WIN32)
 
 if (HAIKU)
-    target_link_libraries(mh PRIVATE bsd src/network)
+    target_link_libraries(mh PRIVATE bsd network m)
 endif (HAIKU)
 
 if (UNIX_LIKE)
-    target_link_libraries(mh PRIVATE pthread dl)
+    target_link_libraries(mh PRIVATE pthread dl m)
 endif (UNIX_LIKE)
 
 # Link libmhext.a to libmh.so.
