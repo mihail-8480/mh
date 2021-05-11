@@ -2,7 +2,6 @@
 #define MHSERV_MH_STREAM_H
 
 #include "mh_memory.h"
-#include "mh_tcp.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -22,9 +21,6 @@ MH_API_TYPE(mh_stream, struct mh_stream {
 
 // Create a new memory stream.
 MH_API_FUNC(mh_stream_t *mh_memory_stream_new(mh_context_t *context, size_t size, bool fixed));
-
-// Create a new socket stream (will probably work with normal file descriptors on unix too).
-MH_API_FUNC(mh_stream_t *mh_socket_stream_new(mh_context_t *context, mh_socket_t sock));
 
 // Create a new file stream.
 MH_API_FUNC(mh_stream_t *mh_file_stream_new(mh_context_t *context, FILE *file, bool should_close));

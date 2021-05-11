@@ -1,4 +1,4 @@
-#include "../../inc/mh_stream.h"
+#include "../../inc/mh_tcp.h"
 #include "mh_stream_private.h"
 
 // The socket stream structure
