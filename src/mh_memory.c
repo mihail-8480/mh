@@ -86,6 +86,8 @@ void mh_memory_to_string(char *dest, mh_memory_t mem) {
 }
 
 bool mh_memory_is_equal(mh_memory_t first, mh_memory_t second) {
-    if (first.size != second.size) return false;
+    if (first.size != second.size) {
+        return false;
+    }
     return memcmp(first.address, second.address, first.size) == 0;
 }
