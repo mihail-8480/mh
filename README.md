@@ -34,7 +34,6 @@ If the test ends with `Finished testing and all tests passed.` the library shoul
 | --- | --- |
 | [mihail-8480/mhserv](https://github.com/mihail-8480/mhserv) | A web server that loads dynamic libraries that implement the function specified in the header `<mh_http_handler.h>`. |
 
-
 ## Dependencies
 
 | Repository | License | Used in Component |

@@ -89,7 +89,7 @@ MH_API_FUNC(void mh_tcp_cleanup(mh_tcp_listener_t *listener));
 MH_API_FUNC(void mh_tcp_start(mh_tcp_listener_t *listener));
 
 // Connect a TCP client to a server.
-MH_API_FUNC(mh_stream_t* mh_tcp_connect(mh_tcp_client_t* client));
+MH_API_FUNC(mh_stream_t *mh_tcp_connect(mh_tcp_client_t *client));
 
 // Create a new socket stream (will probably work with normal file descriptors on unix too).
 MH_API_FUNC(mh_stream_t *mh_socket_stream_new(mh_context_t *context, mh_socket_t sock));
