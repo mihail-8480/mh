@@ -1,5 +1,21 @@
-#include "../../inc/mh_args.h"
+#include "../../inc/mh_console.h"
+#include "../streams/mh_stream_private.h"
+#include <unistd.h>
 
+mh_stream_t *mh_console_error_stream;
+mh_stream_t *mh_console_output_stream;
+
+MH_CONSTRUCTOR(102) void mh_init_streams(void) {
+    mh_console_error_stream = mh_file_stream_new(MH_GLOBAL, fdopen(STDERR_FILENO, "w"), false);
+    mh_console_output_stream = mh_file_stream_new(MH_GLOBAL, fdopen(STDOUT_FILENO, "w"), false);
+    mh_stream_private_t* private_err = ((mh_stream_private_t*)mh_console_error_stream);
+    mh_stream_private_t* private_out = ((mh_stream_private_t*)mh_console_output_stream);
+    private_err->can_read = false;
+    private_err->read = NULL;
+    private_out->can_read = false;
+    private_out->read = NULL;
+
+}
 
 static bool mh_argument_parse_one(mh_map_t *map, int argc, char *argv[], mh_memory_t *format, int *c_arg) {
     while (*c_arg < argc) {
