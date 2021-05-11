@@ -162,8 +162,8 @@ void mh_tcp_init(MH_UNUSED mh_tcp_listener_t *listener) {
 #endif
 }
 
-mh_stream_t *mh_tcp_connect(mh_tcp_client_t *client) {
-    int sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+mh_socket_t mh_tcp_connect(mh_tcp_client_t *client) {
+    mh_socket_t sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (sock == (mh_socket_t) -1) {
         MH_THROW(client->context, "A socket could not be created successfully.");
     }
@@ -171,7 +171,7 @@ mh_stream_t *mh_tcp_connect(mh_tcp_client_t *client) {
     if (con_res < 0) {
         MH_THROW(client->context, "Could not connect to server.");
     }
-    return mh_socket_stream_new(client->context, sock);
+    return sock;
 }
 
 void mh_tcp_cleanup(MH_UNUSED mh_tcp_listener_t *listener) {
