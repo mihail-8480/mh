@@ -41,7 +41,7 @@ MH_TEST_NEW(tcp_test) {
             .context = MH_GLOBAL
     };
 
-    mh_stream_t *stream = mh_tcp_connect(&client);
+    mh_stream_t *stream = mh_socket_stream_new(client.context, mh_tcp_connect(&client));
 
     mh_memory_t ref = MH_REF_CONST("Hello!");
 
