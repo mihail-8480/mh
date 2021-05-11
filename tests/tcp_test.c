@@ -34,7 +34,7 @@ MH_TEST_NEW(tcp_test) {
     };
     mh_thread_create(listener_thread, &listener);
 
-    usleep(100);
+    usleep(100000);
 
     mh_tcp_client_t client = {
             .address = address,
@@ -53,7 +53,7 @@ MH_TEST_NEW(tcp_test) {
 
 
     while (listener.running) {
-        usleep(100);
+        usleep(10000);
     }
 
     MH_TEST_EXPECT(mh_memory_is_equal(buf_ref, ref));
