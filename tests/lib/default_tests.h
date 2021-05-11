@@ -1,7 +1,7 @@
 #ifndef MH_TESTS_LIST_H
 #define MH_TESTS_LIST_H
 
-#include "../inc/mh_tests.h"
+#include "../../inc/mh_tests.h"
 
 MH_TEST_NEW(thread_test);
 

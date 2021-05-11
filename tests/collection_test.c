@@ -1,4 +1,4 @@
-#include "default_tests.h"
+#include "lib/default_tests.h"
 #include "../inc/mh_map.h"
 #include "../inc/mh_list.h"
 
