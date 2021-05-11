@@ -43,4 +43,6 @@ MH_TEST_NEW(iterator_test);
 
 MH_TEST_NEW(stack_test);
 
+MH_TEST_NEW(tcp_test);
+
 #endif //MH_TESTS_LIST_H

@@ -89,9 +89,10 @@ void mh_end(mh_context_t *context) {
     }
     free(this->allocations);
 
-    while(this->recycled_allocations.depth) {
+    while (this->recycled_allocations.depth) {
         void *node = mh_stack_pop(&this->recycled_allocations);
-        MH_INFO("(mh_end [%zu])-- removing recycled allocation index node [%zu] (%zu)\n", (size_t)context, this->recycled_allocations.depth, (size_t)node);
+        MH_INFO("(mh_end [%zu])-- removing recycled allocation index node [%zu] (%zu)\n", (size_t) context,
+                this->recycled_allocations.depth, (size_t) node);
         free(node);
     }
 
@@ -108,7 +109,7 @@ mh_context_allocation_reference_t mh_context_allocate(mh_context_t *context, siz
     // If you can recycle a previous index, do it.
     if (this->recycled_allocations.depth > 0) {
 
-        mh_recycled_node_t *node = (mh_recycled_node_t*)mh_stack_pop(&this->recycled_allocations);
+        mh_recycled_node_t *node = (mh_recycled_node_t *) mh_stack_pop(&this->recycled_allocations);
         index = node->index;
         MH_INFO("(mh_context_allocate)-- allocating memory with a recycled index: %zu\n", node->index);
         free(node);
