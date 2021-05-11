@@ -19,7 +19,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_library(mhext STATIC ext/hashmap/hashmap.c ext/hashmap/mh_map.c)
 
 # libmh.so
-add_library(mh SHARED src/collections/mh_stack.c src/streams/mh_stream.c src/streams/mh_memory_stream.c src/mh_memory.c src/network/mh_tcp.c src/streams/mh_socket_stream.c src/network/mh_http.c src/mh_thread.c src/streams/mh_file_stream.c src/mh_context.c src/collections/mh_collection.c src/mh_handle.c src/mh.c src/test/mh_tests.c src/application/mh_args.c src/collections/mh_list.c src/collections/mh_array.c)
+add_library(mh SHARED src/collections/mh_stack.c src/streams/mh_stream.c src/streams/mh_memory_stream.c src/mh_memory.c src/network/mh_tcp.c src/streams/mh_socket_stream.c src/network/mh_http.c src/mh_thread.c src/streams/mh_file_stream.c src/mh_context.c src/collections/mh_collection.c src/mh_handle.c src/mh.c src/test/mh_tests.c src/application/mh_console.c src/collections/mh_list.c src/collections/mh_array.c)
 
 # Link platform dependent libraries.
 if (WIN32)

@@ -21,7 +21,7 @@ typedef struct mh_recycled_node {
     size_t index;
 } mh_recycled_node_t;
 
-MH_CONSTRUCTOR void mh_context_create_global(void) {
+MH_CONSTRUCTOR(101) void mh_context_create_global(void) {
     MH_INFO("mh_context_create_global():\n");
     mh_global_context = mh_start();
 }

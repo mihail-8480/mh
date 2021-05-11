@@ -1,15 +1,16 @@
 #include "../../inc/mh_tests.h"
 #include "../../inc/mh_handle.h"
-#include "../../inc/mh_args.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "../../inc/mh_console.h"
 
 bool program_error(MH_UNUSED mh_context_t *context, const char *message, mh_code_location_t from) {
     char loc[128];
     mh_code_location_to_string(loc, from);
-    fprintf(stderr, "An error has occurred %s: %s\n", loc, message);
+    mh_memory_t err_msg = MH_STRING("An error has occurred ");
+    mh_stream_write(MH_ERR, &err_msg, err_msg.size);
+    mh_stream_write_reference(MH_ERR, loc, strlen(loc));
+    mh_stream_write_reference(MH_ERR, ": ", 2);
+    mh_stream_write_reference(MH_ERR, message, strlen(message));
+    mh_stream_write_reference(MH_ERR, "\n", 1);
     exit(1);
 }
 
@@ -62,7 +63,7 @@ int main(int argc, char *argv[]) {
     mh_test_provider_t provider = (mh_test_provider_t) (size_t) mh_handle_find_symbol(handle, "mh_test_provider");
     mh_tests_t tests = provider();
     if (check_only) {
-        printf("%d", mh_tests_check(NULL, tests.tests, tests.count));
+        mh_stream_write_reference(MH_OUT, mh_tests_check(NULL, tests.tests, tests.count) ? "1" : "0", 1);
     } else {
         tests_print(tests.tests, tests.count);
     }

@@ -1,14 +1,18 @@
-#ifndef MH_MH_ARGS_H
-#define MH_MH_ARGS_H
+#ifndef MH_MH_CONSOLE_H
+#define MH_MH_CONSOLE_H
 
 #include "mh_map.h"
+#include "mh_stream.h"
 
 /*
  * <mh_args.h>
- * The libmh argument parser header.
+ * The libmh console application header.
  *
  * Contains an argument parser.
  */
+
+extern mh_stream_t *mh_console_output_stream;
+extern mh_stream_t *mh_console_error_stream;
 
 // The argument parser settings.
 MH_API_TYPE(mh_argument_parser_args, struct mh_argument_parser_args {
@@ -23,4 +27,7 @@ MH_API_FUNC(mh_map_t *
             mh_argument_parse(
                     mh_context_t *context, const mh_argument_parser_args_t *args, int argc, char *argv[]));
 
-#endif //MH_MH_ARGS_H
+#define MH_OUT mh_console_output_stream
+#define MH_ERR mh_console_error_stream
+
+#endif //MH_MH_CONSOLE_H

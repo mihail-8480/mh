@@ -21,7 +21,7 @@
 #define MH_FALLTHROUGH __attribute__ ((fallthrough));
 
 // This is a constructor.
-#define MH_CONSTRUCTOR __attribute__((constructor))
+#define MH_CONSTRUCTOR(p) __attribute__((constructor(p)))
 
 // This is a destructor.
 #define MH_DESTRUCTOR __attribute__((destructor))
