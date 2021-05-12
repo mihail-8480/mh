@@ -30,4 +30,11 @@ MH_API_FUNC(mh_map_t *
 #define MH_OUT mh_console_output_stream
 #define MH_ERR mh_console_error_stream
 
+#define MH_PRINT(c_str) mh_stream_write_reference(MH_OUT, c_str, sizeof(c_str)-1)
+#define MH_PRINT_STR(str) mh_stream_write_reference(MH_OUT, str, strlen(str))
+#define MH_PRINT_MEM(mem) mh_stream_write(MH_OUT, &mem, mem.size)
+#define MH_PRINT_ERROR(c_str) mh_stream_write_reference(MH_ERR, c_str, sizeof(c_str)-1)
+#define MH_PRINT_ERROR_STR(str) mh_stream_write_reference(MH_ERR, str, strlen(str))
+#define MH_PRINT_ERROR_MEM(mem) mh_stream_write(MH_ERR, &mem, mem.size)
+
 #endif //MH_MH_CONSOLE_H

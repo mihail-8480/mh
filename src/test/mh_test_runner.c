@@ -1,45 +1,79 @@
 #include "../../inc/mh_tests.h"
 #include "../../inc/mh_handle.h"
 #include "../../inc/mh_console.h"
+#include "../../inc/mh_convert.h"
 
 bool program_error(MH_UNUSED mh_context_t *context, const char *message, mh_code_location_t from) {
     char loc[128];
     mh_code_location_to_string(loc, from);
-    mh_memory_t err_msg = MH_STRING("An error has occurred ");
-    mh_stream_write(MH_ERR, &err_msg, err_msg.size);
-    mh_stream_write_reference(MH_ERR, loc, strlen(loc));
-    mh_stream_write_reference(MH_ERR, ": ", 2);
-    mh_stream_write_reference(MH_ERR, message, strlen(message));
-    mh_stream_write_reference(MH_ERR, "\n", 1);
+    MH_PRINT_ERROR("An error has occurred ");
+    MH_PRINT_ERROR_STR(loc);
+    MH_PRINT_ERROR(": ");
+    MH_PRINT_ERROR_STR(message);
+    MH_PRINT_ERROR("\n");
     exit(1);
 }
 
 void tests_print(const mh_test_t *tests, size_t count) {
     mh_test_return_t result;
     size_t failed = 0;
+    char conv_buf[20];
+    mh_memory_t conv = MH_REF_CONST(conv_buf);
     for (size_t i = 0; i < count; i++) {
-        printf("[......] [%zu/%zu] Running the test `%s`...", i + 1, count, tests[i].name);
+        MH_PRINT("[......] [");
+        mh_uint_to_string(&conv, i+1, MH_BASE_DEC);
+        MH_PRINT_STR(conv.address);
+        MH_PRINT("/");
+        mh_uint_to_string(&conv, count, MH_BASE_DEC);
+        MH_PRINT_STR(conv.address);
+        MH_PRINT("] Running the test `");
+        MH_PRINT_STR(tests[i].name);
+        MH_PRINT("`...");
         fflush(stdout);
         mh_tests_check(&result, &tests[i], 1);
         if (!result.success) {
             char loc[128];
             mh_code_location_to_string(loc, result.location);
-            printf("\r[FAILED] [%zu/%zu] The test `%s` has failed because \"%s\" %s.\n", i + 1, count, tests[i].name,
-                   result.reason, loc);
+            MH_PRINT("\r[FAILED] [");
+            mh_uint_to_string(&conv, i+1, MH_BASE_DEC);
+            MH_PRINT_STR(conv.address);
+            MH_PRINT("/");
+            mh_uint_to_string(&conv, count, MH_BASE_DEC);
+            MH_PRINT_STR(conv.address);
+            MH_PRINT("] The test `");
+            MH_PRINT_STR(tests[i].name);
+            MH_PRINT("` has failed because \"");
+            MH_PRINT_STR(result.reason);
+            MH_PRINT("\" ");
+            MH_PRINT_STR(loc);
+            MH_PRINT(".\n");
             failed++;
             if (tests[i].required) {
-                fprintf(stderr, "`%s` is a required test, stopping...\n", tests[i].name);
+                MH_PRINT_ERROR("That was a required test, stopping program...\n");
                 exit(1);
             }
         } else {
-            printf("\r[PASSED] [%zu/%zu] The test `%s` has passed.\n", i + 1, count, tests[i].name);
+            MH_PRINT("\r[PASSED] [");
+            mh_uint_to_string(&conv, i+1, MH_BASE_DEC);
+            MH_PRINT_STR(conv.address);
+            MH_PRINT("/");
+            mh_uint_to_string(&conv, count, MH_BASE_DEC);
+            MH_PRINT_STR(conv.address);
+            MH_PRINT("] The test `");
+            MH_PRINT_STR(tests[i].name);
+            MH_PRINT("` has passed.\n");
         }
     }
-    printf("Finished testing and ");
+    MH_PRINT("Finished testing and ");
     if (failed) {
-        printf("%zu out of %zu tests passed.\n", count - failed, count);
+        mh_uint_to_string(&conv, count - failed, MH_BASE_DEC);
+        MH_PRINT_STR(conv.address);
+        MH_PRINT(" out of ");
+        mh_uint_to_string(&conv, count, MH_BASE_DEC);
+        MH_PRINT_STR(conv.address);
+        MH_PRINT(" tests passed.\n");
     } else {
-        printf("all tests passed.\n");
+        MH_PRINT("all tests passed.\n");
     }
     exit(failed != 0);
 }
