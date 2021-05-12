@@ -2,7 +2,7 @@
 #include <math.h>
 
 static inline size_t mh_intlen(mh_unsigned_number_t num, mh_base_t base) {
-    return (size_t)ceil(log(num+1) / log(base));
+    return (size_t)ceil(log2(num+1) / log2(base));
 }
 
 static inline mh_unsigned_number_t mh_abs(mh_signed_number_t num) {
