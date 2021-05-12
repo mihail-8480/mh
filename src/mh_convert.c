@@ -31,8 +31,12 @@ static char mh_conversion_table[] = {
         'd', 'e', 'f'
 };
 
+bool mh_verify_base(mh_base_t base) {
+    return base <= sizeof mh_conversion_table && base > 1;
+}
+
 bool mh_int_to_string(mh_memory_t *memory, mh_signed_number_t num, mh_base_t base) {
-    if (base > sizeof(mh_conversion_table)) {
+    if (!mh_verify_base(base)) {
         return false;
     }
     mh_unsigned_number_t p_num = mh_abs(num);
@@ -45,7 +49,7 @@ bool mh_int_to_string(mh_memory_t *memory, mh_signed_number_t num, mh_base_t bas
 }
 
 bool mh_uint_to_string(mh_memory_t *memory, mh_unsigned_number_t num, mh_base_t base) {
-    if (base > sizeof(mh_conversion_table)) {
+    if (!mh_verify_base(base)) {
         return false;
     }
     return mh_strint(memory, num, mh_intlen(num, base), base, mh_conversion_table);
