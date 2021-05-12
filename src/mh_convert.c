@@ -31,7 +31,7 @@ static char mh_conversion_table[] = {
         'd', 'e', 'f'
 };
 
-bool mh_verify_base(mh_base_t base) {
+static inline bool mh_verify_base(mh_base_t base) {
     return base <= sizeof mh_conversion_table && base > 1;
 }
 
