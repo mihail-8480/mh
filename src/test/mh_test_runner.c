@@ -1,79 +1,67 @@
 #include "../../inc/mh_tests.h"
 #include "../../inc/mh_handle.h"
 #include "../../inc/mh_console.h"
-#include "../../inc/mh_convert.h"
 
 bool program_error(MH_UNUSED mh_context_t *context, const char *message, mh_code_location_t from) {
     char loc[128];
     mh_code_location_to_string(loc, from);
-    MH_PRINT_ERROR("An error has occurred ");
-    MH_PRINT_ERROR_STR(loc);
-    MH_PRINT_ERROR(": ");
-    MH_PRINT_ERROR_STR(message);
-    MH_PRINT_ERROR("\n");
+    mh_write_string(MH_ERROR, "An error has occurred ");
+    mh_write_string(MH_ERROR, loc);
+    mh_write_string(MH_ERROR, ": ");
+    mh_write_string(MH_ERROR, message);
+    mh_write_string(MH_ERROR, "\n");
     exit(1);
 }
 
 void tests_print(const mh_test_t *tests, size_t count) {
     mh_test_return_t result;
     size_t failed = 0;
-    char conv_buf[20];
-    mh_memory_t conv = MH_REF_CONST(conv_buf);
     for (size_t i = 0; i < count; i++) {
-        MH_PRINT("[......] [");
-        mh_uint_to_string(&conv, i+1, MH_BASE_DEC);
-        MH_PRINT_STR(conv.address);
-        MH_PRINT("/");
-        mh_uint_to_string(&conv, count, MH_BASE_DEC);
-        MH_PRINT_STR(conv.address);
-        MH_PRINT("] Running the test `");
-        MH_PRINT_STR(tests[i].name);
-        MH_PRINT("`...");
-        mh_stream_flush(MH_OUT);
+        mh_write_string(MH_OUTPUT, "[......] [");
+        mh_write_unsigned_number(MH_OUTPUT, i+1);
+        mh_write_string(MH_OUTPUT, "/");
+        mh_write_unsigned_number(MH_OUTPUT, count);
+        mh_write_string(MH_OUTPUT, "] Running the test `");
+        mh_write_string(MH_OUTPUT, tests[i].name);
+        mh_write_string(MH_OUTPUT, "`...");
         mh_tests_check(&result, &tests[i], 1);
         if (!result.success) {
             char loc[128];
             mh_code_location_to_string(loc, result.location);
-            MH_PRINT("\r[FAILED] [");
-            mh_uint_to_string(&conv, i+1, MH_BASE_DEC);
-            MH_PRINT_STR(conv.address);
-            MH_PRINT("/");
-            mh_uint_to_string(&conv, count, MH_BASE_DEC);
-            MH_PRINT_STR(conv.address);
-            MH_PRINT("] The test `");
-            MH_PRINT_STR(tests[i].name);
-            MH_PRINT("` has failed because \"");
-            MH_PRINT_STR(result.reason);
-            MH_PRINT("\" ");
-            MH_PRINT_STR(loc);
-            MH_PRINT(".\n");
+            mh_write_string(MH_OUTPUT,"\r[FAILED] [");
+            mh_write_unsigned_number(MH_OUTPUT, i+1);
+            mh_write_string(MH_OUTPUT, "/");
+            mh_write_unsigned_number(MH_OUTPUT, count);
+            mh_write_string(MH_OUTPUT, "] The test `");
+            mh_write_string(MH_OUTPUT, tests[i].name);
+            mh_write_string(MH_OUTPUT, "` has failed because \"");
+            mh_write_string(MH_OUTPUT, result.reason);
+            mh_write_string(MH_OUTPUT, "\" ");
+            mh_write_string(MH_OUTPUT, loc);
+            mh_write_string(MH_OUTPUT, ".\n");
             failed++;
             if (tests[i].required) {
-                MH_PRINT_ERROR("That was a required test, stopping program...\n");
+                mh_write_string(MH_ERROR, "That was a required test, stopping program...\n");
                 exit(1);
             }
         } else {
-            MH_PRINT("\r[PASSED] [");
-            mh_uint_to_string(&conv, i+1, MH_BASE_DEC);
-            MH_PRINT_STR(conv.address);
-            MH_PRINT("/");
-            mh_uint_to_string(&conv, count, MH_BASE_DEC);
-            MH_PRINT_STR(conv.address);
-            MH_PRINT("] The test `");
-            MH_PRINT_STR(tests[i].name);
-            MH_PRINT("` has passed.\n");
+            mh_write_string(MH_OUTPUT, "\r[PASSED] [");
+            mh_write_unsigned_number(MH_OUTPUT, i+1);
+            mh_write_string(MH_OUTPUT, "/");
+            mh_write_unsigned_number(MH_OUTPUT, count);
+            mh_write_string(MH_OUTPUT, "] The test `");
+            mh_write_string(MH_OUTPUT, tests[i].name);
+            mh_write_string(MH_OUTPUT, "` has passed.\n");
         }
     }
-    MH_PRINT("Finished testing and ");
+    mh_write_string(MH_OUTPUT, "Finished testing and ");
     if (failed) {
-        mh_uint_to_string(&conv, count - failed, MH_BASE_DEC);
-        MH_PRINT_STR(conv.address);
-        MH_PRINT(" out of ");
-        mh_uint_to_string(&conv, count, MH_BASE_DEC);
-        MH_PRINT_STR(conv.address);
-        MH_PRINT(" tests passed.\n");
+        mh_write_unsigned_number(MH_OUTPUT, count - failed);
+        mh_write_string(MH_OUTPUT, " out of ");
+        mh_write_unsigned_number(MH_OUTPUT, count);
+        mh_write_string(MH_OUTPUT, " tests passed.\n");
     } else {
-        MH_PRINT("all tests passed.\n");
+        mh_write_string(MH_OUTPUT, "all tests passed.\n");
     }
     exit(failed != 0);
 }
@@ -97,7 +85,7 @@ int main(int argc, char *argv[]) {
     mh_test_provider_t provider = (mh_test_provider_t) (size_t) mh_handle_find_symbol(handle, "mh_test_provider");
     mh_tests_t tests = provider();
     if (check_only) {
-        mh_stream_write_reference(MH_OUT, mh_tests_check(NULL, tests.tests, tests.count) ? "1" : "0", 1);
+        mh_write_string(MH_OUTPUT, mh_tests_check(NULL, tests.tests, tests.count) ? "1" : "0");
     } else {
         tests_print(tests.tests, tests.count);
     }

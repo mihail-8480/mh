@@ -1,7 +1,7 @@
 #include "mh_writer_private.h"
 
 void mh_write_string(const mh_writer_t *writer, const char* str) {
-    mh_memory_t memory = MH_STRING((void*)str);
+    mh_memory_t memory = MH_REF_STRING((void*)str);
     writer->write(writer->instance, &memory, memory.size);
 }
 

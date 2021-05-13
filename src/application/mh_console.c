@@ -4,6 +4,9 @@
 mh_stream_t *mh_console_error_stream;
 mh_stream_t *mh_console_output_stream;
 
+mh_writer_t *mh_console_error;
+mh_writer_t *mh_console_output;
+
 MH_CONSTRUCTOR(102) void mh_init_streams(void) {
     mh_console_error_stream = mh_file_stream_new(MH_GLOBAL, stderr, false);
     mh_console_output_stream = mh_file_stream_new(MH_GLOBAL, stdout, false);
@@ -13,7 +16,8 @@ MH_CONSTRUCTOR(102) void mh_init_streams(void) {
     private_err->read = NULL;
     private_out->can_read = false;
     private_out->read = NULL;
-
+    mh_console_error = mh_writer_from_stream(mh_console_error_stream);
+    mh_console_output = mh_writer_from_stream(mh_console_output_stream);
 }
 
 static bool mh_argument_parse_one(mh_map_t *map, int argc, char *argv[], mh_memory_t *format, int *c_arg) {
