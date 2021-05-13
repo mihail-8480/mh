@@ -5,11 +5,7 @@
 bool program_error(MH_UNUSED mh_context_t *context, const char *message, mh_code_location_t from) {
     char loc[128];
     mh_code_location_to_string(loc, from);
-    mh_write_string(MH_ERROR, "An error has occurred ");
-    mh_write_string(MH_ERROR, loc);
-    mh_write_string(MH_ERROR, ": ");
-    mh_write_string(MH_ERROR, message);
-    mh_write_string(MH_ERROR, "\n");
+    MH_WRITE_ERR("An error has occurred {}: {}\n", MH_FMT_STR(loc), MH_FMT_STR(message));
     exit(1);
 }
 
@@ -17,56 +13,33 @@ void tests_print(const mh_test_t *tests, size_t count) {
     mh_test_return_t result;
     size_t failed = 0;
     for (size_t i = 0; i < count; i++) {
-        mh_write_string(MH_OUTPUT, "[......] [");
-        mh_write_unsigned_number(MH_OUTPUT, i+1);
-        mh_write_string(MH_OUTPUT, "/");
-        mh_write_unsigned_number(MH_OUTPUT, count);
-        mh_write_string(MH_OUTPUT, "] Running the test `");
-        mh_write_string(MH_OUTPUT, tests[i].name);
-        mh_write_string(MH_OUTPUT, "`...");
+        MH_WRITE("[......] [{}/{}] Running the test `{}`...", MH_FMT_INT(i + 1), MH_FMT_INT(count),
+                 MH_FMT_STR(tests[i].name));
         mh_tests_check(&result, &tests[i], 1);
         if (!result.success) {
             char loc[128];
             mh_code_location_to_string(loc, result.location);
-            mh_write_string(MH_OUTPUT,"\r[FAILED] [");
-            mh_write_unsigned_number(MH_OUTPUT, i+1);
-            mh_write_string(MH_OUTPUT, "/");
-            mh_write_unsigned_number(MH_OUTPUT, count);
-            mh_write_string(MH_OUTPUT, "] The test `");
-            mh_write_string(MH_OUTPUT, tests[i].name);
-            mh_write_string(MH_OUTPUT, "` has failed because \"");
-            mh_write_string(MH_OUTPUT, result.reason);
-            mh_write_string(MH_OUTPUT, "\" ");
-            mh_write_string(MH_OUTPUT, loc);
-            mh_write_string(MH_OUTPUT, ".\n");
+            MH_WRITE("\r[FAILED] [{}/{}] The test `{}` has failed because \"{}\" {}.\n", MH_FMT_INT(i + 1),
+                     MH_FMT_INT(count), MH_FMT_STR(tests[i].name), MH_FMT_STR(result.reason), MH_FMT_STR(loc));
             failed++;
             if (tests[i].required) {
-                mh_write_string(MH_ERROR, "That was a required test, stopping program...\n");
+                MH_WRITE_ERR("That was a required test, stopping program...\n");
                 exit(1);
             }
         } else {
-            mh_write_string(MH_OUTPUT, "\r[PASSED] [");
-            mh_write_unsigned_number(MH_OUTPUT, i+1);
-            mh_write_string(MH_OUTPUT, "/");
-            mh_write_unsigned_number(MH_OUTPUT, count);
-            mh_write_string(MH_OUTPUT, "] The test `");
-            mh_write_string(MH_OUTPUT, tests[i].name);
-            mh_write_string(MH_OUTPUT, "` has passed.\n");
+            MH_WRITE("\r[PASSED] [{}/{}] The test `{}` has passed.\n", MH_FMT_INT(i + 1), MH_FMT_INT(count),
+                     MH_FMT_STR(tests[i].name));
         }
     }
-    mh_write_string(MH_OUTPUT, "Finished testing and ");
     if (failed) {
-        mh_write_unsigned_number(MH_OUTPUT, count - failed);
-        mh_write_string(MH_OUTPUT, " out of ");
-        mh_write_unsigned_number(MH_OUTPUT, count);
-        mh_write_string(MH_OUTPUT, " tests passed.\n");
+        MH_WRITE("Finished testing and {} out of {} tests passed.\n", MH_FMT_INT(count - failed), MH_FMT_INT(count));
     } else {
-        mh_write_string(MH_OUTPUT, "all tests passed.\n");
+        MH_WRITE("Finished testing and all tests passed.\n");
     }
     exit(failed != 0);
 }
 
-int main(int argc, char *argv[]) {
+int main(MH_UNUSED int argc, MH_UNUSED char *argv[]) {
     typedef mh_tests_t (*mh_test_provider_t)(void);
     mh_context_set_error_handler(MH_GLOBAL, program_error);
 
@@ -85,7 +58,7 @@ int main(int argc, char *argv[]) {
     mh_test_provider_t provider = (mh_test_provider_t) (size_t) mh_handle_find_symbol(handle, "mh_test_provider");
     mh_tests_t tests = provider();
     if (check_only) {
-        mh_write_string(MH_OUTPUT, mh_tests_check(NULL, tests.tests, tests.count) ? "1" : "0");
+        MH_WRITE("{}", MH_FMT_BOOL(mh_tests_check(NULL, tests.tests, tests.count)));
     } else {
         tests_print(tests.tests, tests.count);
     }
