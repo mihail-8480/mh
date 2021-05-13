@@ -15,6 +15,8 @@ typedef struct mh_stream_private {
 
     void (*seek)(void *stream, size_t position);
 
+    void (*flush)(void *stream);
+
     size_t (*get_position)(void *stream);
 
     size_t (*get_size)(void *stream);

@@ -37,6 +37,9 @@ MH_API_FUNC(void mh_stream_read(mh_stream_t *stream, mh_memory_t *buffer, size_t
 // Write from memory to a stream.
 MH_API_FUNC(void mh_stream_write(mh_stream_t *stream, mh_memory_t *buffer, size_t count));
 
+// Flush the stream buffer (if there is one).
+MH_API_FUNC(void mh_stream_flush(mh_stream_t *stream));
+
 // Get the stream's position.
 MH_API_FUNC(size_t mh_stream_get_position(mh_stream_t *stream));
 

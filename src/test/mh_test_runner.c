@@ -29,7 +29,7 @@ void tests_print(const mh_test_t *tests, size_t count) {
         MH_PRINT("] Running the test `");
         MH_PRINT_STR(tests[i].name);
         MH_PRINT("`...");
-        fflush(stdout);
+        mh_stream_flush(MH_OUT);
         mh_tests_check(&result, &tests[i], 1);
         if (!result.success) {
             char loc[128];
