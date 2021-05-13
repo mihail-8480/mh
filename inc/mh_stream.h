@@ -2,6 +2,7 @@
 #define MHSERV_MH_STREAM_H
 
 #include "mh_memory.h"
+#include "mh_writer.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -51,5 +52,8 @@ MH_API_FUNC(void mh_stream_copy_to(mh_stream_t *dest, mh_stream_t *src, size_t s
 
 // Write a string to a stream without copying it twice, return how many bytes were actually written.
 MH_API_FUNC(size_t mh_stream_write_reference(mh_stream_t *stream, const void *ptr, size_t size));
+
+// Get a writer from a stream.
+MH_API_FUNC(mh_writer_t *mh_writer_from_stream(mh_stream_t *stream));
 
 #endif //MHSERV_MH_STREAM_H

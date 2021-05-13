@@ -1,4 +1,5 @@
 #include "../../inc/mh_stream.h"
+#include "../writer/mh_writer_private.h"
 #include "mh_stream_private.h"
 
 void mh_stream_flush(mh_stream_t *stream) {
@@ -85,4 +86,23 @@ size_t mh_stream_write_reference(mh_stream_t *stream, const void *ptr, size_t si
     // Write to the stream
     mh_stream_write(stream, &memory, memory.size);
     return memory.offset;
+}
+
+void mh_stream_writer_write(void *instance, mh_memory_t *memory, size_t size) {
+    MH_THIS(mh_stream_t*, instance);
+    mh_stream_write(this, memory, size);
+    mh_stream_flush(this);
+}
+
+mh_writer_t *mh_writer_from_stream(mh_stream_t *stream) {
+    MH_THIS(mh_stream_private_t*, stream);
+    if (!this->can_write) {
+        MH_THROW(this->context, "Cannot get a writer from a stream that cannot be written to.");
+    }
+    mh_writer_t *writer = mh_context_allocate(this->context, sizeof(mh_writer_t), false).ptr;
+    *writer = (mh_writer_t) {
+        .instance = stream,
+        .write = mh_stream_writer_write
+    };
+    return writer;
 }
