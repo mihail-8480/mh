@@ -1,6 +1,13 @@
 #include "../../inc/mh_stream.h"
 #include "mh_stream_private.h"
 
+void mh_stream_flush(mh_stream_t *stream) {
+    MH_THIS(mh_stream_private_t*, stream);
+    if (this->flush != NULL) {
+        this->flush(this);
+    }
+}
+
 bool mh_stream_seek(mh_stream_t *stream, size_t position) {
     MH_THIS(mh_stream_private_t*, stream);
     if (this->can_seek) {

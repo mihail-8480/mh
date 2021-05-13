@@ -71,6 +71,9 @@ mh_stream_t *mh_socket_stream_new(mh_context_t *context, mh_socket_t socket) {
     this->base.context = context;
     mh_context_add_destructor(context, &this->base.base.destructor);
 
+    // Cannot flush
+    this->base.flush = NULL;
+
     // Override and enable reading
     this->base.can_read = true;
     this->base.read = mh_socket_stream_read;
