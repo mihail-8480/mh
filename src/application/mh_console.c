@@ -10,8 +10,8 @@ mh_writer_t *mh_console_output;
 MH_CONSTRUCTOR(102) void mh_init_streams(void) {
     mh_console_error_stream = mh_file_stream_new(MH_GLOBAL, stderr, false);
     mh_console_output_stream = mh_file_stream_new(MH_GLOBAL, stdout, false);
-    mh_stream_private_t* private_err = ((mh_stream_private_t*)mh_console_error_stream);
-    mh_stream_private_t* private_out = ((mh_stream_private_t*)mh_console_output_stream);
+    mh_stream_private_t *private_err = ((mh_stream_private_t *) mh_console_error_stream);
+    mh_stream_private_t *private_out = ((mh_stream_private_t *) mh_console_output_stream);
     private_err->can_read = false;
     private_err->read = NULL;
     private_out->can_read = false;

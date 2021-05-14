@@ -16,7 +16,8 @@ void tests_print(const mh_test_t *tests, size_t count) {
         mh_tests_check(&result, &tests[i], 1);
         if (!result.success) {
             MH_WRITE("\r[FAILED] [{}/{}] The test `{}` has failed because \"{}\" {}.\n", MH_FMT_INT(i + 1),
-                     MH_FMT_INT(count), MH_FMT_STR(tests[i].name), MH_FMT_STR(result.reason), MH_FMT_LOC(&result.location));
+                     MH_FMT_INT(count), MH_FMT_STR(tests[i].name), MH_FMT_STR(result.reason),
+                     MH_FMT_LOC(&result.location));
             failed++;
             if (tests[i].required) {
                 MH_WRITE_ERR("That was a required test, stopping program...\n");

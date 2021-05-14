@@ -1,8 +1,8 @@
 #include "mh_writer_private.h"
 #include <stdarg.h>
 
-void mh_write_string(const mh_writer_t *writer, const char* str) {
-    mh_memory_t memory = MH_REF_STRING((void*)str);
+void mh_write_string(const mh_writer_t *writer, const char *str) {
+    mh_memory_t memory = MH_REF_STRING((void *) str);
     writer->write(writer->instance, &memory, memory.size);
 }
 
@@ -25,14 +25,14 @@ void mh_write_unsigned_number(const mh_writer_t *writer, mh_unsigned_number_t nu
 }
 
 inline static void mh_buffered_flush(const mh_writer_t *writer, mh_memory_t *buf) {
-    mh_write_memory(writer, (mh_memory_t){.offset = 0, .size = buf->offset, .address = buf->address});
+    mh_write_memory(writer, (mh_memory_t) {.offset = 0, .size = buf->offset, .address = buf->address});
     buf->offset = 0;
 }
 
 inline static void mh_buffered_write(const mh_writer_t *writer, mh_memory_t *buf, char c) {
     retry:
     if (buf->offset < buf->size) {
-        ((char*)buf->address)[buf->offset] = c;
+        ((char *) buf->address)[buf->offset] = c;
         buf->offset++;
     } else {
         mh_buffered_flush(writer, buf);
@@ -41,15 +41,15 @@ inline static void mh_buffered_write(const mh_writer_t *writer, mh_memory_t *buf
 }
 
 static void mh_buffered_write_string(const mh_writer_t *writer, mh_memory_t *buf, const char *c) {
-    while(*c) {
+    while (*c) {
         mh_buffered_write(writer, buf, *c);
         c++;
     }
 }
 
 inline static void mh_buffered_write_memory(const mh_writer_t *writer, mh_memory_t *buf, mh_memory_t mem) {
-    for(size_t i = 0; i < mem.size; i++) {
-        mh_buffered_write(writer, buf, ((char*)mem.address)[i]);
+    for (size_t i = 0; i < mem.size; i++) {
+        mh_buffered_write(writer, buf, ((char *) mem.address)[i]);
     }
 }
 
@@ -57,7 +57,7 @@ inline static void mh_buffered_write_writable(const mh_writer_t *writer, mh_memo
     char data[21];
     mh_memory_t mem;
     mh_code_location_t *location;
-    switch(writable.type) {
+    switch (writable.type) {
         case MH_WR_NULL:
             if (writable.data != NULL) {
                 mh_buffered_write_string(writer, buf, "(invalid)");
@@ -74,7 +74,7 @@ inline static void mh_buffered_write_writable(const mh_writer_t *writer, mh_memo
             break;
         case MH_WR_INT:
             mem = MH_REF_CONST(data);
-            if (mh_int_to_string(&mem, (mh_signed_number_t)writable.data, 10)) {
+            if (mh_int_to_string(&mem, (mh_signed_number_t) writable.data, 10)) {
                 mh_buffered_write_string(writer, buf, data);
             } else {
                 mh_buffered_write_string(writer, buf, "(error)");
@@ -82,7 +82,7 @@ inline static void mh_buffered_write_writable(const mh_writer_t *writer, mh_memo
             break;
         case MH_WR_UINT:
             mem = MH_REF_CONST(data);
-            if (mh_uint_to_string(&mem, (mh_unsigned_number_t)writable.data, 10)) {
+            if (mh_uint_to_string(&mem, (mh_unsigned_number_t) writable.data, 10)) {
                 mh_buffered_write_string(writer, buf, data);
             } else {
                 mh_buffered_write_string(writer, buf, "(error)");
@@ -105,13 +105,13 @@ inline static void mh_buffered_write_writable(const mh_writer_t *writer, mh_memo
             break;
         case MH_WR_LOC:
             if (writable.data != NULL) {
-                location = (mh_code_location_t *)writable.data;
+                location = (mh_code_location_t *) writable.data;
                 mh_buffered_write_string(writer, buf, "in ");
                 mh_buffered_write_string(writer, buf, location->function_name);
                 mh_buffered_write_string(writer, buf, "() at ");
                 mh_buffered_write_string(writer, buf, location->file_name);
                 mem = MH_REF_CONST(data);
-                if (mh_uint_to_string(&mem, (mh_unsigned_number_t)location->file_line, 10)) {
+                if (mh_uint_to_string(&mem, (mh_unsigned_number_t) location->file_line, 10)) {
                     mh_buffered_write(writer, buf, ':');
                     mh_buffered_write_string(writer, buf, mem.address);
                 }
@@ -125,7 +125,7 @@ inline static void mh_buffered_write_writable(const mh_writer_t *writer, mh_memo
     }
 }
 
-void mh_write(const mh_writer_t *writer, const char* format, ...) {
+void mh_write(const mh_writer_t *writer, const char *format, ...) {
     va_list list;
     va_start(list, format);
     char s_buf[32];

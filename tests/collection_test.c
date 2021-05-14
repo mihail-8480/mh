@@ -106,15 +106,15 @@ MH_TEST_NEW(collection_stack_test) {
 
 static mh_memory_t make_kv_mem(const char *key, const char *value) {
     mh_key_value_pair_t *kv = mh_context_allocate(MH_GLOBAL, sizeof(mh_key_value_pair_t), false).ptr;
-    *kv = (mh_key_value_pair_t){
-            .key = MH_REF_STRING((void*)key),
-            .value = MH_REF_STRING((void*)value)
+    *kv = (mh_key_value_pair_t) {
+            .key = MH_REF_STRING((void *) key),
+            .value = MH_REF_STRING((void *) value)
     };
     return mh_memory_reference(kv, sizeof(mh_key_value_pair_t));
 }
 
 MH_TEST_NEW(collection_find_test) {
-    mh_list_t* list = mh_list_new(MH_GLOBAL);
+    mh_list_t *list = mh_list_new(MH_GLOBAL);
 
     mh_list_append(list, make_kv_mem("Key1", "Value1"));
     mh_list_append(list, make_kv_mem("Key2", "Value2"));
@@ -147,7 +147,7 @@ MH_TEST_NEW(collection_find_test) {
 }
 
 MH_TEST_NEW(collection_find_test_map) {
-    mh_map_t* map = mh_map_new(MH_GLOBAL);
+    mh_map_t *map = mh_map_new(MH_GLOBAL);
 
     mh_map_set(map, MH_STRING("Key1"), MH_STRING("Value1"));
     mh_map_set(map, MH_STRING("Key2"), MH_STRING("Value2"));
