@@ -193,11 +193,7 @@ void *mh_context_add_destructor(mh_context_t *context, mh_destructor_t *destruct
 
 void mh_context_error(mh_context_t *context, const char *message, mh_code_location_t from) {
     MH_THIS(mh_context_t*, context);
-#ifdef MH_DEBUG
-    char loc[128];
-    mh_code_location_to_string(loc, from);
-#endif
-    MH_INFO("mh_context_error(%zu, %s, %s)\n", (size_t) context, message, loc);
+    MH_INFO("mh_context_error(%zu, %s, %s at %s:%u)\n", (size_t) context, message, from.function_name, from.file_name, from.file_line);
 
     if (this->error_handler != NULL) {
         this->error_handler(context, message, from);

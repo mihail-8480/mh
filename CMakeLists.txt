@@ -41,7 +41,6 @@ target_link_libraries(mh PRIVATE mhext)
 add_library(mh-default-tests MODULE tests/thread_test.c tests/memory_test.c tests/handle_test.c tests/lib/default_test_provider.c tests/context_test.c tests/stream_test.c tests/collection_test.c tests/tcp_test.c tests/conversion_test.c)
 target_link_libraries(mh-default-tests PRIVATE mh)
 
-
 # mhtest
 add_executable(mhtest src/test/mh_test_runner.c)
 target_link_libraries(mhtest PRIVATE mh)

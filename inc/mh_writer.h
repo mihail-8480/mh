@@ -9,7 +9,8 @@ typedef enum mh_writable_type {
     MH_WR_INT = 2,
     MH_WR_UINT = 3,
     MH_WR_MEM = 4,
-    MH_WR_BOOL = 5
+    MH_WR_BOOL = 5,
+    MH_WR_LOC = 6
 } mh_writable_type_t;
 
 MH_API_TYPE(mh_writer, struct mh_writer);
@@ -31,6 +32,7 @@ MH_API_FUNC(void mh_write(const mh_writer_t *writer, const char* format, ...));
 #define MH_FMT_UINT(_int) MH_FMT((mh_unsigned_number_t)(_int), MH_WR_UINT)
 #define MH_FMT_MEM(_mem) MH_FMT((mh_memory_t*)(_mem), MH_WR_MEM)
 #define MH_FMT_BOOL(_bool) MH_FMT((bool)(_bool), MH_WR_BOOL)
+#define MH_FMT_LOC(_loc) MH_FMT((mh_code_location_t*)(_loc), MH_WR_LOC)
 
 #define MH_WRITE(...) mh_write(MH_OUTPUT, __VA_ARGS__)
 #define MH_WRITE_ERR(...) mh_write(MH_ERROR, __VA_ARGS__)

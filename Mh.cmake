@@ -35,6 +35,10 @@ set(CMAKE_C_FLAGS "-Wall -Wextra -Wpedantic -Werror")
 set(CMAKE_C_FLAGS_DEBUG "-ggdb3")
 set(CMAKE_C_FLAGS_RELEASE "-O3")
 
+# For the relative filename macro.
+string(LENGTH "${CMAKE_SOURCE_DIR}/" SOURCE_PATH_SIZE)
+add_definitions("-DSOURCE_PATH_SIZE=${SOURCE_PATH_SIZE}")
+
 # Set the output to "bin".
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
