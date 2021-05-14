@@ -2,7 +2,7 @@
 #include <math.h>
 
 static inline size_t mh_intlen(mh_unsigned_number_t num, mh_base_t base) {
-    return (size_t)ceil(log2(num+1) / log2(base));
+    return (size_t) ceil(log2(num + 1) / log2(base));
 }
 
 static inline mh_unsigned_number_t mh_abs(mh_signed_number_t num) {
@@ -13,12 +13,12 @@ static inline bool mh_strint(mh_memory_t *memory, mh_unsigned_number_t num, size
     if (end >= memory->size) {
         return false;
     }
-    ((char*)memory->address)[end] = '\0';
+    ((char *) memory->address)[end] = '\0';
     memory->offset = end;
     do {
-        ((char*)memory->address)[--end] = table[num % base];
+        ((char *) memory->address)[--end] = table[num % base];
         num /= base;
-    } while(num);
+    } while (num);
     return true;
 }
 
@@ -43,7 +43,7 @@ bool mh_int_to_string(mh_memory_t *memory, mh_signed_number_t num, mh_base_t bas
     size_t end = mh_intlen(p_num, base) + (num < 0);
     bool res = mh_strint(memory, p_num, end, base, mh_conversion_table);
     if (num < 0) {
-        ((char*)memory->address)[0] = '-';
+        ((char *) memory->address)[0] = '-';
     }
     return res;
 }

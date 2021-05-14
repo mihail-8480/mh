@@ -101,8 +101,8 @@ mh_writer_t *mh_writer_from_stream(mh_stream_t *stream) {
     }
     mh_writer_t *writer = mh_context_allocate(this->context, sizeof(mh_writer_t), false).ptr;
     *writer = (mh_writer_t) {
-        .instance = stream,
-        .write = mh_stream_writer_write
+            .instance = stream,
+            .write = mh_stream_writer_write
     };
     return writer;
 }
