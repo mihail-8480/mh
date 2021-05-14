@@ -8,31 +8,15 @@ MH_TEST_NEW(context_create_test) {
     MH_TEST_PASSED();
 }
 
-static int error_reported = 0;
-
-bool error_report() {
-    error_reported++;
-    return true;
-}
-
 MH_TEST_NEW(context_error_test) {
-    mh_context_set_error_handler(MH_GLOBAL, error_report);
-
-    MH_TRY(error, MH_GLOBAL) {
-        MH_THROW(MH_GLOBAL, "Test");
-    } MH_CATCH (error, MH_GLOBAL, {
-        MH_TEST_EXPECT(error_reported == 1);
-    });
 
     MH_TRY(error2, MH_GLOBAL) {
         MH_TRY(error3, MH_GLOBAL) {
             MH_THROW(MH_GLOBAL, "Test2");
         } MH_CATCH (error3, MH_GLOBAL, {
-            MH_TEST_EXPECT(error_reported == 2);
             MH_THROW(MH_GLOBAL, "Test3");
         });
     } MH_CATCH (error2, MH_GLOBAL, {
-        MH_TEST_EXPECT(error_reported == 3);
         MH_TEST_PASSED();
     });
 
