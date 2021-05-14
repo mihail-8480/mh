@@ -40,7 +40,7 @@ inline static void mh_buffered_write(const mh_writer_t *writer, mh_memory_t *buf
     }
 }
 
-static void mh_buffered_write_string(const mh_writer_t *writer, mh_memory_t *buf, const char *c) {
+inline static void mh_buffered_write_string(const mh_writer_t *writer, mh_memory_t *buf, const char *c) {
     while (*c) {
         mh_buffered_write(writer, buf, *c);
         c++;
