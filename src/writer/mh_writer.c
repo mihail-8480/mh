@@ -24,12 +24,12 @@ void mh_write_unsigned_number(const mh_writer_t *writer, mh_unsigned_number_t nu
     writer->write(writer->instance, &mem, mem.offset);
 }
 
-static void mh_buffered_flush(const mh_writer_t *writer, mh_memory_t *buf) {
+inline static void mh_buffered_flush(const mh_writer_t *writer, mh_memory_t *buf) {
     mh_write_memory(writer, (mh_memory_t){.offset = 0, .size = buf->offset, .address = buf->address});
     buf->offset = 0;
 }
 
-static void mh_buffered_write(const mh_writer_t *writer, mh_memory_t *buf, char c) {
+inline static void mh_buffered_write(const mh_writer_t *writer, mh_memory_t *buf, char c) {
     retry:
     if (buf->offset < buf->size) {
         ((char*)buf->address)[buf->offset] = c;
@@ -47,16 +47,16 @@ static void mh_buffered_write_string(const mh_writer_t *writer, mh_memory_t *buf
     }
 }
 
-static void mh_buffered_write_memory(const mh_writer_t *writer, mh_memory_t *buf, mh_memory_t mem) {
+inline static void mh_buffered_write_memory(const mh_writer_t *writer, mh_memory_t *buf, mh_memory_t mem) {
     for(size_t i = 0; i < mem.size; i++) {
         mh_buffered_write(writer, buf, ((char*)mem.address)[i]);
     }
 }
 
-
-static void mh_buffered_write_writable(const mh_writer_t *writer, mh_memory_t *buf, mh_writable_t writable) {
+inline static void mh_buffered_write_writable(const mh_writer_t *writer, mh_memory_t *buf, mh_writable_t writable) {
     char data[21];
     mh_memory_t mem;
+    mh_code_location_t *location;
     switch(writable.type) {
         case MH_WR_NULL:
             if (writable.data != NULL) {
@@ -101,6 +101,22 @@ static void mh_buffered_write_writable(const mh_writer_t *writer, mh_memory_t *b
                 mh_buffered_write_string(writer, buf, "True");
             } else {
                 mh_buffered_write_string(writer, buf, "False");
+            }
+            break;
+        case MH_WR_LOC:
+            if (writable.data != NULL) {
+                location = (mh_code_location_t *)writable.data;
+                mh_buffered_write_string(writer, buf, "in ");
+                mh_buffered_write_string(writer, buf, location->function_name);
+                mh_buffered_write_string(writer, buf, "() at ");
+                mh_buffered_write_string(writer, buf, location->file_name);
+                mem = MH_REF_CONST(data);
+                if (mh_uint_to_string(&mem, (mh_unsigned_number_t)location->file_line, 10)) {
+                    mh_buffered_write(writer, buf, ':');
+                    mh_buffered_write_string(writer, buf, mem.address);
+                }
+            } else {
+                mh_buffered_write_string(writer, buf, "(null)");
             }
             break;
         default:

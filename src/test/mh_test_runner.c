@@ -3,9 +3,7 @@
 #include "../../inc/mh_console.h"
 
 bool program_error(MH_UNUSED mh_context_t *context, const char *message, mh_code_location_t from) {
-    char loc[128];
-    mh_code_location_to_string(loc, from);
-    MH_WRITE_ERR("An error has occurred {}: {}\n", MH_FMT_STR(loc), MH_FMT_STR(message));
+    MH_WRITE_ERR("An error has occurred {}: {}\n", MH_FMT_LOC(&from), MH_FMT_STR(message));
     exit(1);
 }
 
@@ -17,10 +15,8 @@ void tests_print(const mh_test_t *tests, size_t count) {
                  MH_FMT_STR(tests[i].name));
         mh_tests_check(&result, &tests[i], 1);
         if (!result.success) {
-            char loc[128];
-            mh_code_location_to_string(loc, result.location);
             MH_WRITE("\r[FAILED] [{}/{}] The test `{}` has failed because \"{}\" {}.\n", MH_FMT_INT(i + 1),
-                     MH_FMT_INT(count), MH_FMT_STR(tests[i].name), MH_FMT_STR(result.reason), MH_FMT_STR(loc));
+                     MH_FMT_INT(count), MH_FMT_STR(tests[i].name), MH_FMT_STR(result.reason), MH_FMT_LOC(&result.location));
             failed++;
             if (tests[i].required) {
                 MH_WRITE_ERR("That was a required test, stopping program...\n");
