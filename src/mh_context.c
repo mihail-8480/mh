@@ -195,15 +195,13 @@ void mh_context_error(mh_context_t *context, const char *message, mh_code_locati
     MH_THIS(mh_context_t*, context);
     MH_INFO("mh_context_error(%zu, %s, %s at %s:%u)\n", (size_t) context, message, from.function_name, from.file_name, from.file_line);
 
-    if (this->error_handler != NULL) {
-        this->error_handler(context, message, from);
-    }
-
     if (this->jump_stack.depth) {
         mh_context_jump_stack_node_t *node = ((mh_context_jump_stack_node_t *) mh_stack_pop(&this->jump_stack));
         if (node != NULL) {
             longjmp(node->jmp, true);
         }
+    } else if (this->error_handler != NULL) {
+        this->error_handler(context, message, from);
     }
 
     // Destroy the context and crash the program
