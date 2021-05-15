@@ -73,8 +73,6 @@ void mh_stream_copy_to(mh_stream_t *dest, mh_stream_t *src, size_t size) {
                  "Not enough memory in dest_stream to preform a mh_stream_copy_to operation.");
     }
 
-    // try to NOT read everything at once...
-    // or use an outside buffer
     mh_memory_t *buffer = mh_memory_new(dest_stream->context, size, false);
     mh_stream_read(src, buffer, size);
     mh_stream_write(dest, buffer, buffer->offset);
