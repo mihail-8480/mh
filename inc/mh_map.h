@@ -16,7 +16,7 @@ MH_API_TYPE(mh_map, struct mh_map {
     mh_collection_t collection;
 });
 // Add an element to the map.
-MH_API_FUNC(void mh_map_add(mh_map_t *map, mh_memory_t key, mh_memory_t value));
+MH_API_FUNC(void mh_map_set(mh_map_t *map, mh_memory_t key, mh_memory_t value));
 
 // Remove an element from the map (WARNING: currently not implemented).
 MH_API_FUNC(void mh_map_remove(mh_map_t *map, mh_memory_t key));

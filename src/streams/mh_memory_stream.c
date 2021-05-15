@@ -78,6 +78,10 @@ mh_memory_t *mh_memory_stream_get_memory(mh_stream_t *stream) {
 mh_stream_t *mh_memory_stream_new(mh_context_t *context, size_t size, bool fixed) {
     MH_THIS(mh_memory_stream_t*, mh_context_allocate(context, sizeof(mh_memory_stream_t), false).ptr);
 
+    // Cannot flush
+    this->base.flush = NULL;
+
+
     this->base.base.destructor.free = NULL;
     this->base.context = context;
     mh_context_add_destructor(context, &this->base.base.destructor);

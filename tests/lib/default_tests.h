@@ -1,7 +1,7 @@
 #ifndef MH_TESTS_LIST_H
 #define MH_TESTS_LIST_H
 
-#include "../inc/mh_tests.h"
+#include "../../inc/mh_tests.h"
 
 MH_TEST_NEW(thread_test);
 
@@ -35,12 +35,20 @@ MH_TEST_NEW(context_thread_bind_test);
 
 MH_TEST_NEW(memory_stream_test);
 
-MH_TEST_NEW(map_test);
+MH_TEST_NEW(collection_map_test);
 
-MH_TEST_NEW(list_test);
+MH_TEST_NEW(collection_list_test);
 
-MH_TEST_NEW(iterator_test);
+MH_TEST_NEW(collection_iterator_test);
 
-MH_TEST_NEW(stack_test);
+MH_TEST_NEW(collection_stack_test);
+
+MH_TEST_NEW(collection_find_test);
+
+MH_TEST_NEW(collection_find_test_map);
+
+MH_TEST_NEW(tcp_test);
+
+MH_TEST_NEW(conversion_test);
 
 #endif //MH_TESTS_LIST_H

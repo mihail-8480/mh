@@ -73,11 +73,19 @@ size_t mh_file_stream_get_size(void *stream) {
     return size;
 }
 
+void mh_file_stream_flush(void *stream) {
+    MH_THIS(mh_file_stream_t*, stream);
+    fflush(this->file);
+}
+
 mh_stream_t *mh_file_stream_new(mh_context_t *context, FILE *file, bool should_close) {
     MH_THIS(mh_file_stream_t*, mh_context_allocate(context, sizeof(mh_file_stream_t), false).ptr);
     this->base.base.destructor.free = mh_file_stream_free;
     this->base.context = context;
     mh_context_add_destructor(context, &this->base.base.destructor);
+
+    // Enable flushing
+    this->base.flush = mh_file_stream_flush;
 
     // Override and enable reading
     this->base.can_read = true;

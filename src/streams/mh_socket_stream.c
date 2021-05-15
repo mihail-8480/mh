@@ -1,4 +1,4 @@
-#include "../../inc/mh_stream.h"
+#include "../../inc/mh_tcp.h"
 #include "mh_stream_private.h"
 
 // The socket stream structure
@@ -70,6 +70,9 @@ mh_stream_t *mh_socket_stream_new(mh_context_t *context, mh_socket_t socket) {
     this->base.base.destructor.free = mh_socket_stream_free;
     this->base.context = context;
     mh_context_add_destructor(context, &this->base.base.destructor);
+
+    // Cannot flush
+    this->base.flush = NULL;
 
     // Override and enable reading
     this->base.can_read = true;

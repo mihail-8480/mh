@@ -2,7 +2,7 @@
 #define MHSERV_MH_STREAM_H
 
 #include "mh_memory.h"
-#include "mh_tcp.h"
+#include "mh_writer.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -23,9 +23,6 @@ MH_API_TYPE(mh_stream, struct mh_stream {
 // Create a new memory stream.
 MH_API_FUNC(mh_stream_t *mh_memory_stream_new(mh_context_t *context, size_t size, bool fixed));
 
-// Create a new socket stream (will probably work with normal file descriptors on unix too).
-MH_API_FUNC(mh_stream_t *mh_socket_stream_new(mh_context_t *context, mh_socket_t sock));
-
 // Create a new file stream.
 MH_API_FUNC(mh_stream_t *mh_file_stream_new(mh_context_t *context, FILE *file, bool should_close));
 
@@ -41,6 +38,9 @@ MH_API_FUNC(void mh_stream_read(mh_stream_t *stream, mh_memory_t *buffer, size_t
 // Write from memory to a stream.
 MH_API_FUNC(void mh_stream_write(mh_stream_t *stream, mh_memory_t *buffer, size_t count));
 
+// Flush the stream buffer (if there is one).
+MH_API_FUNC(void mh_stream_flush(mh_stream_t *stream));
+
 // Get the stream's position.
 MH_API_FUNC(size_t mh_stream_get_position(mh_stream_t *stream));
 
@@ -52,5 +52,8 @@ MH_API_FUNC(void mh_stream_copy_to(mh_stream_t *dest, mh_stream_t *src, size_t s
 
 // Write a string to a stream without copying it twice, return how many bytes were actually written.
 MH_API_FUNC(size_t mh_stream_write_reference(mh_stream_t *stream, const void *ptr, size_t size));
+
+// Get a writer from a stream.
+MH_API_FUNC(mh_writer_t *mh_writer_from_stream(mh_stream_t *stream));
 
 #endif //MHSERV_MH_STREAM_H

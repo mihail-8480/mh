@@ -2,6 +2,7 @@
 #define MHSERV_MH_TCP_H
 
 #include "mh_context.h"
+#include "mh_stream.h"
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -41,6 +42,14 @@ MH_API_TYPE(mh_socket, SOCKET);
 // The TCP listener struct.
 MH_API_TYPE(mh_tcp_listener, struct mh_tcp_listener);
 
+// The TCP client struct.
+MH_API_TYPE(mh_tcp_client, struct mh_tcp_client {
+    // The context where the TCP client is running.
+    mh_context_t *context;
+    // The address that the TCP client should connect to.
+    mh_socket_address_t address;
+});
+
 // A function pointer type for mh_tcp_start.
 typedef void (*mh_on_connect_t)(mh_tcp_listener_t *, mh_context_t *, mh_socket_t, mh_socket_address_t);
 
@@ -63,6 +72,7 @@ struct mh_tcp_listener {
     mh_on_connect_t on_connect;
 };
 
+
 // Convert a socket address to a string.
 MH_API_FUNC(unsigned short mh_tcp_address_to_string(char *dest, mh_socket_address_t address, size_t size));
 
@@ -77,5 +87,12 @@ MH_API_FUNC(void mh_tcp_cleanup(mh_tcp_listener_t *listener));
 
 // Start a TCP listener.
 MH_API_FUNC(void mh_tcp_start(mh_tcp_listener_t *listener));
+
+// Connect a TCP client to a server.
+MH_API_FUNC(mh_socket_t mh_tcp_connect(mh_tcp_client_t *client));
+
+// Create a new socket stream (will probably work with normal file descriptors on unix too).
+MH_API_FUNC(mh_stream_t *mh_socket_stream_new(mh_context_t *context, mh_socket_t sock));
+
 
 #endif //MHSERV_MH_TCP_H

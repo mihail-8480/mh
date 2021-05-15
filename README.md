@@ -33,3 +33,9 @@ If the test ends with `Finished testing and all tests passed.` the library shoul
 | Repository | Description |
 | --- | --- |
 | [mihail-8480/mhserv](https://github.com/mihail-8480/mhserv) | A web server that loads dynamic libraries that implement the function specified in the header `<mh_http_handler.h>`. |
+
+## Dependencies
+
+| Repository | License | Used in Component |
+| --- | --- | --- |
+| [tidwall/hashmap.c](https://github.com/tidwall/hashmap.c)| [MIT](https://github.com/tidwall/hashmap.c/blob/master/LICENSE) | `libext.a` (`mh/ext/hashmap`) for `<mh_map.h>` |

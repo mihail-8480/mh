@@ -1,4 +1,4 @@
-#include "../inc/mh_test_provider.h"
+#include "../../inc/mh_test_provider.h"
 #include "default_tests.h"
 
 static const mh_test_t tests[] = {
@@ -24,10 +24,16 @@ static const mh_test_t tests[] = {
         MH_TEST(memory_stream_test),
 
 
-        MH_TEST(iterator_test),
-        MH_TEST(map_test),
-        MH_TEST(list_test),
-        MH_TEST(stack_test)
+        MH_TEST(collection_iterator_test),
+        MH_TEST(collection_map_test),
+        MH_TEST(collection_list_test),
+        MH_TEST(collection_stack_test),
+        MH_TEST(collection_find_test),
+        MH_TEST(collection_find_test_map),
+
+        MH_TEST(tcp_test),
+
+        MH_TEST(conversion_test)
 };
 
 mh_tests_t mh_test_provider(void) {

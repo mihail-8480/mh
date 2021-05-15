@@ -17,8 +17,11 @@
 // This may not be used.
 #define MH_UNUSED __attribute__((unused))
 
+// Intended fallthrough.
+#define MH_FALLTHROUGH __attribute__ ((fallthrough));
+
 // This is a constructor.
-#define MH_CONSTRUCTOR __attribute__((constructor))
+#define MH_CONSTRUCTOR(p) __attribute__((constructor(p)))
 
 // This is a destructor.
 #define MH_DESTRUCTOR __attribute__((destructor))
@@ -35,9 +38,12 @@
 // Define a MH API function.
 #define MH_API_FUNC(x) MH_UNUSED extern x
 
+// Relative filename macro.
+#define __FILENAME__ (__FILE__ + SOURCE_PATH_SIZE)
+
 // Turn a function name into an error location.
-#define MH_LOCATION(x) ((mh_code_location_t){.file_name = __FILE__, .file_line = __LINE__, .function_name = #x, .function_address = (size_t)x})
-#define MH_LOCATION_ANY() ((mh_code_location_t){.file_name = __FILE__, .file_line = __LINE__, .function_name = __func__, .function_address = (size_t)NULL})
+#define MH_LOCATION(x) ((mh_code_location_t){.file_name = __FILENAME__, .file_line = __LINE__, .function_name = #x, .function_address = (size_t)x})
+#define MH_LOCATION_ANY() ((mh_code_location_t){.file_name = __FILENAME__, .file_line = __LINE__, .function_name = __func__, .function_address = (size_t)NULL})
 
 // Define an MH API type.
 #define MH_API_TYPE(name, code) typedef code name##_t
@@ -69,10 +75,6 @@ MH_API_TYPE(mh_code_location, struct mh_code_location {
 
 // Get the current version.
 MH_PURE MH_API_FUNC(mh_version_t mh_get_version(void));
-
-// Turn a code location to a string.
-MH_API_FUNC(void mh_code_location_to_string(char *str, mh_code_location_t location));
-
 
 #ifdef MH_DEBUG
 #include <stdio.h>

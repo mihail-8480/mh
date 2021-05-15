@@ -162,6 +162,18 @@ void mh_tcp_init(MH_UNUSED mh_tcp_listener_t *listener) {
 #endif
 }
 
+mh_socket_t mh_tcp_connect(mh_tcp_client_t *client) {
+    mh_socket_t sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (sock == (mh_socket_t) -1) {
+        MH_THROW(client->context, "A socket could not be created successfully.");
+    }
+    int con_res = connect(sock, (struct sockaddr *) &client->address, sizeof(mh_socket_address_t));
+    if (con_res < 0) {
+        MH_THROW(client->context, "Could not connect to server.");
+    }
+    return sock;
+}
+
 void mh_tcp_cleanup(MH_UNUSED mh_tcp_listener_t *listener) {
 #if defined(WIN32)
     WSACleanup();
