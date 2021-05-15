@@ -3,6 +3,11 @@
 
 #include "mh_memory.h"
 
+/*
+ * <mh_convert.h>
+ * The libmh type conversion header.
+ */
+
 // Represents a number system.
 typedef enum mh_base {
     MH_BASE_BIN = 2,
