@@ -20,7 +20,17 @@ MH_CONSTRUCTOR(102) void mh_init_streams(void) {
     mh_console_output = mh_writer_from_stream(mh_console_output_stream);
 }
 
-static bool mh_argument_parse_one(mh_map_t *map, int argc, char *argv[], mh_memory_t *format, int *c_arg) {
+
+static bool global_error(MH_UNUSED mh_context_t *context, const char *message, mh_code_location_t from) {
+    MH_WRITE_ERR("An error has occurred {}: {}\n", MH_FMT_LOC(&from), MH_FMT_STR(message));
+    exit(1);
+}
+
+MH_CONSTRUCTOR(103) void mh_init_global_error(void) {
+    mh_context_set_error_handler(MH_GLOBAL, global_error);
+}
+
+inline static bool mh_argument_parse_one(mh_map_t *map, int argc, char *argv[], mh_memory_t *format, int *c_arg) {
     while (*c_arg < argc) {
         if (format->offset >= format->size) {
             return true;
@@ -35,6 +45,11 @@ static bool mh_argument_parse_one(mh_map_t *map, int argc, char *argv[], mh_memo
         *c_arg = *c_arg + 1;
     }
     return false;
+}
+
+const char *mh_env_default(const char* env, const char* def) {
+    const char *res = getenv(env);
+    return res != NULL ? res : def;
 }
 
 mh_map_t *mh_argument_parse(mh_context_t *context, const mh_argument_parser_args_t *args, int argc, char *argv[]) {

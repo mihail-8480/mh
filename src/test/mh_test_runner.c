@@ -2,11 +2,6 @@
 #include "../../inc/mh_handle.h"
 #include "../../inc/mh_console.h"
 
-bool program_error(MH_UNUSED mh_context_t *context, const char *message, mh_code_location_t from) {
-    MH_WRITE_ERR("An error has occurred {}: {}\n", MH_FMT_LOC(&from), MH_FMT_STR(message));
-    exit(1);
-}
-
 void tests_print(const mh_test_t *tests, size_t count) {
     mh_test_return_t result;
     size_t failed = 0;
@@ -36,10 +31,8 @@ void tests_print(const mh_test_t *tests, size_t count) {
     exit(failed != 0);
 }
 
-int main(MH_UNUSED int argc, MH_UNUSED char *argv[]) {
+int main(int argc, char *argv[]) {
     typedef mh_tests_t (*mh_test_provider_t)(void);
-    mh_context_set_error_handler(MH_GLOBAL, program_error);
-
     mh_argument_parser_args_t args = {
             .required_arguments = "lib",
             .optional_arguments = "check_only",
