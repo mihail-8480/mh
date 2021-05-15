@@ -1,12 +1,15 @@
 #include "lib/default_tests.h"
 #include "../inc/mh_thread.h"
 #include "../inc/mh_tcp.h"
+#include <unistd.h>
 
 static bool listener_result = false;
 
 static void *listener_thread(void *listener) {
     MH_THIS(mh_tcp_listener_t*, listener);
+    mh_tcp_init(listener);
     mh_tcp_start(this);
+    mh_tcp_cleanup(listener);
     return NULL;
 }
 
@@ -55,7 +58,6 @@ MH_TEST_NEW(tcp_test) {
     while (listener.running) {
         usleep(10000);
     }
-
     MH_TEST_EXPECT(mh_memory_is_equal(buf_ref, ref));
     MH_TEST_EXPECT(listener_result);
     MH_TEST_PASSED();
