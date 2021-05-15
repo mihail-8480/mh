@@ -22,6 +22,7 @@ static inline bool mh_strint(mh_memory_t *memory, mh_unsigned_number_t num, size
     return true;
 }
 
+const char *zero = "0";
 static char mh_conversion_table[] = {
         '0',
         '1', '2', '3',
@@ -39,6 +40,11 @@ bool mh_int_to_string(mh_memory_t *memory, mh_signed_number_t num, mh_base_t bas
     if (!mh_verify_base(base)) {
         return false;
     }
+
+    if (num == 0 && memory->size > 1) {
+        strcpy(memory->address, zero);
+        return true;
+    }
     mh_unsigned_number_t p_num = mh_abs(num);
     size_t end = mh_intlen(p_num, base) + (num < 0);
     bool res = mh_strint(memory, p_num, end, base, mh_conversion_table);
@@ -51,6 +57,10 @@ bool mh_int_to_string(mh_memory_t *memory, mh_signed_number_t num, mh_base_t bas
 bool mh_uint_to_string(mh_memory_t *memory, mh_unsigned_number_t num, mh_base_t base) {
     if (!mh_verify_base(base)) {
         return false;
+    }
+    if (num == 0 && memory->size > 1) {
+        strcpy(memory->address, zero);
+        return true;
     }
     return mh_strint(memory, num, mh_intlen(num, base), base, mh_conversion_table);
 }
