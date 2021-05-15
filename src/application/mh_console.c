@@ -47,7 +47,7 @@ inline static bool mh_argument_parse_one(mh_map_t *map, int argc, char *argv[], 
     return false;
 }
 
-const char *mh_env_default(const char* env, const char* def) {
+const char *mh_env_default(const char *env, const char *def) {
     const char *res = getenv(env);
     return res != NULL ? res : def;
 }
