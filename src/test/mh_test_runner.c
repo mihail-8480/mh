@@ -1,52 +1,38 @@
 #include "../../inc/mh_tests.h"
 #include "../../inc/mh_handle.h"
-#include "../../inc/mh_args.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-bool program_error(MH_UNUSED mh_context_t *context, const char *message, mh_code_location_t from) {
-    char loc[128];
-    mh_code_location_to_string(loc, from);
-    fprintf(stderr, "An error has occurred %s: %s\n", loc, message);
-    exit(1);
-}
+#include "../../inc/mh_console.h"
 
 void tests_print(const mh_test_t *tests, size_t count) {
     mh_test_return_t result;
     size_t failed = 0;
     for (size_t i = 0; i < count; i++) {
-        printf("[......] [%zu/%zu] Running the test `%s`...", i + 1, count, tests[i].name);
-        fflush(stdout);
+        MH_WRITE("[......] [{}/{}] Running the test `{}`...", MH_FMT_INT(i + 1), MH_FMT_INT(count),
+                 MH_FMT_STR(tests[i].name));
         mh_tests_check(&result, &tests[i], 1);
         if (!result.success) {
-            char loc[128];
-            mh_code_location_to_string(loc, result.location);
-            printf("\r[FAILED] [%zu/%zu] The test `%s` has failed because \"%s\" %s.\n", i + 1, count, tests[i].name,
-                   result.reason, loc);
+            MH_WRITE("\r[FAILED] [{}/{}] The test `{}` has failed because \"{}\" {}.\n", MH_FMT_INT(i + 1),
+                     MH_FMT_INT(count), MH_FMT_STR(tests[i].name), MH_FMT_STR(result.reason),
+                     MH_FMT_LOC(&result.location));
             failed++;
             if (tests[i].required) {
-                fprintf(stderr, "`%s` is a required test, stopping...\n", tests[i].name);
+                MH_WRITE_ERR("That was a required test, stopping program...\n");
                 exit(1);
             }
         } else {
-            printf("\r[PASSED] [%zu/%zu] The test `%s` has passed.\n", i + 1, count, tests[i].name);
+            MH_WRITE("\r[PASSED] [{}/{}] The test `{}` has passed.\n", MH_FMT_INT(i + 1), MH_FMT_INT(count),
+                     MH_FMT_STR(tests[i].name));
         }
     }
-    printf("Finished testing and ");
     if (failed) {
-        printf("%zu out of %zu tests passed.\n", count - failed, count);
+        MH_WRITE("Finished testing and {} out of {} tests passed.\n", MH_FMT_INT(count - failed), MH_FMT_INT(count));
     } else {
-        printf("all tests passed.\n");
+        MH_WRITE("Finished testing and all tests passed.\n");
     }
     exit(failed != 0);
 }
 
 int main(int argc, char *argv[]) {
     typedef mh_tests_t (*mh_test_provider_t)(void);
-    mh_context_set_error_handler(MH_GLOBAL, program_error);
-
     mh_argument_parser_args_t args = {
             .required_arguments = "lib",
             .optional_arguments = "check_only",
@@ -62,7 +48,7 @@ int main(int argc, char *argv[]) {
     mh_test_provider_t provider = (mh_test_provider_t) (size_t) mh_handle_find_symbol(handle, "mh_test_provider");
     mh_tests_t tests = provider();
     if (check_only) {
-        printf("%d", mh_tests_check(NULL, tests.tests, tests.count));
+        MH_WRITE("{}", MH_FMT_BOOL(mh_tests_check(NULL, tests.tests, tests.count)));
     } else {
         tests_print(tests.tests, tests.count);
     }

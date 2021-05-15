@@ -9,7 +9,7 @@
 
 /*
  * <mh_context.h>
- * The libmh context library.
+ * The libmh context header.
  *
  * Contains error handling and memory management functions.
  */

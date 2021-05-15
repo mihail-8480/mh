@@ -1,4 +1,4 @@
-#include "default_tests.h"
+#include "lib/default_tests.h"
 #include "../inc/mh_memory.h"
 
 MH_TEST_NEW(memory_new_test) {

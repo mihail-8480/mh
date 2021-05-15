@@ -1,4 +1,4 @@
-#include "default_tests.h"
+#include "lib/default_tests.h"
 #include "../inc/mh_stream.h"
 
 MH_TEST_NEW(memory_stream_test) {
