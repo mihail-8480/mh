@@ -85,7 +85,7 @@ static inline bool mh_intstr(mh_const_string_t str, mh_base_t base, mh_unsigned_
     mh_unsigned_number_t number = 0;
     for (; *str; str++) {
         signed char num = mh_chr_to_int(*str);
-        if (num == -1) {
+        if (num == -1 || (char)base <= num) {
             return false;
         }
         number = (number * base) + num;
@@ -95,6 +95,9 @@ static inline bool mh_intstr(mh_const_string_t str, mh_base_t base, mh_unsigned_
 }
 
 bool mh_int_parse(mh_const_string_t str, mh_base_t base, mh_signed_number_t *out) {
+    if (!mh_verify_base(base)) {
+        return false;
+    }
     mh_signed_number_t sign = 1;
     if (*str != 0 && str[0] == '-') {
         sign = -1;
@@ -114,5 +117,8 @@ bool mh_int_parse(mh_const_string_t str, mh_base_t base, mh_signed_number_t *out
 }
 
 bool mh_uint_parse(mh_const_string_t str, mh_base_t base, mh_unsigned_number_t *out) {
+    if (!mh_verify_base(base)) {
+        return false;
+    }
     return mh_intstr(str, base, out);
 }
