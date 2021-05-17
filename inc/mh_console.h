@@ -3,6 +3,7 @@
 
 #include "mh_map.h"
 #include "mh_stream.h"
+#include "mh_reader.h"
 
 /*
  * <mh_args.h>
@@ -15,11 +16,17 @@ extern mh_stream_t *mh_console_output_stream;
 // A mh_stream_t that is connected to stderr.
 extern mh_stream_t *mh_console_error_stream;
 
+// A mh_stream_t that is connected to stdin.
+extern mh_stream_t *mh_console_input_stream;
+
 // A mh_writer_t that's connected to mh_console_error_stream.
 extern mh_writer_t *mh_console_error;
 
 // A mh_writer_t that's connected to mh_console_output_stream.
 extern mh_writer_t *mh_console_output;
+
+// A mh_reader_t that's connected to mh_console_input_stream.
+extern mh_reader_t *mh_console_input;
 
 // The argument parser settings.
 MH_API_TYPE(mh_argument_parser_args, struct mh_argument_parser_args {
@@ -42,6 +49,9 @@ MH_API_FUNC(const char *mh_env_default(const char *env, const char *def));
 
 // An alias for mh_console_error.
 #define MH_ERROR mh_console_error
+
+// An alias for mh_console_input.
+#define MH_INPUT mh_console_input
 
 // Write something to MH_OUTPUT.
 #define MH_WRITE(...) mh_write(MH_OUTPUT, __VA_ARGS__)

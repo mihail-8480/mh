@@ -35,4 +35,7 @@ MH_API_FUNC(bool mh_int_parse(mh_const_string_t str, mh_base_t base, mh_signed_n
 // Convert a string to an unsigned number.
 MH_API_FUNC(bool mh_uint_parse(mh_const_string_t str, mh_base_t base, mh_unsigned_number_t *out));
 
+// Is the character a valid number?
+MH_API_FUNC(bool mh_is_number(char chr, mh_base_t base));
+
 #endif //MH_MH_CONVERT_H

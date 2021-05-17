@@ -3,6 +3,7 @@
 
 #include "mh_memory.h"
 #include "mh_writer.h"
+#include "mh_reader.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -55,5 +56,9 @@ MH_API_FUNC(size_t mh_stream_write_reference(mh_stream_t *stream, const void *pt
 
 // Get a writer from a stream.
 MH_API_FUNC(mh_writer_t *mh_writer_from_stream(mh_stream_t *stream));
+
+// Get a writer from a stream.
+MH_API_FUNC(mh_reader_t *mh_reader_from_stream(mh_stream_t *stream));
+
 
 #endif //MHSERV_MH_STREAM_H
