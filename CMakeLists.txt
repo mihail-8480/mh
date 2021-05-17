@@ -16,10 +16,10 @@ add_compile_definitions(MH_VERSION_PATCH=${CMAKE_PROJECT_VERSION_PATCH})
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Create a library called libmhext.a that contains code that wasn't written by me and has a different copyright.
-add_library(mhext STATIC ext/hashmap/hashmap.c ext/hashmap/mh_map.c)
+add_library(mhext STATIC lib/ext/hashmap/hashmap.c lib/ext/hashmap/mh_map.c)
 
 # libmh.so
-add_library(mh SHARED src/collections/mh_stack.c src/streams/mh_stream.c src/streams/mh_memory_stream.c src/mh_memory.c src/network/mh_tcp.c src/streams/mh_socket_stream.c src/network/mh_http.c src/mh_thread.c src/streams/mh_file_stream.c src/mh_context.c src/collections/mh_collection.c src/mh_handle.c src/mh.c src/test/mh_tests.c src/application/mh_console.c src/collections/mh_list.c src/collections/mh_array.c src/mh_convert.c src/writer/mh_writer.c)
+add_library(mh SHARED lib/src/collections/mh_stack.c lib/src/io/mh_stream.c lib/src/io/mh_memory_stream.c lib/src/mh_memory.c lib/src/network/mh_tcp.c lib/src/io/mh_socket_stream.c lib/src/network/mh_http.c lib/src/mh_thread.c lib/src/io/mh_file_stream.c lib/src/mh_context.c lib/src/collections/mh_collection.c lib/src/mh_handle.c lib/src/mh.c lib/src/test/mh_tests.c lib/src/application/mh_console.c lib/src/collections/mh_list.c lib/src/collections/mh_array.c lib/src/mh_convert.c lib/src/io/mh_writer.c lib/src/io/mh_reader.c)
 
 # Link platform dependent libraries.
 if (WIN32)
@@ -42,8 +42,12 @@ add_library(mh-default-tests MODULE tests/thread_test.c tests/memory_test.c test
 target_link_libraries(mh-default-tests PRIVATE mh)
 
 # mhtest
-add_executable(mhtest src/test/mh_test_runner.c)
+add_executable(mhtest lib/src/test/mh_test_runner.c)
 target_link_libraries(mhtest PRIVATE mh)
+
+# example
+add_executable(example examples/main.c)
+target_link_libraries(example PRIVATE mh)
 
 install(TARGETS mh mhtest
         RUNTIME DESTINATION bin
