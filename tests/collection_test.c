@@ -104,7 +104,7 @@ MH_TEST_NEW(collection_stack_test) {
     MH_TEST_PASSED();
 }
 
-static mh_memory_t make_kv_mem(const char *key, const char *value) {
+static mh_memory_t make_kv_mem(mh_const_string_t key, mh_const_string_t value) {
     mh_key_value_pair_t *kv = mh_context_allocate(MH_GLOBAL, sizeof(mh_key_value_pair_t), false).ptr;
     *kv = (mh_key_value_pair_t) {
             .key = MH_REF_STRING((void *) key),

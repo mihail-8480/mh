@@ -13,7 +13,7 @@ void mh_handle_destroy(void *ptr) {
     dlclose(this->handle);
 }
 
-mh_handle_t *mh_handle_new(mh_context_t *context, const char *path) {
+mh_handle_t *mh_handle_new(mh_context_t *context, mh_const_string_t path) {
     // Wrapper for dlopen()
     MH_THIS(mh_handle_private_t*,
             (mh_handle_private_t *) mh_context_allocate(context, sizeof(mh_handle_private_t), false).ptr);
@@ -30,7 +30,7 @@ mh_handle_t *mh_handle_new(mh_context_t *context, const char *path) {
     return (mh_handle_t *) this;
 }
 
-void *mh_handle_find_symbol(mh_handle_t *handle, const char *name) {
+void *mh_handle_find_symbol(mh_handle_t *handle, mh_const_string_t name) {
     // Wrapper for dlsym()
     MH_THIS(mh_handle_private_t*, handle);
     void *sym = dlsym(this->handle, name);

@@ -40,7 +40,7 @@ MH_CONSTRUCTOR(102) void mh_init_streams(void) {
 }
 
 
-static bool global_error(MH_UNUSED mh_context_t *context, const char *message, mh_code_location_t from) {
+static bool global_error(MH_UNUSED mh_context_t *context, mh_const_string_t message, mh_code_location_t from) {
     MH_WRITE_ERR("An error has occurred {}: {}\n", MH_FMT_LOC(&from), MH_FMT_STR(message));
 #if MH_DEBUG
     abort();
@@ -70,8 +70,8 @@ inline static bool mh_argument_parse_one(mh_map_t *map, int argc, char *argv[], 
     return false;
 }
 
-const char *mh_env_default(const char *env, const char *def) {
-    const char *res = getenv(env);
+mh_const_string_t mh_env_default(mh_const_string_t env, mh_const_string_t def) {
+    mh_const_string_t res = getenv(env);
     return res != NULL ? res : def;
 }
 

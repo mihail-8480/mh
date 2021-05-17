@@ -4,9 +4,9 @@
 typedef mh_version_t (*mh_get_version_t)(void);
 
 #ifdef WIN32
-static const char* libmh_lib = "libmh.dll";
+static mh_const_string_t libmh_lib = "libmh.dll";
 #else
-static const char *libmh_lib = "libmh.so";
+static mh_const_string_t libmh_lib = "libmh.so";
 #endif
 
 MH_TEST_NEW(handle_test) {

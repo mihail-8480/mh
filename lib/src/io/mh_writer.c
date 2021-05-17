@@ -1,7 +1,7 @@
 #include "../../inc/mh_writer_private.h"
 #include <stdarg.h>
 
-void mh_write_string(const mh_writer_t *writer, const char *str) {
+void mh_write_string(const mh_writer_t *writer, mh_const_string_t str) {
     mh_memory_t memory = MH_REF_STRING((void *) str);
     writer->write(writer->instance, &memory, memory.size);
 }
@@ -40,7 +40,7 @@ inline static void mh_buffered_write(const mh_writer_t *writer, mh_memory_t *buf
     }
 }
 
-inline static void mh_buffered_write_string(const mh_writer_t *writer, mh_memory_t *buf, const char *c) {
+inline static void mh_buffered_write_string(const mh_writer_t *writer, mh_memory_t *buf, mh_const_string_t c) {
     while (*c) {
         mh_buffered_write(writer, buf, *c);
         c++;
@@ -125,7 +125,7 @@ inline static void mh_buffered_write_writable(const mh_writer_t *writer, mh_memo
     }
 }
 
-void mh_write(const mh_writer_t *writer, const char *format, ...) {
+void mh_write(const mh_writer_t *writer, mh_const_string_t format, ...) {
     va_list list;
     va_start(list, format);
     char s_buf[32];
