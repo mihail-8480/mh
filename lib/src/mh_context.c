@@ -191,7 +191,7 @@ void *mh_context_add_destructor(mh_context_t *context, mh_destructor_t *destruct
     return destructor;
 }
 
-void mh_context_error(mh_context_t *context, const char *message, mh_code_location_t from) {
+void mh_context_error(mh_context_t *context, mh_const_string_t message, mh_code_location_t from) {
     MH_THIS(mh_context_t*, context);
     MH_INFO("mh_context_error(%zu, %s, %s at %s:%u)\n", (size_t) context, message, from.function_name, from.file_name,
             from.file_line);

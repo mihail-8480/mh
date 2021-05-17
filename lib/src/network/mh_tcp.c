@@ -138,7 +138,7 @@ unsigned short mh_tcp_address_to_string(char *host, mh_socket_address_t address,
     return ntohs(address.sin_port);
 }
 
-mh_socket_address_t mh_tcp_string_to_address(const char *host, unsigned short port) {
+mh_socket_address_t mh_tcp_string_to_address(mh_const_string_t host, unsigned short port) {
     mh_socket_address_t address = {
             .sin_family = AF_INET,
             .sin_port = htons(port)

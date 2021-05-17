@@ -25,7 +25,7 @@ MH_TEST_NEW(context_error_test) {
 
 MH_TEST_NEW(context_allocate_test) {
     bool failed = false;
-    const char *reason = "Success.";
+    mh_const_string_t reason = "Success.";
     mh_context_t *context = mh_start();
     mh_context_allocation_reference_t allocation = mh_context_allocate(context, 10, true);
     if (allocation.ptr == NULL) {

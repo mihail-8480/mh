@@ -46,7 +46,7 @@ MH_API_TYPE(mh_destructor, struct mh_destructor {
 MH_API_TYPE(mh_context, struct mh_context);
 
 // A context error handler.
-typedef bool (*mh_error_handler_t)(mh_context_t *context, const char *message, mh_code_location_t from);
+typedef bool (*mh_error_handler_t)(mh_context_t *context, mh_const_string_t message, mh_code_location_t from);
 
 // Destroy a structure that has a mh_destructor as it's first field.
 MH_API_FUNC(void mh_destroy(mh_destructor_t *object));
@@ -58,7 +58,7 @@ MH_API_FUNC(mh_context_t *mh_start(void));
 MH_API_FUNC(void mh_end(mh_context_t *context));
 
 // Report an error to a context.
-MH_NORETURN MH_API_FUNC(void mh_context_error(mh_context_t *context, const char *message, mh_code_location_t from));
+MH_NORETURN MH_API_FUNC(void mh_context_error(mh_context_t *context, mh_const_string_t message, mh_code_location_t from));
 
 // Set an error handler to a context.
 MH_API_FUNC(void mh_context_set_error_handler(mh_context_t *context, mh_error_handler_t handler));

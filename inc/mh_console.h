@@ -42,7 +42,7 @@ MH_API_FUNC(mh_map_t *
                     mh_context_t *context, const mh_argument_parser_args_t *args, int argc, char *argv[]));
 
 // Get an environment variable, if it's not found return the default value.
-MH_API_FUNC(const char *mh_env_default(const char *env, const char *def));
+MH_API_FUNC(mh_const_string_t mh_env_default(mh_const_string_t env, mh_const_string_t def));
 
 // An alias for mh_console_output.
 #define MH_OUTPUT mh_console_output
