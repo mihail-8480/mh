@@ -51,6 +51,9 @@
 // Define a variable named this.
 #define MH_THIS(type, expression) type this = (type)expression
 
+// A constant string.
+MH_API_TYPE(mh_const_string, const char *);
+
 // Version information.
 MH_API_TYPE(mh_version, struct mh_version {
     // Major version number.
@@ -64,11 +67,11 @@ MH_API_TYPE(mh_version, struct mh_version {
 // A location in the code.
 MH_API_TYPE(mh_code_location, struct mh_code_location {
     // The name of the file where the code is located at.
-    const char *file_name;
+    mh_const_string_t file_name;
     // The line of the file where the code is located at.
     unsigned int file_line;
     // The function name where this came from.
-    const char *function_name;
+    mh_const_string_t function_name;
     // The address (or 0) of the function pointer to the function where this came from.
     size_t function_address;
 });

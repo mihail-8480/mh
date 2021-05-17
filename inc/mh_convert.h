@@ -29,4 +29,10 @@ MH_API_FUNC(bool mh_int_to_string(mh_memory_t *memory, mh_signed_number_t num, m
 // Convert an unsigned number to a string and move the offset to the amount of characters written.
 MH_API_FUNC(bool mh_uint_to_string(mh_memory_t *memory, mh_unsigned_number_t num, mh_base_t base));
 
+// Convert a string to a signed number.
+MH_API_FUNC(bool mh_int_parse(mh_const_string_t str, mh_base_t base, mh_signed_number_t *out));
+
+// Convert a string to an unsigned number.
+MH_API_FUNC(bool mh_uint_parse(mh_const_string_t str, mh_base_t base, mh_unsigned_number_t *out));
+
 #endif //MH_MH_CONVERT_H
