@@ -57,5 +57,13 @@ MH_TEST_NEW(conversion_test) {
     MH_TEST_EXPECT(mh_uint_parse("0", MH_BASE_DEC, &u_num));
     MH_TEST_EXPECT(u_num == 0);
 
+    MH_TEST_EXPECT(mh_int_parse("beef", MH_BASE_HEX, &num));
+    MH_TEST_EXPECT(num == 0xbeef);
+
+    MH_TEST_EXPECT(mh_int_parse("10", MH_BASE_BIN, &num));
+    MH_TEST_EXPECT(num == 2);
+
+    MH_TEST_EXPECT(!mh_int_parse("2", MH_BASE_BIN, &num));
+
     MH_TEST_PASSED();
 }
