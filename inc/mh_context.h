@@ -58,7 +58,8 @@ MH_API_FUNC(mh_context_t *mh_start(void));
 MH_API_FUNC(void mh_end(mh_context_t *context));
 
 // Report an error to a context.
-MH_NORETURN MH_API_FUNC(void mh_context_error(mh_context_t *context, mh_const_string_t message, mh_code_location_t from));
+MH_NORETURN MH_API_FUNC(
+        void mh_context_error(mh_context_t *context, mh_const_string_t message, mh_code_location_t from));
 
 // Set an error handler to a context.
 MH_API_FUNC(void mh_context_set_error_handler(mh_context_t *context, mh_error_handler_t handler));
