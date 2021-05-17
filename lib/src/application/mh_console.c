@@ -40,11 +40,12 @@ MH_CONSTRUCTOR(102) void mh_init_streams(void) {
 }
 
 
-static bool global_error(MH_UNUSED mh_context_t *context, mh_const_string_t message, mh_code_location_t from) {
-    MH_WRITE_ERR("An error has occurred {}: {}\n", MH_FMT_LOC(&from), MH_FMT_STR(message));
+static bool global_error(MH_UNUSED mh_context_t *context, mh_const_string_t message, MH_UNUSED mh_code_location_t from) {
 #if MH_DEBUG
+    MH_WRITE_ERR("An error has occurred {}: {}\n", MH_FMT_LOC(&from), MH_FMT_STR(message));
     abort();
 #else
+    MH_WRITE_ERR("{}\n", MH_FMT_STR(message));
     exit(1);
 #endif
 }
@@ -77,15 +78,18 @@ mh_const_string_t mh_env_default(mh_const_string_t env, mh_const_string_t def) {
 
 mh_map_t *mh_argument_parse(mh_context_t *context, const mh_argument_parser_args_t *args, int argc, char *argv[]) {
     mh_map_t *map = mh_map_new(context);
-    mh_memory_t req = MH_REF_STRING(args->required_arguments);
-
+    bool too_many_req = false;
     int c_arg = 1;
-    bool too_many_req = mh_argument_parse_one(map, argc, argv, &req, &c_arg);
+    if (args->required_arguments != NULL) {
+        mh_memory_t req = MH_REF_STRING(args->required_arguments);
+        too_many_req = mh_argument_parse_one(map, argc, argv, &req, &c_arg);
 
-    if (req.offset != req.size) {
-        MH_THROW(context, "Not enough arguments.");
+        if (req.offset != req.size) {
+            MH_THROW(context, "Not enough arguments.");
+        }
+    } else {
+        too_many_req = true;
     }
-
     if (too_many_req && args->optional_arguments != NULL) {
         mh_memory_t opt = MH_REF_STRING(args->optional_arguments);
         bool too_many_opt = mh_argument_parse_one(map, argc, argv, &opt, &c_arg);

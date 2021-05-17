@@ -79,6 +79,9 @@ MH_API_TYPE(mh_code_location, struct mh_code_location {
 // Get the current version.
 MH_PURE MH_API_FUNC(mh_version_t mh_get_version(void));
 
+// Get the current git commit hash.
+MH_PURE MH_API_FUNC(mh_const_string_t mh_get_git_hash(void));
+
 #ifdef MH_DEBUG
 #include <stdio.h>
 // Print something to the screen.

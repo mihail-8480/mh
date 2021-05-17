@@ -5,7 +5,13 @@ project(mh
         DESCRIPTION "A C library that is supposed to make my life easier."
         HOMEPAGE_URL "https://github.com/mihail-8480/mh")
 
-include("Mh.cmake")
+include("cmake/Mh.cmake")
+
+# If git is found, add the commit hash as a macro definition.
+find_package(Git)
+if(Git_FOUND)
+    include("cmake/Git.cmake")
+endif()
 
 # Make the version number be visible to the C code using definitions.
 add_compile_definitions(MH_VERSION_MINOR=${CMAKE_PROJECT_VERSION_MINOR})
@@ -46,7 +52,7 @@ add_executable(mhtest lib/src/test/mh_test_runner.c)
 target_link_libraries(mhtest PRIVATE mh)
 
 # example
-add_executable(example examples/main.c)
+add_executable(example examples/lib/main.c examples/version.c)
 target_link_libraries(example PRIVATE mh)
 
 install(TARGETS mh mhtest
