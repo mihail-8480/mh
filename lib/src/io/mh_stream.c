@@ -118,8 +118,8 @@ mh_reader_t *mh_reader_from_stream(mh_stream_t *stream) {
     }
     mh_reader_t *reader = mh_context_allocate(this->context, sizeof(mh_reader_t), false).ptr;
     *reader = (mh_reader_t) {
-        .instance = stream,
-        .read = mh_stream_reader_read
+            .instance = stream,
+            .read = mh_stream_reader_read
     };
     return reader;
 }
