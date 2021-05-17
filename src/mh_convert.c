@@ -102,8 +102,7 @@ bool mh_int_parse(mh_const_string_t str, mh_base_t base, mh_signed_number_t *out
     if (*str != 0 && str[0] == '-') {
         sign = -1;
         str++;
-    }
-    if (*str != 0 && str[0] == '+') {
+    } else if (*str != 0 && str[0] == '+') {
         sign = 1;
         str++;
     }
