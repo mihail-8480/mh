@@ -85,7 +85,7 @@ static inline bool mh_intstr(mh_const_string_t str, mh_base_t base, mh_unsigned_
     mh_unsigned_number_t number = 0;
     for (; *str; str++) {
         signed char num = mh_chr_to_int(*str);
-        if (num == -1 || (char)base <= num) {
+        if (num == -1 || (char) base <= num) {
             return false;
         }
         number = (number * base) + num;
