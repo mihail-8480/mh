@@ -90,7 +90,7 @@ void mh_end(mh_context_t *context) {
     free(this->allocations);
 
     while (this->recycled_allocations.depth) {
-        void *node = mh_stack_pop(&this->recycled_allocations);
+        mh_ref_t node = mh_stack_pop(&this->recycled_allocations);
         MH_INFO("(mh_end [%zu])-- removing recycled allocation index node [%zu] (%zu)\n", (size_t) context,
                 this->recycled_allocations.depth, (size_t) node);
         free(node);
@@ -125,7 +125,7 @@ mh_context_allocation_reference_t mh_context_allocate(mh_context_t *context, siz
     }
 
     // If clear is true use calloc, if not use malloc
-    void *ptr;
+    mh_ref_t ptr;
     if (!clear) {
         ptr = malloc(size);
     } else {
@@ -139,7 +139,7 @@ mh_context_allocation_reference_t mh_context_allocate(mh_context_t *context, siz
     return (mh_context_allocation_reference_t) {.index = index, .ptr = ptr};
 }
 
-void *mh_context_reallocate(mh_context_t *context, mh_context_allocation_reference_t ref, size_t size) {
+mh_ref_t mh_context_reallocate(mh_context_t *context, mh_context_allocation_reference_t ref, size_t size) {
     MH_THIS(mh_context_t*, context);
     MH_INFO("mh_context_reallocate(%zu, {%zu,%zu}, %zu):\n", (size_t) context, (size_t) ref.ptr, ref.index, size);
 
@@ -147,7 +147,7 @@ void *mh_context_reallocate(mh_context_t *context, mh_context_allocation_referen
         MH_THROW(context, "Invalid allocation reference.");
     }
 
-    void *ptr = realloc(ref.ptr, size);
+    mh_ref_t ptr = realloc(ref.ptr, size);
 
     MH_NULL_REFERENCE(context, ptr);
 
@@ -173,7 +173,7 @@ void mh_context_free(mh_context_t *context, mh_context_allocation_reference_t re
     mh_stack_push(&this->recycled_allocations, &node->node);
 }
 
-void *mh_context_add_destructor(mh_context_t *context, mh_destructor_t *destructor) {
+mh_ref_t mh_context_add_destructor(mh_context_t *context, mh_destructor_t *destructor) {
     MH_THIS(mh_context_t*, context);
     MH_INFO("mh_context_add_destructor(%zu, %zu):\n", (size_t) context, (size_t) destructor);
 

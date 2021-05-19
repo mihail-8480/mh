@@ -34,7 +34,7 @@ typedef struct mh_tcp_threaded_args {
 
 } mh_tcp_threaded_args_t;
 
-void *mh_tcp_threaded_connect_invoke(void *ptr) {
+mh_ref_t mh_tcp_threaded_connect_invoke(mh_ref_t ptr) {
     // Get the arguments
     MH_THIS(mh_tcp_threaded_args_t*, ptr);
     mh_context_bind_to_thread(this->context);

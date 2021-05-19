@@ -9,7 +9,7 @@ typedef struct mh_file_stream {
     bool should_close;
 } mh_file_stream_t;
 
-void mh_file_stream_read(void *stream, mh_memory_t *buffer, size_t count) {
+void mh_file_stream_read(mh_ref_t stream, mh_memory_t *buffer, size_t count) {
     MH_THIS(mh_file_stream_t*, stream);
 
     // Read from the file
@@ -24,7 +24,7 @@ void mh_file_stream_read(void *stream, mh_memory_t *buffer, size_t count) {
     buffer->offset = size;
 }
 
-void mh_file_stream_write(void *stream, mh_memory_t *buffer, size_t count) {
+void mh_file_stream_write(mh_ref_t stream, mh_memory_t *buffer, size_t count) {
     MH_THIS(mh_file_stream_t*, stream);
 
     // Write to the file
@@ -39,7 +39,7 @@ void mh_file_stream_write(void *stream, mh_memory_t *buffer, size_t count) {
     buffer->offset = size;
 }
 
-void mh_file_stream_free(void *stream) {
+void mh_file_stream_free(mh_ref_t stream) {
     MH_THIS(mh_file_stream_t*, stream);
     // Close the file (if needed)
     if (this->should_close) {
@@ -47,17 +47,17 @@ void mh_file_stream_free(void *stream) {
     }
 }
 
-void mh_file_stream_seek(void *stream, size_t position) {
+void mh_file_stream_seek(mh_ref_t stream, size_t position) {
     MH_THIS(mh_file_stream_t*, stream);
     fseek(this->file, (long) position, SEEK_SET);
 }
 
-size_t mh_file_stream_get_position(void *stream) {
+size_t mh_file_stream_get_position(mh_ref_t stream) {
     MH_THIS(mh_file_stream_t*, stream);
     return ftell(this->file);
 }
 
-size_t mh_file_stream_get_size(void *stream) {
+size_t mh_file_stream_get_size(mh_ref_t stream) {
     MH_THIS(mh_file_stream_t*, stream);
     // Save the old position
     long old_position = ftell(this->file);
@@ -73,7 +73,7 @@ size_t mh_file_stream_get_size(void *stream) {
     return size;
 }
 
-void mh_file_stream_flush(void *stream) {
+void mh_file_stream_flush(mh_ref_t stream) {
     MH_THIS(mh_file_stream_t*, stream);
     fflush(this->file);
 }

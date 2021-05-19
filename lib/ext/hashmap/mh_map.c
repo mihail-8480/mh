@@ -14,7 +14,7 @@ typedef struct mh_map_iterator {
     size_t i;
 } mh_map_iterator_t;
 
-static int mh_kv_compare(const void *a, const void *b, MH_UNUSED void *udata) {
+static int mh_kv_compare(mh_ref_t a, mh_ref_t b, MH_UNUSED mh_ref_t udata) {
     const mh_key_value_pair_t *ua = a;
     const mh_key_value_pair_t *ub = b;
     if (ua->key.size != ub->key.size) {
@@ -23,7 +23,7 @@ static int mh_kv_compare(const void *a, const void *b, MH_UNUSED void *udata) {
     return memcmp(ua->key.address, ub->key.address, ua->key.size);
 }
 
-static uint64_t mh_kv_hash(const void *item, uint64_t seed0, uint64_t seed1) {
+static uint64_t mh_kv_hash(mh_ref_t item, uint64_t seed0, uint64_t seed1) {
     const mh_key_value_pair_t *kv = item;
     uint64_t hash = hashmap_sip(kv->key.address, kv->key.size, seed0, seed1);
     return hash;
@@ -36,7 +36,7 @@ void mh_map_set(mh_map_t *map, mh_memory_t key, mh_memory_t value) {
             .key = key,
             .value = value
     };
-    void *result = hashmap_set(this->map, kv);
+    mh_ref_t result = hashmap_set(this->map, kv);
     if (result == NULL && this->map->oom) {
         MH_THROW(this->context, "Out of memory.");
     }
@@ -52,7 +52,7 @@ void mh_map_remove(mh_map_t *map, MH_UNUSED mh_memory_t key) {
 
 mh_memory_t mh_map_get(mh_map_t *map, mh_memory_t key) {
     MH_THIS(mh_hashmap_t*, map);
-    void *result = hashmap_get(this->map, &(mh_key_value_pair_t) {.key = key});
+    mh_ref_t result = hashmap_get(this->map, &(mh_key_value_pair_t) {.key = key});
     if (result == NULL) {
         return MH_MEM_NULL;
     }
@@ -112,7 +112,7 @@ static mh_iterator_t *mh_map_get_iterator(mh_collection_t *collection) {
     return &it->base;
 }
 
-static void mh_map_destructor(void *map) {
+static void mh_map_destructor(mh_ref_t map) {
     MH_THIS(mh_hashmap_t*, map);
     hashmap_free(this->map);
 }

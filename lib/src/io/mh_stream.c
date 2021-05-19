@@ -79,21 +79,21 @@ void mh_stream_copy_to(mh_stream_t *dest, mh_stream_t *src, size_t size) {
     mh_stream_write(dest, buffer, buffer->offset);
 }
 
-size_t mh_stream_write_reference(mh_stream_t *stream, const void *ptr, size_t size) {
+size_t mh_stream_write_reference(mh_stream_t *stream, mh_ref_t ptr, size_t size) {
     // Create a memory reference
-    mh_memory_t memory = mh_memory_reference((void *) ptr, size);
+    mh_memory_t memory = mh_memory_reference((mh_ref_t) ptr, size);
     // Write to the stream
     mh_stream_write(stream, &memory, memory.size);
     return memory.offset;
 }
 
-void mh_stream_writer_write(void *instance, mh_memory_t *memory, size_t size) {
+void mh_stream_writer_write(mh_ref_t instance, mh_memory_t *memory, size_t size) {
     MH_THIS(mh_stream_t*, instance);
     mh_stream_write(this, memory, size);
     mh_stream_flush(this);
 }
 
-void mh_stream_reader_read(void *instance, mh_memory_t *memory, size_t size) {
+void mh_stream_reader_read(mh_ref_t instance, mh_memory_t *memory, size_t size) {
     MH_THIS(mh_stream_t*, instance);
     mh_stream_read(this, memory, size);
 }

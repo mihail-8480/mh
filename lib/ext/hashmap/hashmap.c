@@ -15,22 +15,22 @@ struct bucket *bucket_at(struct hashmap *map, size_t index) {
     return (struct bucket *) (((char *) map->buckets) + (map->bucketsz * index));
 }
 
-void *bucket_item(struct bucket *entry) {
+mh_ref_t bucket_item(struct bucket *entry) {
     return ((char *) entry) + sizeof(struct bucket);
 }
 
-static uint64_t get_hash(struct hashmap *map, void *key) {
+static uint64_t get_hash(struct hashmap *map, mh_ref_t key) {
     return map->hash(key, map->seed0, map->seed1) << 16 >> 16;
 }
 
 struct hashmap *hashmap_new(
         size_t elsize, size_t cap,
         uint64_t seed0, uint64_t seed1,
-        uint64_t (*hash)(const void *,
+        uint64_t (*hash)(mh_ref_t,
                          uint64_t, uint64_t),
-        int (*compare)(const void *, const void *,
-                       void *),
-        void *udata) {
+        int (*compare)(mh_ref_t, mh_ref_t,
+                       mh_ref_t),
+        mh_ref_t udata) {
     int ncap = 16;
     if (cap < (size_t) ncap) {
         cap = ncap;
@@ -82,7 +82,7 @@ void hashmap_clear(struct hashmap *map, bool update_cap) {
     if (update_cap) {
         map->cap = map->nbuckets;
     } else if (map->nbuckets != map->cap) {
-        void *new_buckets = map->malloc(map->bucketsz * map->cap);
+        mh_ref_t new_buckets = map->malloc(map->bucketsz * map->cap);
         if (new_buckets) {
             map->free(map->buckets);
             map->buckets = new_buckets;
@@ -135,7 +135,7 @@ static bool resize(struct hashmap *map, size_t new_cap) {
     return true;
 }
 
-void *hashmap_set(struct hashmap *map, void *item) {
+mh_ref_t hashmap_set(struct hashmap *map, mh_ref_t item) {
     if (!item) {
         panic("Item is null.");
     }
@@ -178,7 +178,7 @@ void *hashmap_set(struct hashmap *map, void *item) {
     }
 }
 
-void *hashmap_get(struct hashmap *map, void *key) {
+mh_ref_t hashmap_get(struct hashmap *map, mh_ref_t key) {
     if (!key) {
         panic("Key is null.");
     }
@@ -197,7 +197,7 @@ void *hashmap_get(struct hashmap *map, void *key) {
     }
 }
 
-void *hashmap_probe(struct hashmap *map, uint64_t position) {
+mh_ref_t hashmap_probe(struct hashmap *map, uint64_t position) {
     size_t i = position & map->mask;
     struct bucket *bucket = bucket_at(map, i);
     if (!bucket->dib) {
@@ -206,7 +206,7 @@ void *hashmap_probe(struct hashmap *map, uint64_t position) {
     return bucket_item(bucket);
 }
 
-void *hashmap_delete(struct hashmap *map, void *key) {
+mh_ref_t hashmap_delete(struct hashmap *map, mh_ref_t key) {
     if (!key) {
         panic("Key is null.");
     }
@@ -253,7 +253,7 @@ void hashmap_free(struct hashmap *map) {
 }
 
 bool hashmap_scan(struct hashmap *map,
-                  bool (*iter)(const void *, void *), void *udata) {
+                  bool (*iter)(mh_ref_t, mh_ref_t), mh_ref_t udata) {
     for (size_t i = 0; i < map->nbuckets; i++) {
         struct bucket *bucket = bucket_at(map, i);
         if (bucket->dib) {
@@ -366,7 +366,7 @@ static uint64_t SIP64(const uint8_t *in, const size_t inlen,
     return out;
 }
 
-uint64_t hashmap_sip(const void *data, size_t len,
+uint64_t hashmap_sip(mh_ref_t data, size_t len,
                      uint64_t seed0, uint64_t seed1) {
     return SIP64((uint8_t *) data, len, seed0, seed1);
 }

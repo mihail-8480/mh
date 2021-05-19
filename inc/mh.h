@@ -76,6 +76,9 @@ MH_API_TYPE(mh_code_location, struct mh_code_location {
     size_t function_address;
 });
 
+// A reference.
+MH_API_TYPE(mh_ref, void *);
+
 // Get the current version.
 MH_PURE MH_API_FUNC(mh_version_t mh_get_version(void));
 

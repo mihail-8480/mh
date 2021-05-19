@@ -31,11 +31,11 @@ void mh_memory_resize(mh_context_t *context, mh_memory_t *memory, size_t size) {
 
 
     // Reallocate to a new pointer to avoid memory leaks on error
-    void *new = mh_context_reallocate(context,
-                                      (mh_context_allocation_reference_t) {
-                                              .index = this->index,
-                                              .ptr = this->base.address
-                                      }, size);
+    mh_ref_t new = mh_context_reallocate(context,
+                                         (mh_context_allocation_reference_t) {
+                                                 .index = this->index,
+                                                 .ptr = this->base.address
+                                         }, size);
 
     // If the new pointer is null, report the error
     if (new == NULL) {
@@ -47,7 +47,7 @@ void mh_memory_resize(mh_context_t *context, mh_memory_t *memory, size_t size) {
     this->base.size = size;
 }
 
-mh_memory_t mh_memory_reference(void *address, size_t size) {
+mh_memory_t mh_memory_reference(mh_ref_t address, size_t size) {
     // Create a new instance of the structure with offset 0
     return (mh_memory_t) {.address = address, .size = size, .offset = 0};
 }

@@ -2,7 +2,7 @@
 #include "../inc/mh_thread.h"
 #include <unistd.h>
 
-static void *modify(void *args) {
+static mh_ref_t modify(mh_ref_t args) {
     bool *arg_bool = (bool *) args;
     *arg_bool = false;
     return NULL;
