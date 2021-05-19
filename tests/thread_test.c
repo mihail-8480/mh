@@ -8,7 +8,7 @@ static mh_ref_t modify(mh_ref_t args) {
     return NULL;
 }
 
-MH_TEST_NEW(thread_test) {
+MH_TEST_ADD(thread_test) {
     bool args = true;
     mh_thread_create(modify, &args);
     size_t c = 0;

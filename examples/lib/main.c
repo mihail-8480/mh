@@ -1,5 +1,4 @@
 #include "example.h"
-
 mh_map_t *commands;
 
 MH_CONSTRUCTOR(200) void commands_ctr(void) {
@@ -20,5 +19,5 @@ int main(int argc, char *argv[]) {
         MH_WRITE_ERR("Invalid command `{}`.\n", MH_FMT_STR(command.address));
         exit(1);
     }
-    ((command_t *) (size_t) command_func)();
+    ((command_t*)(size_t)command_func)();
 }

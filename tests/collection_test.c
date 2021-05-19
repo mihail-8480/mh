@@ -1,5 +1,4 @@
 #include "lib/default_tests.h"
-#include "../inc/mh_map.h"
 #include "../inc/mh_list.h"
 
 static int c = 0;
@@ -8,7 +7,7 @@ static void count(MH_UNUSED mh_memory_t mem) {
     c++;
 }
 
-MH_TEST_NEW(collection_map_test) {
+MH_TEST_ADD(collection_map_test) {
     mh_map_t *map = mh_map_new(MH_GLOBAL);
     char key[] = "TestKey";
     char key2[] = "TestKey1";
@@ -25,7 +24,7 @@ MH_TEST_NEW(collection_map_test) {
     MH_TEST_PASSED();
 }
 
-MH_TEST_NEW(collection_list_test) {
+MH_TEST_ADD(collection_list_test) {
     mh_list_t *list = mh_list_new(MH_GLOBAL);
     mh_list_prepend(list, MH_REF_CONST("Node0"));
     mh_list_append(list, MH_REF_CONST("Node1"));
@@ -64,7 +63,7 @@ MH_TEST_NEW(collection_list_test) {
     MH_TEST_PASSED();
 }
 
-MH_TEST_NEW(collection_iterator_test) {
+MH_TEST_ADD(collection_iterator_test) {
     char array[] = "TEST";
     int i = 0;
     MH_FOREACH(char*, chr, MH_ARRAY(MH_GLOBAL, array)) {
@@ -73,7 +72,7 @@ MH_TEST_NEW(collection_iterator_test) {
     MH_TEST_PASSED();
 }
 
-MH_TEST_NEW(collection_stack_test) {
+MH_TEST_ADD(collection_stack_test) {
     typedef struct {
         mh_stack_node_t node;
         int a;
@@ -113,7 +112,7 @@ static mh_memory_t make_kv_mem(mh_const_string_t key, mh_const_string_t value) {
     return mh_memory_reference(kv, sizeof(mh_key_value_pair_t));
 }
 
-MH_TEST_NEW(collection_find_test) {
+MH_TEST_ADD(collection_find_test) {
     mh_list_t *list = mh_list_new(MH_GLOBAL);
 
     mh_list_append(list, make_kv_mem("Key1", "Value1"));
@@ -146,7 +145,7 @@ MH_TEST_NEW(collection_find_test) {
     MH_TEST_PASSED();
 }
 
-MH_TEST_NEW(collection_find_test_map) {
+MH_TEST_ADD(collection_find_test_map) {
     mh_map_t *map = mh_map_new(MH_GLOBAL);
 
     mh_map_set(map, MH_STRING("Key1"), MH_STRING("Value1"));

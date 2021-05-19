@@ -2,53 +2,15 @@
 #define MH_TESTS_LIST_H
 
 #include "../../inc/mh_tests.h"
+#include "../../inc/mh_map.h"
 
-MH_TEST_NEW(thread_test);
+extern mh_map_t *test_map;
 
-MH_TEST_NEW(memory_new_test);
-
-MH_TEST_NEW(memory_resize_test);
-
-MH_TEST_NEW(memory_reference_test);
-
-MH_TEST_NEW(memory_read_until_test);
-
-MH_TEST_NEW(memory_index_of_test);
-
-MH_TEST_NEW(memory_to_string_test);
-
-MH_TEST_NEW(memory_is_equal_test);
-
-MH_TEST_NEW(handle_test);
-
-MH_TEST_NEW(context_create_test);
-
-MH_TEST_NEW(context_error_test);
-
-MH_TEST_NEW(context_allocate_test);
-
-MH_TEST_NEW(context_reallocate_test);
-
-MH_TEST_NEW(context_destructor_test);
-
-MH_TEST_NEW(context_thread_bind_test);
-
-MH_TEST_NEW(memory_stream_test);
-
-MH_TEST_NEW(collection_map_test);
-
-MH_TEST_NEW(collection_list_test);
-
-MH_TEST_NEW(collection_iterator_test);
-
-MH_TEST_NEW(collection_stack_test);
-
-MH_TEST_NEW(collection_find_test);
-
-MH_TEST_NEW(collection_find_test_map);
-
-MH_TEST_NEW(tcp_test);
-
-MH_TEST_NEW(conversion_test);
+#define MH_TEST_ADD(T) \
+MH_TEST_NEW(T); \
+MH_CONSTRUCTOR(201) void (T##_ctr)(void) { \
+    mh_map_set(test_map, MH_STRING(#T), MH_REF_CONST((mh_ref_t)(size_t)T)); \
+} \
+MH_TEST_NEW(T)
 
 #endif //MH_TESTS_LIST_H

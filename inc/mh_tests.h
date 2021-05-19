@@ -29,10 +29,10 @@ MH_API_TYPE(mh_test, struct mh_test {
     mh_const_string_t name;
 
     // A pointer to the test function.
-    const mh_test_function_t func;
+    mh_test_function_t func;
 
     // Is this test required? If true - it'll make the testing software instantly stop if this test fails.
-    const bool required;
+    bool required;
 });
 
 
