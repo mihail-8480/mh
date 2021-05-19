@@ -18,10 +18,10 @@ mh_tests_t mh_test_provider(void) {
         }
         mh_test_t test = {
                 .required = false,
-                .func = (mh_test_function_t)(size_t)item->value.address,
+                .func = (mh_test_function_t) (size_t) item->value.address,
                 .name = item->key.address
         };
-        ((mh_test_t *)mem->address)[count++] = test;
+        ((mh_test_t *) mem->address)[count++] = test;
     }
     return (mh_tests_t) {.count = count, .tests = mem->address};
 }

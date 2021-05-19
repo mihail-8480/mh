@@ -1,5 +1,6 @@
 #ifndef MH_EXAMPLE_H
 #define MH_EXAMPLE_H
+
 #include "../../inc/mh_console.h"
 
 extern mh_map_t *commands;

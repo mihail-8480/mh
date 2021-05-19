@@ -158,6 +158,7 @@ mh_socket_t mh_tcp_connect(mh_tcp_client_t *client) {
     }
     return sock;
 }
+
 #if defined(WIN32)
 
 MH_DESTRUCTOR void mh_tcp_cleanup(void) {
