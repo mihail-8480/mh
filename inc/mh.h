@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 /*
  * <mh.h>
@@ -13,6 +14,12 @@
 
 // Get the number of elements in a fixed size array.
 #define MH_FIXED_COUNT(array) (sizeof array / sizeof array[0])
+
+// Forcefully cast one pointer type to an other pointer type.
+#define MH_FORCE_CAST_PTR(_type_, _var_) (_type_)(uintptr_t)_var_
+
+// Forcefully cast one type to an other type.
+#define MH_FORCE_CAST(_type_, _var_) *MH_FORCE_CAST_PTR(_type_ *,&_var_)
 
 // This may not be used.
 #define MH_UNUSED __attribute__((unused))
@@ -42,8 +49,8 @@
 #define __FILENAME__ (__FILE__ + SOURCE_PATH_SIZE)
 
 // Turn a function name into an error location.
-#define MH_LOCATION(x) ((mh_code_location_t){.file_name = __FILENAME__, .file_line = __LINE__, .function_name = #x, .function_address = (size_t)x})
-#define MH_LOCATION_ANY() ((mh_code_location_t){.file_name = __FILENAME__, .file_line = __LINE__, .function_name = __func__, .function_address = (size_t)NULL})
+#define MH_LOCATION(x) ((mh_code_location_t){.file_name = __FILENAME__, .file_line = __LINE__, .function_name = #x, .function_address = (uintptr_t)x})
+#define MH_LOCATION_ANY() ((mh_code_location_t){.file_name = __FILENAME__, .file_line = __LINE__, .function_name = __func__, .function_address = (uintptr_t)NULL})
 
 // Define an MH API type.
 #define MH_API_TYPE(name, code) typedef code name##_t
