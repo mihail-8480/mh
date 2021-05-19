@@ -147,21 +147,6 @@ mh_socket_address_t mh_tcp_string_to_address(mh_const_string_t host, unsigned sh
     return address;
 }
 
-void mh_tcp_init(MH_UNUSED mh_tcp_listener_t *listener) {
-#if defined(WIN32)
-    // Initiates Winsock
-    WSADATA wsa;
-    if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
-        WSACleanup();
-        MH_THROW(listener->context, "WSAStartup failed.");
-    }
-    if (LOBYTE(wsa.wVersion) != 2 || HIBYTE(wsa.wVersion) != 2) {
-        WSACleanup();
-        MH_THROW(listener->context, "Invalid WinSock version.");
-    }
-#endif
-}
-
 mh_socket_t mh_tcp_connect(mh_tcp_client_t *client) {
     mh_socket_t sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (sock == (mh_socket_t) -1) {
@@ -173,9 +158,22 @@ mh_socket_t mh_tcp_connect(mh_tcp_client_t *client) {
     }
     return sock;
 }
-
-void mh_tcp_cleanup(MH_UNUSED mh_tcp_listener_t *listener) {
 #if defined(WIN32)
+
+MH_DESTRUCTOR void mh_tcp_cleanup(void) {
     WSACleanup();
-#endif
 }
+
+MH_CONSTRUCTOR(105) void mh_tcp_init(void) {
+    // Initiates Winsock
+    WSADATA wsa;
+    if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
+        WSACleanup();
+        MH_THROW(MH_GLOBAL, "WSAStartup failed.");
+    }
+    if (LOBYTE(wsa.wVersion) != 2 || HIBYTE(wsa.wVersion) != 2) {
+        WSACleanup();
+        MH_THROW(MH_GLOBAL, "Invalid WinSock version.");
+    }
+}
+#endif
