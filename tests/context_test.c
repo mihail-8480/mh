@@ -1,14 +1,14 @@
 #include "lib/default_tests.h"
 #include "../inc/mh_context.h"
 
-MH_TEST_NEW(context_create_test) {
+MH_TEST_ADD(context_create_test) {
     mh_context_t *context = mh_start();
     MH_TEST_EXPECT(context != NULL);
     mh_end(context);
     MH_TEST_PASSED();
 }
 
-MH_TEST_NEW(context_error_test) {
+MH_TEST_ADD(context_error_test) {
 
     MH_TRY(error2, MH_GLOBAL) {
         MH_TRY(error3, MH_GLOBAL) {
@@ -23,7 +23,7 @@ MH_TEST_NEW(context_error_test) {
     MH_TEST_FAIL();
 }
 
-MH_TEST_NEW(context_allocate_test) {
+MH_TEST_ADD(context_allocate_test) {
     bool failed = false;
     mh_const_string_t reason = "Success.";
     mh_context_t *context = mh_start();
@@ -44,7 +44,7 @@ MH_TEST_NEW(context_allocate_test) {
     MH_TEST_RESULT(!failed, reason);
 }
 
-MH_TEST_NEW(context_reallocate_test) {
+MH_TEST_ADD(context_reallocate_test) {
     mh_context_t *context = mh_start();
     mh_context_allocation_reference_t allocation = mh_context_allocate(context, 10, true);
     mh_ref_t new_address = mh_context_reallocate(context, allocation, 20);
@@ -62,7 +62,7 @@ void my_destructor_free(mh_ref_t args) {
     *(((my_destructor_t *) args)->changed) = true;
 }
 
-MH_TEST_NEW(context_destructor_test) {
+MH_TEST_ADD(context_destructor_test) {
     bool changed = false;
     my_destructor_t destructor = {
             .changed = &changed,
@@ -75,7 +75,7 @@ MH_TEST_NEW(context_destructor_test) {
     MH_TEST_PASSED();
 }
 
-MH_TEST_NEW(context_thread_bind_test) {
+MH_TEST_ADD(context_thread_bind_test) {
     mh_context_t *context = mh_start();
     mh_context_bind_to_thread(context);
     mh_context_t *second = mh_context_get_from_thread();

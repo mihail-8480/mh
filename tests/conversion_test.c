@@ -1,7 +1,7 @@
 #include "lib/default_tests.h"
 #include "../inc/mh_convert.h"
 
-MH_TEST_NEW(conversion_test) {
+MH_TEST_ADD(conversion_test) {
     char str[5];
     char zero[2];
     mh_memory_t mem = MH_REF_CONST(str);

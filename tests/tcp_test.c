@@ -26,7 +26,7 @@ static void on_connect(mh_tcp_listener_t *listener, mh_context_t *context, mh_so
     listener->running = false;
 }
 
-MH_TEST_NEW(tcp_test) {
+MH_TEST_ADD(tcp_test) {
     mh_socket_address_t address = mh_tcp_string_to_address("127.0.0.1", 21337);
     mh_tcp_listener_t listener = {
             .context = MH_GLOBAL,
