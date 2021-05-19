@@ -2,7 +2,7 @@
 
 typedef struct mh_array {
     mh_collection_t collection;
-    void *ptr;
+    mh_ref_t ptr;
     size_t size;
     size_t element_size;
     mh_context_t *context;
@@ -59,7 +59,7 @@ static mh_iterator_t *mh_array_get_iterator(mh_collection_t *collection) {
 }
 
 
-mh_collection_t *mh_array_new(mh_context_t *context, void *array, size_t size, size_t element_size) {
+mh_collection_t *mh_array_new(mh_context_t *context, mh_ref_t array, size_t size, size_t element_size) {
     MH_THIS(mh_array_t*, mh_context_allocate(context, sizeof(mh_array_t), false).ptr);
     *this = (mh_array_t) {
             .element_size = element_size,

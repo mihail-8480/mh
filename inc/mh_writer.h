@@ -36,7 +36,7 @@ typedef enum mh_writable_type {
 // Something that is writable.
 MH_API_TYPE(mh_writable, struct mh_writable {
     // The data that will get written.
-    void *data;
+    mh_ref_t data;
 
     // How is the data supposed to be written.
     mh_writable_type_t type;
@@ -61,7 +61,7 @@ MH_API_FUNC(void mh_write_unsigned_number(const mh_writer_t *writer, mh_unsigned
 MH_API_FUNC(void mh_write(const mh_writer_t *writer, mh_const_string_t format, ...));
 
 // Create an argument for mh_write().
-#define MH_FMT(_data, _type) (mh_writable_t) {.data = (void*)_data, .type = _type}
+#define MH_FMT(_data, _type) (mh_writable_t) {.data = (mh_ref_t)_data, .type = _type}
 
 // Create an argument with the value (null).
 #define MH_FMT_NULL MH_FMT(NULL, MH_WR_NULL)

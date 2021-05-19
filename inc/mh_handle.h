@@ -20,6 +20,6 @@ MH_API_TYPE(mh_handle, struct mh_handle {
 MH_API_FUNC(mh_handle_t *mh_handle_new(mh_context_t *context, mh_const_string_t path));
 
 // Find a symbol inside of a library.
-MH_API_FUNC(void *mh_handle_find_symbol(mh_handle_t *handle, mh_const_string_t name));
+MH_API_FUNC(mh_ref_t mh_handle_find_symbol(mh_handle_t *handle, mh_const_string_t name));
 
 #endif //MHSERV_MH_HANDLE_H

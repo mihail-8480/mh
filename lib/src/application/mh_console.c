@@ -40,7 +40,8 @@ MH_CONSTRUCTOR(102) void mh_init_streams(void) {
 }
 
 
-static bool global_error(MH_UNUSED mh_context_t *context, mh_const_string_t message, MH_UNUSED mh_code_location_t from) {
+static bool
+global_error(MH_UNUSED mh_context_t *context, mh_const_string_t message, MH_UNUSED mh_code_location_t from) {
 #if MH_DEBUG
     MH_WRITE_ERR("An error has occurred {}: {}\n", MH_FMT_LOC(&from), MH_FMT_STR(message));
     abort();

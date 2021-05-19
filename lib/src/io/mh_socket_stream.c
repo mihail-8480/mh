@@ -7,7 +7,7 @@ typedef struct mh_socket_stream {
     mh_socket_t socket;
 } mh_socket_stream_t;
 
-void mh_socket_stream_read(void *stream, mh_memory_t *buffer, size_t count) {
+void mh_socket_stream_read(mh_ref_t stream, mh_memory_t *buffer, size_t count) {
     MH_THIS(mh_socket_stream_t*, stream);
 
 
@@ -28,7 +28,7 @@ void mh_socket_stream_read(void *stream, mh_memory_t *buffer, size_t count) {
     buffer->offset = size;
 }
 
-void mh_socket_stream_write(void *stream, mh_memory_t *buffer, size_t count) {
+void mh_socket_stream_write(mh_ref_t stream, mh_memory_t *buffer, size_t count) {
     MH_THIS(mh_socket_stream_t*, stream);
 
     // Read from the socket
@@ -48,7 +48,7 @@ void mh_socket_stream_write(void *stream, mh_memory_t *buffer, size_t count) {
     buffer->offset = size;
 }
 
-void mh_socket_stream_free(void *stream) {
+void mh_socket_stream_free(mh_ref_t stream) {
     MH_THIS(mh_socket_stream_t*, stream);
     // Shutdown the socket
 #if defined (LINUX) || defined (HAIKU)

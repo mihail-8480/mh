@@ -2,7 +2,7 @@
 #include <stdarg.h>
 
 void mh_write_string(const mh_writer_t *writer, mh_const_string_t str) {
-    mh_memory_t memory = MH_REF_STRING((void *) str);
+    mh_memory_t memory = MH_REF_STRING((mh_ref_t) str);
     writer->write(writer->instance, &memory, memory.size);
 }
 

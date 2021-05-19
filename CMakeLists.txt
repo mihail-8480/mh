@@ -9,9 +9,9 @@ include("cmake/Mh.cmake")
 
 # If git is found, add the commit hash as a macro definition.
 find_package(Git)
-if(Git_FOUND)
+if (Git_FOUND)
     include("cmake/Git.cmake")
-endif()
+endif ()
 
 # Make the version number be visible to the C code using definitions.
 add_compile_definitions(MH_VERSION_MINOR=${CMAKE_PROJECT_VERSION_MINOR})

@@ -1,7 +1,7 @@
 #include "../../inc/mh_thread.h"
 #include <pthread.h>
 
-void mh_thread_create(mh_thread_action_t action, void *args) {
+void mh_thread_create(mh_thread_action_t action, mh_ref_t args) {
     // Create the new thread and set it's arguments
     pthread_attr_t attr;
     pthread_t thread;
@@ -11,7 +11,7 @@ void mh_thread_create(mh_thread_action_t action, void *args) {
     pthread_attr_destroy(&attr);
 }
 
-void mh_thread_exit(void *ret) {
+void mh_thread_exit(mh_ref_t ret) {
     // Exit from the thread
     pthread_exit(ret);
 #ifdef WIN32

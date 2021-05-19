@@ -5,7 +5,7 @@
 
 static bool listener_result = false;
 
-static void *listener_thread(void *listener) {
+static mh_ref_t listener_thread(mh_ref_t listener) {
     MH_THIS(mh_tcp_listener_t*, listener);
     mh_tcp_init(listener);
     mh_tcp_start(this);

@@ -47,7 +47,7 @@ MH_TEST_NEW(context_allocate_test) {
 MH_TEST_NEW(context_reallocate_test) {
     mh_context_t *context = mh_start();
     mh_context_allocation_reference_t allocation = mh_context_allocate(context, 10, true);
-    void *new_address = mh_context_reallocate(context, allocation, 20);
+    mh_ref_t new_address = mh_context_reallocate(context, allocation, 20);
     mh_end(context);
     MH_TEST_EXPECT(new_address != NULL);
     MH_TEST_PASSED();
@@ -58,7 +58,7 @@ typedef struct my_destructor {
     bool *changed;
 } my_destructor_t;
 
-void my_destructor_free(void *args) {
+void my_destructor_free(mh_ref_t args) {
     *(((my_destructor_t *) args)->changed) = true;
 }
 

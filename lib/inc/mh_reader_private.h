@@ -4,9 +4,9 @@
 #include "../../inc/mh_reader.h"
 
 struct mh_reader {
-    void (*read)(void *instance, mh_memory_t *mem, size_t count);
+    void (*read)(mh_ref_t instance, mh_memory_t *mem, size_t count);
 
-    void *instance;
+    mh_ref_t instance;
 };
 
 #endif //MH_MH_READER_PRIVATE_H

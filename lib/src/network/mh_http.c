@@ -60,7 +60,7 @@ mh_http_request_t *mh_http_request_new(mh_context_t *context, mh_socket_address_
     for (size_t i = 0; i < count; i++) {
         mh_memory_t head = ((mh_memory_t *) memory->address)[i];
         mh_memory_t key = mh_memory_read_until(&head, ':');
-        mh_memory_t value = mh_memory_reference((void *) ((size_t) head.address + head.offset + 1),
+        mh_memory_t value = mh_memory_reference((mh_ref_t) ((size_t) head.address + head.offset + 1),
                                                 head.size - (head.offset + 1));
         mh_key_value_pair_t *kv = mh_context_allocate(context, sizeof(mh_key_value_pair_t), true).ptr;
         *kv = (mh_key_value_pair_t) {
@@ -114,7 +114,7 @@ void mh_http_request_read_content(mh_http_request_t *request) {
         mh_stream_copy_to(private->request_stream, request->stream, this->mh_http_copy_buffer_size);
     }
     request->content = mh_memory_reference(
-            (void *) ((size_t) private->request_memory->address + private->request_header_end),
+            (mh_ref_t) ((size_t) private->request_memory->address + private->request_header_end),
             private->request_memory->offset - private->request_header_end);
 }
 
@@ -159,7 +159,7 @@ void mh_http_on_connect(mh_tcp_listener_t *listener, mh_context_t *context, mh_s
     // Split the request_stream memory into header and post
     mh_memory_t header = mh_memory_reference(request_memory->address,
                                              request_memory->offset - (request_memory->offset - request_header_end));
-    mh_memory_t post = mh_memory_reference((void *) ((size_t) request_memory->address + request_header_end),
+    mh_memory_t post = mh_memory_reference((mh_ref_t) ((size_t) request_memory->address + request_header_end),
                                            request_memory->offset - request_header_end);
 
     // Parse the request header

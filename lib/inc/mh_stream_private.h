@@ -9,17 +9,17 @@
 typedef struct mh_stream_private {
     mh_stream_t base;
 
-    void (*write)(void *stream, mh_memory_t *buffer, size_t count);
+    void (*write)(mh_ref_t stream, mh_memory_t *buffer, size_t count);
 
-    void (*read)(void *stream, mh_memory_t *buffer, size_t count);
+    void (*read)(mh_ref_t stream, mh_memory_t *buffer, size_t count);
 
-    void (*seek)(void *stream, size_t position);
+    void (*seek)(mh_ref_t stream, size_t position);
 
-    void (*flush)(void *stream);
+    void (*flush)(mh_ref_t stream);
 
-    size_t (*get_position)(void *stream);
+    size_t (*get_position)(mh_ref_t stream);
 
-    size_t (*get_size)(void *stream);
+    size_t (*get_size)(mh_ref_t stream);
 
     bool can_read;
     bool can_write;
