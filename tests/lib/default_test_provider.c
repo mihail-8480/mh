@@ -8,7 +8,7 @@ MH_CONSTRUCTOR(200) void test_ctr(void) {
 }
 
 static mh_memory_t *mem;
-size_t count = 0;
+static size_t count = 0;
 
 mh_tests_t mh_test_provider(void) {
     mem = mh_memory_new(MH_GLOBAL, sizeof(mh_test_t), false);
