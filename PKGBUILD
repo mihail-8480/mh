@@ -12,6 +12,7 @@ source=("git://github.com/mihail-8480/mh.git")
 md5sums=('SKIP')
 
 build() {
+    cd mh
     cmake -B . \
         -DCMAKE_BUILD_TYPE='Release' \
         -DCMAKE_INSTALL_PREFIX='/usr' \
@@ -20,5 +21,6 @@ build() {
 }
 
 package() {
+    cd mh
     cmake --install .
 }
