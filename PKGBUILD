@@ -9,6 +9,7 @@ license=('MIT')
 depends=('glibc')
 makedepends=('cmake' 'gcc' 'make')
 source=("git://github.com/mihail-8480/mh.git")
+md5sums=('SKIP')
 
 build() {
     cmake -B . \
