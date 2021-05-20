@@ -10,13 +10,13 @@ depends=('glibc')
 makedepends=('cmake' 'gcc' 'make')
 
 build() {
-    cmake -B \
+    cmake -B . \
         -DCMAKE_BUILD_TYPE='Release' \
         -DCMAKE_INSTALL_PREFIX='/usr' \
         -Wno-dev
-    make -C
+    make -C .
 }
 
 package() {
-    cmake --install build
+    cmake --install .
 }
