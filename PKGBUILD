@@ -7,6 +7,7 @@ pkgdesc="A C library that is supposed to make my life easier."
 arch=('x86_64')
 license=('MIT')
 depends=('libc.so' 'libm.so' 'libpthread.so' 'libdl.so')
+makedepends=('cmake' 'gcc' 'make')
 
 build() {
     cmake -B build \
@@ -14,4 +15,8 @@ build() {
         -DCMAKE_INSTALL_PREFIX='/usr' \
         -Wno-dev
     make -C build
+}
+
+package() {
+    cmake --install build
 }
