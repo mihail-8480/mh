@@ -8,6 +8,7 @@ arch=('x86_64')
 license=('MIT')
 depends=('glibc')
 makedepends=('cmake' 'gcc' 'make')
+source=('.')
 
 build() {
     cmake -B . \
