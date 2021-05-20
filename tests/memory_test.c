@@ -1,7 +1,7 @@
 #include "lib/default_tests.h"
 #include "../inc/mh_memory.h"
 
-MH_TEST_NEW(memory_new_test) {
+MH_TEST_ADD(memory_new_test) {
     mh_memory_t *memory = mh_memory_new(MH_GLOBAL, 10, true);
 
     MH_TEST_EXPECT(memory != NULL);
@@ -15,7 +15,7 @@ MH_TEST_NEW(memory_new_test) {
     MH_TEST_PASSED();
 }
 
-MH_TEST_NEW(memory_resize_test) {
+MH_TEST_ADD(memory_resize_test) {
     mh_memory_t *memory = mh_memory_new(MH_GLOBAL, 10, false);
     mh_memory_resize(MH_GLOBAL, memory, 20);
 
@@ -23,7 +23,7 @@ MH_TEST_NEW(memory_resize_test) {
     MH_TEST_PASSED();
 }
 
-MH_TEST_NEW(memory_reference_test) {
+MH_TEST_ADD(memory_reference_test) {
     char str[] = "test";
     mh_memory_t ref = mh_memory_reference(str, 4);
 
@@ -33,7 +33,7 @@ MH_TEST_NEW(memory_reference_test) {
     MH_TEST_PASSED();
 }
 
-MH_TEST_NEW(memory_read_until_test) {
+MH_TEST_ADD(memory_read_until_test) {
     char str[] = "test";
     mh_memory_t ref = mh_memory_reference(str, 4);
     mh_memory_t ref2 = mh_memory_read_until(&ref, 's');
@@ -46,7 +46,7 @@ MH_TEST_NEW(memory_read_until_test) {
     MH_TEST_PASSED();
 }
 
-MH_TEST_NEW(memory_index_of_test) {
+MH_TEST_ADD(memory_index_of_test) {
     char str[] = "test";
     mh_memory_t ref = mh_memory_reference(str, 4);
 
@@ -54,7 +54,7 @@ MH_TEST_NEW(memory_index_of_test) {
     MH_TEST_PASSED();
 }
 
-MH_TEST_NEW(memory_to_string_test) {
+MH_TEST_ADD(memory_to_string_test) {
     char str[] = "test";
     char str2[5];
     mh_memory_t ref = mh_memory_reference(str, 4);
@@ -64,7 +64,7 @@ MH_TEST_NEW(memory_to_string_test) {
     MH_TEST_PASSED();
 }
 
-MH_TEST_NEW(memory_is_equal_test) {
+MH_TEST_ADD(memory_is_equal_test) {
     char str[] = "test";
     mh_memory_t ref = mh_memory_reference(str, 4);
     mh_memory_t ref2 = mh_memory_reference(str, 4);

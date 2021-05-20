@@ -58,7 +58,7 @@ MH_API_FUNC(mh_iterator_t *mh_collection_get_iterator(mh_collection_t *collectio
 MH_API_FUNC(void mh_collection_foreach(mh_collection_t *collection, void (*action)(mh_memory_t memory)));
 
 // Create an array collection.
-MH_API_FUNC(mh_collection_t *mh_array_new(mh_context_t *context, void *array, size_t size, size_t element_size));
+MH_API_FUNC(mh_collection_t *mh_array_new(mh_context_t *context, mh_ref_t array, size_t size, size_t element_size));
 
 // Find values in a key-value pair collection.
 MH_API_FUNC(

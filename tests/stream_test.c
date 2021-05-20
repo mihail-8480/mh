@@ -1,7 +1,7 @@
 #include "lib/default_tests.h"
 #include "../inc/mh_stream.h"
 
-MH_TEST_NEW(memory_stream_test) {
+MH_TEST_ADD(memory_stream_test) {
     mh_stream_t *stream = mh_memory_stream_new(MH_GLOBAL, 1, false);
     mh_memory_t *memory = mh_memory_stream_get_memory(stream);
 

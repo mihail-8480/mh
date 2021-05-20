@@ -2,13 +2,13 @@
 #include "../inc/mh_thread.h"
 #include <unistd.h>
 
-static void *modify(void *args) {
+static mh_ref_t modify(mh_ref_t args) {
     bool *arg_bool = (bool *) args;
     *arg_bool = false;
     return NULL;
 }
 
-MH_TEST_NEW(thread_test) {
+MH_TEST_ADD(thread_test) {
     bool args = true;
     mh_thread_create(modify, &args);
     size_t c = 0;

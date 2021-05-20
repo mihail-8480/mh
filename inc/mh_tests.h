@@ -15,7 +15,7 @@ MH_API_TYPE(mh_test_return, struct mh_test_return {
     // Did the test succeed?
     bool success;
     // If not, what was the reason it failed?
-    const char *reason;
+    mh_const_string_t reason;
     // The location in code where it failed.
     mh_code_location_t location;
 });
@@ -26,13 +26,13 @@ typedef mh_test_return_t (*mh_test_function_t)(void);
 // A test.
 MH_API_TYPE(mh_test, struct mh_test {
     // The name of the test.
-    const char *name;
+    mh_const_string_t name;
 
     // A pointer to the test function.
-    const mh_test_function_t func;
+    mh_test_function_t func;
 
     // Is this test required? If true - it'll make the testing software instantly stop if this test fails.
-    const bool required;
+    bool required;
 });
 
 

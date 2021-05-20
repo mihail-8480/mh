@@ -16,7 +16,7 @@
 // A structure that represents a memory address with a allocation_size and offset.
 typedef struct mh_memory {
     // The address of the memory.
-    void *address;
+    mh_ref_t address;
     // An integer that represents some kind of offset to that address.
     size_t offset;
     // The allocated size of the memory.
@@ -30,7 +30,7 @@ mh_memory_t *mh_memory_new(mh_context_t *context, size_t size, bool clear);
 void mh_memory_resize(mh_context_t *context, mh_memory_t *memory, size_t size);
 
 // Create a reference to existing memory without allocating anything.
-mh_memory_t mh_memory_reference(void *address, size_t size);
+mh_memory_t mh_memory_reference(mh_ref_t address, size_t size);
 
 // Find the index of a character in memory.
 size_t mh_memory_index_of(mh_memory_t memory, char c);

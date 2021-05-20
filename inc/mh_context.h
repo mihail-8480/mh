@@ -15,10 +15,10 @@
  */
 
 // A function pointer that points to the method that is supposed to free memory.
-typedef void (*mh_destructor_free_t)(void *ptr);
+typedef void (*mh_destructor_free_t)(mh_ref_t);
 
 // A pointer to something allocated.
-MH_API_TYPE(mh_context_allocation, void*);
+MH_API_TYPE(mh_context_allocation, mh_ref_t);
 
 // A context reference to allocated memory.
 MH_API_TYPE(mh_context_allocation_reference, struct mh_context_allocation_reference {
@@ -46,7 +46,7 @@ MH_API_TYPE(mh_destructor, struct mh_destructor {
 MH_API_TYPE(mh_context, struct mh_context);
 
 // A context error handler.
-typedef bool (*mh_error_handler_t)(mh_context_t *context, const char *message, mh_code_location_t from);
+typedef bool (*mh_error_handler_t)(mh_context_t *context, mh_const_string_t message, mh_code_location_t from);
 
 // Destroy a structure that has a mh_destructor as it's first field.
 MH_API_FUNC(void mh_destroy(mh_destructor_t *object));
@@ -58,7 +58,8 @@ MH_API_FUNC(mh_context_t *mh_start(void));
 MH_API_FUNC(void mh_end(mh_context_t *context));
 
 // Report an error to a context.
-MH_NORETURN MH_API_FUNC(void mh_context_error(mh_context_t *context, const char *message, mh_code_location_t from));
+MH_NORETURN MH_API_FUNC(
+        void mh_context_error(mh_context_t *context, mh_const_string_t message, mh_code_location_t from));
 
 // Set an error handler to a context.
 MH_API_FUNC(void mh_context_set_error_handler(mh_context_t *context, mh_error_handler_t handler));
@@ -70,7 +71,7 @@ MH_API_FUNC(void mh_context_push_jump(mh_context_t *context, mh_context_jump_sta
 MH_API_FUNC(void mh_context_remove_jump(mh_context_t *context, mh_context_jump_stack_node_t *jump));
 
 // Resize memory in the context.
-MH_API_FUNC(void *mh_context_reallocate(mh_context_t *context, mh_context_allocation_reference_t ref, size_t size));
+MH_API_FUNC(mh_ref_t mh_context_reallocate(mh_context_t *context, mh_context_allocation_reference_t ref, size_t size));
 
 // Free previously allocated memory.
 MH_API_FUNC(void mh_context_free(mh_context_t *context, mh_context_allocation_reference_t ref));
@@ -79,7 +80,7 @@ MH_API_FUNC(void mh_context_free(mh_context_t *context, mh_context_allocation_re
 MH_API_FUNC(mh_context_allocation_reference_t mh_context_allocate(mh_context_t *context, size_t size, bool clear));
 
 // Add a destructor that will be called when the context ends.
-MH_API_FUNC(void *mh_context_add_destructor(mh_context_t *context, mh_destructor_t *destructor));
+MH_API_FUNC(mh_ref_t mh_context_add_destructor(mh_context_t *context, mh_destructor_t *destructor));
 
 // Bind a context to the current thread.
 MH_API_FUNC(void mh_context_bind_to_thread(mh_context_t *context));
