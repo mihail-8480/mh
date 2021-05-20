@@ -6,7 +6,7 @@ url="https://github.com/mihail-8480/mh"
 pkgdesc="A C library that is supposed to make my life easier."
 arch=('x86_64')
 license=('MIT')
-depends=('libc.so' 'libm.so' 'libpthread.so' 'libdl.so')
+depends=('glibc')
 makedepends=('cmake' 'gcc' 'make')
 
 build() {
