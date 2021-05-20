@@ -77,13 +77,7 @@ struct mh_tcp_listener {
 MH_API_FUNC(unsigned short mh_tcp_address_to_string(char *dest, mh_socket_address_t address, size_t size));
 
 // Convert a string to a socket address.
-MH_API_FUNC(mh_socket_address_t mh_tcp_string_to_address(const char *str, unsigned short port));
-
-// Init platform-specific stuff.
-MH_API_FUNC(void mh_tcp_init(mh_tcp_listener_t *listener));
-
-// Cleanup platform-specific stuff.
-MH_API_FUNC(void mh_tcp_cleanup(mh_tcp_listener_t *listener));
+MH_API_FUNC(mh_socket_address_t mh_tcp_string_to_address(mh_const_string_t str, unsigned short port));
 
 // Start a TCP listener.
 MH_API_FUNC(void mh_tcp_start(mh_tcp_listener_t *listener));

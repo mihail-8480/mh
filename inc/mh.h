@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 /*
  * <mh.h>
@@ -13,6 +14,12 @@
 
 // Get the number of elements in a fixed size array.
 #define MH_FIXED_COUNT(array) (sizeof array / sizeof array[0])
+
+// Forcefully cast one pointer type to an other pointer type.
+#define MH_FORCE_CAST_PTR(_type_, _var_) (_type_)(uintptr_t)_var_
+
+// Forcefully cast one type to an other type.
+#define MH_FORCE_CAST(_type_, _var_) *MH_FORCE_CAST_PTR(_type_ *,&_var_)
 
 // This may not be used.
 #define MH_UNUSED __attribute__((unused))
@@ -42,14 +49,17 @@
 #define __FILENAME__ (__FILE__ + SOURCE_PATH_SIZE)
 
 // Turn a function name into an error location.
-#define MH_LOCATION(x) ((mh_code_location_t){.file_name = __FILENAME__, .file_line = __LINE__, .function_name = #x, .function_address = (size_t)x})
-#define MH_LOCATION_ANY() ((mh_code_location_t){.file_name = __FILENAME__, .file_line = __LINE__, .function_name = __func__, .function_address = (size_t)NULL})
+#define MH_LOCATION(x) ((mh_code_location_t){.file_name = __FILENAME__, .file_line = __LINE__, .function_name = #x, .function_address = (uintptr_t)x})
+#define MH_LOCATION_ANY() ((mh_code_location_t){.file_name = __FILENAME__, .file_line = __LINE__, .function_name = __func__, .function_address = (uintptr_t)NULL})
 
 // Define an MH API type.
 #define MH_API_TYPE(name, code) typedef code name##_t
 
 // Define a variable named this.
 #define MH_THIS(type, expression) type this = (type)expression
+
+// A constant string.
+MH_API_TYPE(mh_const_string, const char *);
 
 // Version information.
 MH_API_TYPE(mh_version, struct mh_version {
@@ -64,17 +74,23 @@ MH_API_TYPE(mh_version, struct mh_version {
 // A location in the code.
 MH_API_TYPE(mh_code_location, struct mh_code_location {
     // The name of the file where the code is located at.
-    const char *file_name;
+    mh_const_string_t file_name;
     // The line of the file where the code is located at.
     unsigned int file_line;
     // The function name where this came from.
-    const char *function_name;
+    mh_const_string_t function_name;
     // The address (or 0) of the function pointer to the function where this came from.
     size_t function_address;
 });
 
+// A reference.
+MH_API_TYPE(mh_ref, void *);
+
 // Get the current version.
 MH_PURE MH_API_FUNC(mh_version_t mh_get_version(void));
+
+// Get the current git commit hash.
+MH_PURE MH_API_FUNC(mh_const_string_t mh_get_git_hash(void));
 
 #ifdef MH_DEBUG
 #include <stdio.h>
