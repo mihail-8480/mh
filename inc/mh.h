@@ -12,6 +12,10 @@
  * Contains macros that this library uses and some functions.
  */
 
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wstring-plus-int"
+#endif
+
 // Get the number of elements in a fixed size array.
 #define MH_FIXED_COUNT(array) (sizeof array / sizeof array[0])
 
@@ -99,7 +103,7 @@ MH_PURE MH_API_FUNC(mh_const_string_t mh_get_git_hash(void));
 #else
 
 // Doesn't do anything.
-static inline void mh_nothing() {
+MH_UNUSED static inline void mh_nothing() {
 
 }
 // Doesn't do anything.
