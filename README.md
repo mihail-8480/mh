@@ -18,9 +18,7 @@ default.*
 ### On Arch Linux-based distributions
 You can build it using [`mhrepo`](https://github.com/mihail-8480/mhrepo).
 ```sh
-git clone https://github.com/mihail-8480/mhrepo
-cd mhrepo
-./mhpkg install mh
+mhpkg install mh
 ```
 
 ## Testing
