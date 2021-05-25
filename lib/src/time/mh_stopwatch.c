@@ -2,20 +2,18 @@
 
 mh_stopwatch_t mh_stopwatch_start(void) {
     mh_stopwatch_t stopwatch;
-    stopwatch.end = MH_TIME_NULL;
     mh_stopwatch_restart(&stopwatch);
     return stopwatch;
 }
 
 void mh_stopwatch_stop(mh_stopwatch_t *stopwatch) {
-    clock_gettime(CLOCK_MONOTONIC, &stopwatch->end);
+    stopwatch->end = mh_clock_now();
 }
 
 void mh_stopwatch_restart(mh_stopwatch_t *stopwatch) {
-    clock_gettime(CLOCK_MONOTONIC, &stopwatch->start);
+    stopwatch->start = mh_clock_now();
 }
 
 mh_seconds_t mh_stopwatch_value(mh_stopwatch_t stopwatch) {
-    return (((double)stopwatch.end.tv_sec + 1.0e-9*(mh_seconds_t)stopwatch.end.tv_nsec) -
-           (stopwatch.start.tv_sec + 1.0e-9*(mh_seconds_t)stopwatch.start.tv_nsec));
+    return mh_time_to_seconds(stopwatch.end) - mh_time_to_seconds(stopwatch.start);
 }

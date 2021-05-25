@@ -24,6 +24,12 @@ MH_API_TYPE(mh_stopwatch, struct mh_stopwatch {
 // How many seconds did an action take?
 MH_API_TYPE(mh_seconds, long double);
 
+// Get a time value from the clock.
+MH_API_FUNC(mh_time_t mh_clock_now(void));
+
+// Convert a point in time to seconds.
+MH_PURE MH_API_FUNC(mh_seconds_t mh_time_to_seconds(mh_time_t time));
+
 // Start measuring time with a stopwatch.
 MH_API_FUNC(mh_stopwatch_t mh_stopwatch_start(void));
 
