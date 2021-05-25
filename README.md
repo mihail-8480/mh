@@ -1,8 +1,8 @@
-# libmh
+# mh
 
 ## Installation
 
-To build and install `libmh` you need to have `gcc`, `cmake` and `make` installed.
+To build and install `mh` you need to have `gcc`, `cmake` and `make` installed.
 
 ```shell
 git clone https://github.com/mihail-8480/mh
