@@ -14,7 +14,7 @@ MH_TEST_ADD(thread_test) {
     size_t c = 0;
     while (args) {
         MH_TEST_EXPECT(c < 10);
-        usleep(1);
+        usleep(1000);
         c++;
     }
     MH_TEST_PASSED();
