@@ -2,6 +2,7 @@
 #define MH_TESTS_H
 
 #include "mh.h"
+#include "mh_time.h"
 
 /*
  * <mh_tests.h>
@@ -18,6 +19,8 @@ MH_API_TYPE(mh_test_return, struct mh_test_return {
     mh_const_string_t reason;
     // The location in code where it failed.
     mh_code_location_t location;
+    // How many seconds did it take for this test to run?
+    mh_seconds_t seconds;
 });
 
 // A test function pointer.
@@ -49,13 +52,13 @@ MH_API_TYPE(mh_tests, struct mh_tests {
 #define MH_TEST_NEW(f) mh_test_return_t f(void)
 
 // Make a test fail without a reason.
-#define MH_TEST_FAIL() return (mh_test_return_t){.success = false, .reason = "No reason specified.", .location = MH_LOCATION_ANY()}
+#define MH_TEST_FAIL() return (mh_test_return_t){.success = false, .reason = "No reason specified.", .location = MH_LOCATION_ANY(), .seconds = -1}
 
 // Make the test pass.
-#define MH_TEST_PASSED() return (mh_test_return_t){.success = true, .reason = "Success.", .location = MH_LOCATION_ANY()}
+#define MH_TEST_PASSED() return (mh_test_return_t){.success = true, .reason = "Success.", .location = MH_LOCATION_ANY(), .seconds = -1}
 
 // Make the test return a specific result.
-#define MH_TEST_RESULT(value, r) return (mh_test_return_t){.success = value, .reason = r, .location = MH_LOCATION_ANY()}
+#define MH_TEST_RESULT(value, r) return (mh_test_return_t){.success = value, .reason = r, .location = MH_LOCATION_ANY(), .seconds = -1}
 
 // Create a test structure based on a test function.
 #define MH_TEST(f) {.name = #f, .func = f, .required = false}

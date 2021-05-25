@@ -5,13 +5,19 @@
 void tests_print(const mh_test_t *tests, size_t count) {
     mh_test_return_t result;
     size_t failed = 0;
+    mh_stopwatch_t stopwatch = mh_stopwatch_start();
     for (size_t i = 0; i < count; i++) {
-        MH_WRITE("[......] [{}/{}] Running the test `{}`...", MH_FMT_INT(i + 1), MH_FMT_INT(count),
+        MH_WRITE("[......] [{}/{}] Running the test `{}`...",
+                 MH_FMT_INT(i + 1),
+                 MH_FMT_INT(count),
                  MH_FMT_STR(tests[i].name));
         mh_tests_check(&result, &tests[i], 1);
         if (!result.success) {
-            MH_WRITE("\r[FAILED] [{}/{}] The test `{}` has failed because \"{}\" {}.\n", MH_FMT_INT(i + 1),
-                     MH_FMT_INT(count), MH_FMT_STR(tests[i].name), MH_FMT_STR(result.reason),
+            MH_WRITE("\r[FAILED] [{}/{}] The test `{}` has failed because \"{}\" {}.\n",
+                     MH_FMT_INT(i + 1),
+                     MH_FMT_INT(count),
+                     MH_FMT_STR(tests[i].name),
+                     MH_FMT_STR(result.reason),
                      MH_FMT_LOC(&result.location));
             failed++;
             if (tests[i].required) {
@@ -19,14 +25,20 @@ void tests_print(const mh_test_t *tests, size_t count) {
                 exit(1);
             }
         } else {
-            MH_WRITE("\r[PASSED] [{}/{}] The test `{}` has passed.\n", MH_FMT_INT(i + 1), MH_FMT_INT(count),
+            MH_WRITE("\r[PASSED] [{}/{}] The test `{}` has passed.\n",
+                     MH_FMT_INT(i + 1),
+                     MH_FMT_INT(count),
                      MH_FMT_STR(tests[i].name));
         }
     }
+    mh_stopwatch_stop(&stopwatch);
     if (failed) {
-        MH_WRITE("Finished testing and {} out of {} tests passed.\n", MH_FMT_INT(count - failed), MH_FMT_INT(count));
+        MH_WRITE("Finished testing and {} out of {} tests passed in {}us.\n",
+                 MH_FMT_INT(count - failed),
+                 MH_FMT_INT(count),
+                 MH_FMT_INT(mh_stopwatch_value(stopwatch) * MH_MICROSECONDS));
     } else {
-        MH_WRITE("Finished testing and all tests passed.\n");
+        MH_WRITE("Finished testing and all tests passed in {}us.\n", MH_FMT_INT(mh_stopwatch_value(stopwatch) * MH_MICROSECONDS));
     }
     exit(failed != 0);
 }
